@@ -11,6 +11,11 @@ using MdcHR26Apps.Models.EvaluationAgreement;
 using MdcHR26Apps.Models.EvaluationSubAgreement;
 using MdcHR26Apps.Models.EvaluationTasks;
 using MdcHR26Apps.Models.EvaluationLists;
+using MdcHR26Apps.Models.Views.v_MemberListDB;
+using MdcHR26Apps.Models.Views.v_DeptObjectiveListDb;
+using MdcHR26Apps.Models.Views.v_ProcessTRListDB;
+using MdcHR26Apps.Models.Views.v_ReportTaskListDB;
+using MdcHR26Apps.Models.Views.v_TotalReportListDB;
 
 namespace MdcHR26Apps.Models;
 
@@ -48,12 +53,12 @@ public class MdcHR26AppsAddDbContext(DbContextOptions<MdcHR26AppsAddDbContext> o
     public DbSet<TasksDb> TasksDb { get; set; } = null!;
     public DbSet<EvaluationLists.EvaluationLists> EvaluationLists { get; set; } = null!;
 
-    // === Phase 2-4: 5개 뷰 (추후 추가) ===
-    // public DbSet<v_MemberListDB> v_MemberListDB { get; set; }
-    // public DbSet<v_DeptObjectiveListDb> v_DeptObjectiveListDb { get; set; }
-    // public DbSet<v_ProcessTRListDB> v_ProcessTRListDB { get; set; }
-    // public DbSet<v_ReportTaskListDB> v_ReportTaskListDB { get; set; }
-    // public DbSet<v_TotalReportListDB> v_TotalReportListDB { get; set; }
+    // === Phase 2-4: 5개 뷰 ===
+    public DbSet<v_MemberListDB> v_MemberListDB { get; set; } = null!;
+    public DbSet<v_DeptObjectiveListDb> v_DeptObjectiveListDb { get; set; } = null!;
+    public DbSet<v_ProcessTRListDB> v_ProcessTRListDB { get; set; } = null!;
+    public DbSet<v_ReportTaskListDB> v_ReportTaskListDB { get; set; } = null!;
+    public DbSet<v_TotalReportListDB> v_TotalReportListDB { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -83,11 +88,11 @@ public class MdcHR26AppsAddDbContext(DbContextOptions<MdcHR26AppsAddDbContext> o
         //     .Property(u => u.EStatus)
         //     .HasColumnType("BIT");
 
-        // === Phase 2-4: 뷰 매핑 (추후 추가) ===
-        // modelBuilder.Entity<v_MemberListDB>().ToView("v_MemberListDB").HasNoKey();
-        // modelBuilder.Entity<v_DeptObjectiveListDb>().ToView("v_DeptObjectiveListDb").HasNoKey();
-        // modelBuilder.Entity<v_ProcessTRListDB>().ToView("v_ProcessTRListDB").HasNoKey();
-        // modelBuilder.Entity<v_ReportTaskListDB>().ToView("v_ReportTaskListDB").HasNoKey();
-        // modelBuilder.Entity<v_TotalReportListDB>().ToView("v_TotalReportListDB").HasNoKey();
+        // === Phase 2-4: 뷰 매핑 ===
+        modelBuilder.Entity<v_MemberListDB>().ToView("v_MemberListDB").HasNoKey();
+        modelBuilder.Entity<v_DeptObjectiveListDb>().ToView("v_DeptObjectiveListDb").HasNoKey();
+        modelBuilder.Entity<v_ProcessTRListDB>().ToView("v_ProcessTRListDB").HasNoKey();
+        modelBuilder.Entity<v_ReportTaskListDB>().ToView("v_ReportTaskListDB").HasNoKey();
+        modelBuilder.Entity<v_TotalReportListDB>().ToView("v_TotalReportListDB").HasNoKey();
     }
 }

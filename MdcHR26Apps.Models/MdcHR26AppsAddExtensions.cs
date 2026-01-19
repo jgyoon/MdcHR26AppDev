@@ -14,6 +14,11 @@ using MdcHR26Apps.Models.EvaluationAgreement;
 using MdcHR26Apps.Models.EvaluationSubAgreement;
 using MdcHR26Apps.Models.EvaluationTasks;
 using MdcHR26Apps.Models.EvaluationLists;
+using MdcHR26Apps.Models.Views.v_MemberListDB;
+using MdcHR26Apps.Models.Views.v_DeptObjectiveListDb;
+using MdcHR26Apps.Models.Views.v_ProcessTRListDB;
+using MdcHR26Apps.Models.Views.v_ReportTaskListDB;
+using MdcHR26Apps.Models.Views.v_TotalReportListDB;
 
 namespace MdcHR26Apps.Models;
 
@@ -112,12 +117,36 @@ public static class MdcHR26AppsAddExtensions
             return new EvaluationListsRepository(connectionString, loggerFactory);
         });
 
-        // === Phase 2-4: View Repository (추후 추가) ===
-        // services.AddScoped<Iv_MemberListRepository>(provider => new v_MemberListRepository(connectionString));
-        // services.AddScoped<Iv_DeptObjectiveListRepository>(provider => new v_DeptObjectiveListRepository(connectionString));
-        // services.AddScoped<Iv_ProcessTRListRepository>(provider => new v_ProcessTRListRepository(connectionString));
-        // services.AddScoped<Iv_ReportTaskListRepository>(provider => new v_ReportTaskListRepository(connectionString));
-        // services.AddScoped<Iv_TotalReportListRepository>(provider => new v_TotalReportListRepository(connectionString));
+        // === Phase 2-4: View Repository 등록 (5개) ===
+        services.AddScoped<Iv_MemberListRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new v_MemberListRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<Iv_DeptObjectiveListRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new v_DeptObjectiveListRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<Iv_ProcessTRListRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new v_ProcessTRListRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<Iv_ReportTaskListRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new v_ReportTaskListRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<Iv_TotalReportListRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new v_TotalReportListRepository(connectionString, loggerFactory);
+        });
 
         return services;
     }
