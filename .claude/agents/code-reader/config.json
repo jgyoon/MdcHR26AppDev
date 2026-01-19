@@ -1,0 +1,29 @@
+{
+  "name": "code-reader",
+  "description": "코드 파일을 읽고 구조화된 요약을 반환하는 전문 에이전트 (100줄 이상 파일 처리)",
+  "version": "1.0.0",
+  "author": "MdcHR2026 Team",
+  "type": "agent",
+  "capabilities": [
+    "대용량 코드 파일 분석 (100줄 이상)",
+    "JSON 구조화 출력 (파일 메타데이터, 구조 분석, 검증 결과)",
+    "Self-validation 및 신뢰도 점수 (0.0-1.0)",
+    "자동 fallback (신뢰도 0.5 이하 시 직접 읽기)"
+  ],
+  "tools": [
+    "Read",
+    "Glob",
+    "Grep"
+  ],
+  "activation_threshold": {
+    "line_count": 100,
+    "description": "파일이 100줄 이상일 때 자동 활성화"
+  },
+  "output_format": "JSON",
+  "tags": [
+    "code",
+    "analysis",
+    "reading",
+    "automation"
+  ]
+}

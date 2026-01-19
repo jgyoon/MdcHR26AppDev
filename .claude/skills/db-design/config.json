@@ -1,0 +1,29 @@
+{
+  "name": "db-design",
+  "description": "데이터베이스 테이블 설계, 수정, 최적화 작업을 수행하는 스킬",
+  "version": "1.0.0",
+  "author": "MdcHR2026 Team",
+  "triggers": [
+    "/db-design",
+    "/database",
+    "/db"
+  ],
+  "parameters": {
+    "task": {
+      "type": "string",
+      "description": "수행할 데이터베이스 작업 내용",
+      "required": true
+    }
+  },
+  "examples": [
+    "/db-design UserDb에 비밀번호 Salt 필드 추가",
+    "/db-design MemberDb 제거하고 UserDb로 통합",
+    "/db-design 부서 목표 작성 권한 관리 추가"
+  ],
+  "tags": [
+    "database",
+    "sql",
+    "design",
+    "schema"
+  ]
+}

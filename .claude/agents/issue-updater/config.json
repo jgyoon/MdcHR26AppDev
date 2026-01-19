@@ -1,0 +1,25 @@
+{
+  "name": "issue-updater",
+  "description": "작업지시서의 진행 상황을 기반으로 관련 이슈를 자동으로 업데이트하는 전문 에이전트",
+  "version": "1.0.0",
+  "author": "MdcHR2026 Team",
+  "type": "agent",
+  "capabilities": [
+    "작업지시서 → 이슈 연계 및 동기화",
+    "이슈 진행률 자동 업데이트",
+    "상태 자동 변경 (대기/진행중/완료)",
+    "문서 간 링크 유지 및 관리"
+  ],
+  "tools": [
+    "Read",
+    "Edit",
+    "Glob",
+    "Grep"
+  ],
+  "tags": [
+    "issue",
+    "automation",
+    "synchronization",
+    "workflow"
+  ]
+}

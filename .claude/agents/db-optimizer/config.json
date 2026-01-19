@@ -1,0 +1,24 @@
+{
+  "name": "db-optimizer",
+  "description": "데이터베이스 구조를 분석하고 최적화 제안을 수행하는 전문 에이전트",
+  "version": "1.0.0",
+  "author": "MdcHR2026 Team",
+  "type": "agent",
+  "capabilities": [
+    "DB 구조 분석 (중복 테이블/필드 탐지, 외래키 관계 분석)",
+    "성능 최적화 (인덱스 분석, 쿼리 최적화, 뷰 성능 개선)",
+    "보안 강화 (비밀번호 저장 방식, 권한 관리, 민감 데이터 보호)",
+    "유지보수성 개선 (명명 규칙, 문서화, 버전 관리)"
+  ],
+  "tools": [
+    "Read",
+    "Glob",
+    "Grep"
+  ],
+  "tags": [
+    "database",
+    "optimization",
+    "analysis",
+    "security"
+  ]
+}

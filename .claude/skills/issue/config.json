@@ -1,0 +1,38 @@
+{
+  "name": "issue",
+  "description": "프로젝트 이슈를 생성하고 관리하는 스킬",
+  "version": "1.0.0",
+  "author": "MdcHR2026 Team",
+  "triggers": [
+    "/issue",
+    "/이슈"
+  ],
+  "parameters": {
+    "action": {
+      "type": "string",
+      "description": "수행할 동작 (create/update/list)",
+      "required": false,
+      "default": "create"
+    },
+    "title_or_number": {
+      "type": "string",
+      "description": "이슈 제목 또는 번호",
+      "required": false
+    },
+    "status": {
+      "type": "string",
+      "description": "이슈 상태 (진행중/완료/보류)",
+      "required": false
+    }
+  },
+  "examples": [
+    "/issue UserDb 비밀번호 보안 강화 필요",
+    "/issue update 011 완료",
+    "/issue list"
+  ],
+  "tags": [
+    "issue",
+    "tracking",
+    "management"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "task",
+  "description": "작업 내용을 분석하여 자동으로 작업지시서를 생성하는 스킬",
+  "version": "1.0.0",
+  "author": "MdcHR2026 Team",
+  "triggers": [
+    "/task",
+    "/작업지시서"
+  ],
+  "parameters": {
+    "description": {
+      "type": "string",
+      "description": "수행할 작업 설명",
+      "required": true
+    }
+  },
+  "examples": [
+    "/task UserDb에 IsDeptObjectiveWriter 필드 추가",
+    "/task MemberDb 테이블 제거 및 v_MemberListDB 재작성"
+  ],
+  "tags": [
+    "task",
+    "documentation",
+    "workflow"
+  ]
+}
