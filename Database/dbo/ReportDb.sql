@@ -5,7 +5,7 @@ CREATE TABLE [dbo].[ReportDb]
     -- [01] Report id
     [Rid] BIGINT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     -- [02] 사용자 ID (외래키)
-    [UId] BIGINT NOT NULL,
+    [Uid] BIGINT NOT NULL,
     -- [03] Report_Item_Number
     [Report_Item_Number] INT NOT NULL,
     -- [04] Report_Item_Name_1(지표분류명)
@@ -57,8 +57,8 @@ CREATE TABLE [dbo].[ReportDb]
 
     -- 외래키 제약조건
     CONSTRAINT FK_ReportDb_UserDb
-        FOREIGN KEY (UId)
-        REFERENCES [dbo].[UserDb](UId)
+        FOREIGN KEY (Uid)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION
 )

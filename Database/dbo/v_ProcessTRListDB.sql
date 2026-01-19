@@ -16,7 +16,7 @@ AS SELECT
 	A.Is_Director_Submission,
 	A.FeedBackStatus,
 	A.FeedBack_Submission,
-	A.UId,
+	A.Uid,
 	ISNULL(C.TRid, 0) AS TRid,
 	ISNULL(C.User_Evaluation_1, 0) AS User_Evaluation_1,
 	ISNULL(C.User_Evaluation_2, 0) AS User_Evaluation_2,
@@ -38,7 +38,7 @@ AS SELECT
 	ISNULL(C.Director_Score, 0) AS Director_Score
 FROM
 	[dbo].[ProcessDb] A
-	INNER JOIN [dbo].[UserDb] U ON A.UId = U.UId
-	LEFT JOIN [dbo].[UserDb] TL ON A.TeamLeaderId = TL.UId
-	LEFT JOIN [dbo].[UserDb] D ON A.DirectorId = D.UId
-	LEFT JOIN [dbo].[TotalReportDb] C ON A.UId = C.UId
+	INNER JOIN [dbo].[UserDb] U ON A.Uid = U.Uid
+	LEFT JOIN [dbo].[UserDb] TL ON A.TeamLeaderId = TL.Uid
+	LEFT JOIN [dbo].[UserDb] D ON A.DirectorId = D.Uid
+	LEFT JOIN [dbo].[TotalReportDb] C ON A.Uid = C.Uid

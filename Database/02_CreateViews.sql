@@ -38,7 +38,7 @@ PRINT '  - v_MemberListDB 생성';
 GO
 CREATE VIEW [dbo].[v_MemberListDB]
 AS SELECT
-    U.UId,
+    U.Uid,
     U.UserId,
     U.UserName,
     U.ENumber,
@@ -93,7 +93,7 @@ AS SELECT
 	A.Is_Director_Submission,
 	A.FeedBackStatus,
 	A.FeedBack_Submission,
-	A.UId,
+	A.Uid,
 	ISNULL(C.TRid, 0) AS TRid,
 	ISNULL(C.User_Evaluation_1, 0) AS User_Evaluation_1,
 	ISNULL(C.User_Evaluation_2, 0) AS User_Evaluation_2,
@@ -115,10 +115,10 @@ AS SELECT
 	ISNULL(C.Director_Score, 0) AS Director_Score
 FROM
 	[dbo].[ProcessDb] A
-	INNER JOIN [dbo].[UserDb] U ON A.UId = U.UId
-	LEFT JOIN [dbo].[UserDb] TL ON A.TeamLeaderId = TL.UId
-	LEFT JOIN [dbo].[UserDb] D ON A.DirectorId = D.UId
-	LEFT JOIN [dbo].[TotalReportDb] C ON A.UId = C.UId;
+	INNER JOIN [dbo].[UserDb] U ON A.Uid = U.Uid
+	LEFT JOIN [dbo].[UserDb] TL ON A.TeamLeaderId = TL.Uid
+	LEFT JOIN [dbo].[UserDb] D ON A.DirectorId = D.Uid
+	LEFT JOIN [dbo].[TotalReportDb] C ON A.Uid = C.Uid;
 GO
 
 -- [04] v_ReportTaskListDB
@@ -138,7 +138,7 @@ AS SELECT
 	B.*
 FROM
 	[dbo].[ReportDb] A
-	INNER JOIN [dbo].[UserDb] U ON A.UId = U.UId
+	INNER JOIN [dbo].[UserDb] U ON A.Uid = U.Uid
 	INNER JOIN [dbo].[TasksDb] B ON A.Task_Number = B.TaksListNumber;
 GO
 
@@ -148,7 +148,7 @@ GO
 CREATE VIEW [dbo].[v_TotalReportListDB]
 AS SELECT
 	A.TRid,
-	A.UId,
+	A.Uid,
 	B.UserId,
 	B.UserName,
 	A.User_Evaluation_1,
@@ -172,7 +172,7 @@ AS SELECT
 	A.TeamLeader_Score
 FROM
 	[dbo].[TotalReportDb] A
-	INNER JOIN [dbo].[UserDb] B ON A.UId = B.UId;
+	INNER JOIN [dbo].[UserDb] B ON A.Uid = B.Uid;
 GO
 
 PRINT '뷰 생성 완료';

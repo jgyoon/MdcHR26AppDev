@@ -1,7 +1,7 @@
 # 이슈 #008: Phase 2 - Model 개발 (Dapper)
 
 **날짜**: 2026-01-16
-**상태**: 작업지시서 작성 완료
+**상태**: 진행중
 **우선순위**: 높음
 **관련 이슈**: [#004](004_phase1_database_design.md), [#007](007_remove_memberdb_optimize_structure.md)
 
@@ -69,16 +69,16 @@ MdcHR26Apps.Models/
 - **EStatusDb 테이블은 존재하지 않음** - 재직 상태는 `UserDb.EStatus` (BIT) 컬럼으로 관리
 - 총 **12개 테이블**, **5개 뷰** (DB 구조 분석 완료)
 
-### 3. 기술 스택
+### 3. 기술 스택 (실제 적용)
 
-- **프레임워크**: .NET 10.0
-- **C# 버전**: C# 13 (최신 언어 기능)
-- **ORM**: Dapper 2.1.66 (Micro ORM)
-- **DB 연결**: Microsoft.Data.SqlClient 6.1.1
-- **보조 ORM**: Entity Framework Core 10.0.0
-- **보안**: SHA-256 + Salt (도서관리 프로젝트 방식)
-- **패턴**: Repository Pattern, Dependency Injection
-- **신기능**: Primary Constructors, Collection Expressions
+- **프레임워크**: .NET 9.0 ✅
+- **C# 버전**: C# 13 (Primary Constructors, Raw String Literals) ✅
+- **ORM**: Dapper 2.1.66 (Micro ORM) ✅
+- **DB 연결**: Microsoft.Data.SqlClient 5.2.2 ✅
+- **보조 ORM**: Entity Framework Core 9.0.0 ✅
+- **보안**: SHA-256 + Salt (C# 구현, LoginCheckAsync) ✅
+- **패턴**: Repository Pattern, Dependency Injection ✅
+- **신기능**: Primary Constructors, Raw String Literals ✅
 
 ### 4. 핵심 구현 사항
 
@@ -117,14 +117,15 @@ MdcHR26Apps.Models/
 - [x] 도서관리 Model 프로젝트 분석
 - [x] 작업지시서 작성
 
-### 개발 단계 (Phase 2-1)
-- [ ] MdcHR26Apps.Models 프로젝트 생성
-- [ ] NuGet 패키지 설치
-- [ ] Common 모듈 작성
-- [ ] DbContext 작성 (12개 테이블, 5개 뷰)
-- [ ] DI Extensions 작성 (12개 Repository + 5개 View Repository)
-- [ ] UserDb 완전 구현 (참조 모델, EStatus BIT 포함)
-- [ ] EDepartmentDb, ERankDb 구현 (마스터 데이터)
+### 개발 단계 (Phase 2-1) ✅ 완료
+- [x] MdcHR26Apps.Models 프로젝트 생성 (.NET 9.0)
+- [x] NuGet 패키지 설치 (Dapper 2.1.66, EF Core 9.0.0, SqlClient 5.2.2)
+- [x] Common 모듈 작성 (SelectListModel)
+- [x] DbContext 작성 (3개 테이블 활성화, 9개 주석 처리)
+- [x] DI Extensions 작성 (3개 Repository 등록)
+- [x] UserDb 완전 구현 (EStatus BIT, 18개 메서드, SHA-256 로그인)
+- [x] EDepartmentDb, ERankDb 구현 (각 7개 메서드)
+- [x] 빌드 성공 (오류 0개, 7.587초)
 
 ### 개발 단계 (Phase 2-2)
 - [ ] ProcessDb 구현 (평가 프로세스)
@@ -314,7 +315,8 @@ MdcHR26Apps.Models/
 ## 관련 문서
 
 **작업지시서**:
-- [20260116_01_phase2_model_development.md](../tasks/20260116_01_phase2_model_development.md)
+- [20260116_01_phase2_model_development.md](../tasks/20260116_01_phase2_model_development.md) - ✅ 개발자 승인 완료 (2026-01-19)
+- [20260119_01_phase2_1_project_setup.md](../tasks/20260119_01_phase2_1_project_setup.md) - ✅ 작업 완료 (2026-01-19)
 
 **선행 이슈**:
 - [#004: Phase 1 데이터베이스 설계](004_phase1_database_design.md)
@@ -350,14 +352,30 @@ MdcHR26Apps.Models/
 
 **작업 시작**: 2026-01-16
 **작업지시서 작성**: 2026-01-16
-**현재 상태**: 작업지시서 작성 완료, 개발자 승인 대기
+**개발자 승인**: 2026-01-19
+**Phase 2-1 완료**: 2026-01-19
+**현재 상태**: 진행 중 (Phase 2-1 완료, Phase 2-2 준비)
 **비고**:
 - 3개 프로젝트 분석 완료 (현재, 2025년, 도서관리)
 - 상세 작업지시서 작성 완료 (57페이지)
 - 개발 구조 및 우선순위 설계 완료
 - 코드 예시 및 테스트 계획 포함
 
+**진행 이력**:
+- 2026-01-16: Phase 2 전체 작업지시서 작성 (20260116_01)
+- 2026-01-19: 개발자 승인 완료
+- 2026-01-19: Phase 2-1 상세 작업지시서 작성 (20260119_01)
+- 2026-01-19: Phase 2-1 프로젝트 생성 및 13개 파일 작성
+- 2026-01-19: Phase 2-1 빌드 성공 (오류 0개, 7.587초)
+
+**Phase 2-1 완료 내용**:
+- ✅ MdcHR26Apps.Models 프로젝트 생성 (.NET 9.0)
+- ✅ 13개 파일 작성 (Entity 3개, Repository 6개, 공통 4개)
+- ✅ Primary Constructor, Raw String Literals 적용
+- ✅ SHA-256 + Salt 로그인 구현
+- ✅ Dapper + EF Core 하이브리드 구조
+
 **다음 단계**:
-1. 개발자 검토 및 승인
-2. Phase 2-1 개발 시작 (UserDb 참조 모델)
-3. 단계별 진행 및 테스트
+1. ✅ Phase 2-1 개발 완료
+2. ⏳ Phase 2-2 작업지시서 작성 (ProcessDb, ReportDb, TotalReportDb, EvaluationUsers)
+3. Phase 2-2 개발 진행

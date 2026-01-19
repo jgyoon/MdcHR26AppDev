@@ -79,7 +79,7 @@ SET IDENTITY_INSERT [dbo].[UserDb] ON;
 GO
 
 INSERT INTO [dbo].[UserDb]
-    ([UId], [UserId], [UserName], [UserPassword], [UserPasswordSalt], [ENumber], [Email],
+    ([Uid], [UserId], [UserName], [UserPassword], [UserPasswordSalt], [ENumber], [Email],
      [EDepartId], [ERankId], [EStatus], [IsTeamLeader], [IsDirector], [IsAdministrator], [IsDeptObjectiveWriter])
 VALUES
     (1, 'admin', N'시스템관리자', @AdminPassword, @AdminSalt, 'A0001', 'admin@company.com',

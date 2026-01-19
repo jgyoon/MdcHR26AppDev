@@ -12,5 +12,5 @@ AS SELECT
 	B.*
 FROM
 	[dbo].[ReportDb] A
-	INNER JOIN [dbo].[UserDb] U ON A.UId = U.UId
+	INNER JOIN [dbo].[UserDb] U ON A.Uid = U.Uid
 	INNER JOIN [dbo].[TasksDb] B ON A.Task_Number = B.TaksListNumber

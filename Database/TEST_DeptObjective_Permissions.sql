@@ -101,9 +101,9 @@ PRINT '';
 PRINT '=== 3. 권한 검증 함수 테스트 ===';
 GO
 
-DECLARE @User01Id BIGINT = (SELECT UId FROM UserDb WHERE UserId = 'user01');
-DECLARE @User02Id BIGINT = (SELECT UId FROM UserDb WHERE UserId = 'user02');
-DECLARE @User03Id BIGINT = (SELECT UId FROM UserDb WHERE UserId = 'user03');
+DECLARE @User01Id BIGINT = (SELECT Uid FROM UserDb WHERE UserId = 'user01');
+DECLARE @User02Id BIGINT = (SELECT Uid FROM UserDb WHERE UserId = 'user02');
+DECLARE @User03Id BIGINT = (SELECT Uid FROM UserDb WHERE UserId = 'user03');
 DECLARE @AdminId BIGINT = 1;  -- 관리자
 
 -- 3-1. 관리자 권한 테스트 (모든 부서 작성 가능)
@@ -145,7 +145,7 @@ PRINT '';
 PRINT '=== 4. 부서 목표 작성 프로시저 테스트 ===';
 GO
 
-DECLARE @User02Id BIGINT = (SELECT UId FROM UserDb WHERE UserId = 'user02');
+DECLARE @User02Id BIGINT = (SELECT Uid FROM UserDb WHERE UserId = 'user02');
 DECLARE @AdminId BIGINT = 1;
 
 -- 4-1. 성공 케이스: 권한 보유자
@@ -181,7 +181,7 @@ GO
 
 -- 4-3. 실패 케이스: 권한 없는 사용자
 PRINT '4-3. 권한 없는 사용자 작성 테스트 (실패해야 정상)';
-DECLARE @User01Id BIGINT = (SELECT UId FROM UserDb WHERE UserId = 'user01');
+DECLARE @User01Id BIGINT = (SELECT Uid FROM UserDb WHERE UserId = 'user01');
 BEGIN TRY
     EXEC sp_CreateDeptObjective
         @EDepartId = 2,
@@ -202,7 +202,7 @@ PRINT '';
 PRINT '=== 5. 부서 목표 수정 프로시저 테스트 ===';
 GO
 
-DECLARE @User02Id BIGINT = (SELECT UId FROM UserDb WHERE UserId = 'user02');
+DECLARE @User02Id BIGINT = (SELECT Uid FROM UserDb WHERE UserId = 'user02');
 DECLARE @ObjectiveId BIGINT;
 
 -- 수정할 목표 ID 조회
@@ -228,7 +228,7 @@ GO
 
 -- 5-2. 실패 케이스: 부서 변경 시도 (db-optimizer 권장사항)
 PRINT '5-2. 부서 변경 방지 테스트 (실패해야 정상)';
-DECLARE @User02Id BIGINT = (SELECT UId FROM UserDb WHERE UserId = 'user02');
+DECLARE @User02Id BIGINT = (SELECT Uid FROM UserDb WHERE UserId = 'user02');
 DECLARE @ObjectiveId BIGINT;
 
 SELECT TOP 1 @ObjectiveId = DeptObjectiveDbId
@@ -268,8 +268,8 @@ SELECT
     DO.UpdatedAt AS 수정일시
 FROM DeptObjectiveDb DO
 INNER JOIN EDepartmentDb D ON DO.EDepartId = D.EDepartId
-INNER JOIN UserDb U1 ON DO.CreatedBy = U1.UId
-LEFT JOIN UserDb U2 ON DO.UpdatedBy = U2.UId
+INNER JOIN UserDb U1 ON DO.CreatedBy = U1.Uid
+LEFT JOIN UserDb U2 ON DO.UpdatedBy = U2.Uid
 ORDER BY D.EDepartmentNo, DO.CreatedAt DESC;
 GO
 
@@ -282,7 +282,7 @@ GO
 
 PRINT '7-1. 전체 회원 조회 (재직자만)';
 SELECT
-    UId,
+    Uid,
     UserId,
     UserName,
     ENumber,
@@ -319,7 +319,7 @@ GO
 PRINT '8-1. 생성된 부서 목표 삭제';
 DELETE FROM DeptObjectiveDb
 WHERE CreatedBy IN (
-    SELECT UId FROM UserDb WHERE UserId IN ('user02', 'admin')
+    SELECT Uid FROM UserDb WHERE UserId IN ('user02', 'admin')
 );
 PRINT '  - 부서 목표 삭제 완료';
 GO
