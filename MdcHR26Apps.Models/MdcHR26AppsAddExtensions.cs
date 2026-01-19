@@ -5,6 +5,10 @@ using Microsoft.Extensions.Logging;
 using MdcHR26Apps.Models.User;
 using MdcHR26Apps.Models.Department;
 using MdcHR26Apps.Models.Rank;
+using MdcHR26Apps.Models.EvaluationProcess;
+using MdcHR26Apps.Models.EvaluationReport;
+using MdcHR26Apps.Models.Result;
+using MdcHR26Apps.Models.EvaluationUsers;
 
 namespace MdcHR26Apps.Models;
 
@@ -47,14 +51,35 @@ public static class MdcHR26AppsAddExtensions
             return new ERankRepository(connectionString, loggerFactory);
         });
 
-        // === Phase 2-2, 2-3: 나머지 Repository (추후 추가) ===
+        // === Phase 2-2: 평가 핵심 Repository 등록 (4개) ===
+        services.AddScoped<IProcessRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new ProcessRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<IReportRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new ReportRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<ITotalReportRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new TotalReportRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<IEvaluationUsersRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new EvaluationUsersRepository(connectionString, loggerFactory);
+        });
+
+        // === Phase 2-3: 나머지 5개 Repository (추후 추가) ===
         // services.AddScoped<IDeptObjectiveRepository>(provider => new DeptObjectiveRepository(connectionString));
         // services.AddScoped<IAgreementRepository>(provider => new AgreementRepository(connectionString));
         // services.AddScoped<ISubAgreementRepository>(provider => new SubAgreementRepository(connectionString));
-        // services.AddScoped<IProcessRepository>(provider => new ProcessRepository(connectionString));
-        // services.AddScoped<IReportRepository>(provider => new ReportRepository(connectionString));
-        // services.AddScoped<ITotalReportRepository>(provider => new TotalReportRepository(connectionString));
-        // services.AddScoped<IEvaluationUsersRepository>(provider => new EvaluationUsersRepository(connectionString));
         // services.AddScoped<ITasksRepository>(provider => new TasksRepository(connectionString));
         // services.AddScoped<IEvaluationListsRepository>(provider => new EvaluationListsRepository(connectionString));
 

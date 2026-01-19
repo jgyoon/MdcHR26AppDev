@@ -18,7 +18,7 @@
 
 | 번호 | 제목 | 우선순위 | 작성일 | 현재 상태 |
 |------|------|----------|--------|----------|
-| [#008](issues/008_phase2_model_development.md) | Phase 2 - Model 개발 (Dapper) | 높음 | 2026-01-16 | Phase 2-1 완료, Phase 2-2 준비 |
+| [#008](issues/008_phase2_model_development.md) | Phase 2 - Model 개발 (Dapper) | 높음 | 2026-01-16 | Phase 2-1, 2-2 완료 |
 
 **Phase 2-1 완료 내역** (2026-01-19):
 - ✅ MdcHR26Apps.Models 프로젝트 생성 (.NET 9.0)
@@ -28,7 +28,16 @@
 - ✅ Primary Constructor, Raw String Literals 적용
 - ✅ 빌드 성공 (오류 0개, 7.587초)
 
-**다음 단계**: Phase 2-2 작업지시서 작성
+**Phase 2-2 완료 내역** (2026-01-19):
+- ✅ 12개 파일 작성 완료 (Entity 4개, Interface 4개, Repository 4개)
+- ✅ ProcessDb: 15개 필드, 15개 메서드 (평가 프로세스)
+- ✅ ReportDb: 22개 필드, 6개 메서드 (개별 평가)
+- ✅ TotalReportDb: 21개 필드, 6개 메서드 (종합 평가)
+- ✅ EvaluationUsers: 7개 필드, 9개 메서드 (평가 참여자)
+- ✅ Boolean BIT 비교 수정, FK 정규화 (Uid Int64)
+- ✅ 빌드 성공 (오류 0개, 경고 0개, 7.49초)
+
+**다음 단계**: Phase 2-3 작업지시서 작성 (5개 테이블)
 
 ---
 
@@ -88,8 +97,8 @@
     ↓
 [#008] Phase 2 Model 개발 (진행중)
     ├─ Phase 2-1: 프로젝트 생성 및 기본 모델 (완료 ✅)
-    ├─ Phase 2-2: 평가 핵심 모델 (준비 중) ← 현재
-    ├─ Phase 2-3: 목표/협의/업무 모델 (대기)
+    ├─ Phase 2-2: 평가 핵심 모델 (완료 ✅)
+    ├─ Phase 2-3: 목표/협의/업무 모델 (준비 중) ← 현재
     └─ Phase 2-4: View 모델 (대기)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -148,7 +157,8 @@ works/
 | 20260114_01_enhance_password_security.md | 완료 | [#006](issues/006_enhance_password_security.md) |
 | 20260114_02_remove_memberdb_optimize_structure.md | 완료 | [#007](issues/007_remove_memberdb_optimize_structure.md) |
 | 20260116_01_phase2_model_development.md | 승인 완료 | [#008](issues/008_phase2_model_development.md) |
-| 20260119_01_phase2_1_project_setup.md | 완료 (13개 파일 생성) | [#008](issues/008_phase2_model_development.md) |
+| 20260119_01_phase2_1_project_setup.md | 완료 (13개 파일) | [#008](issues/008_phase2_model_development.md) |
+| 20260119_02_phase2_2_evaluation_core.md | 완료 (12개 파일) | [#008](issues/008_phase2_model_development.md) |
 
 ---
 

@@ -127,11 +127,14 @@ MdcHR26Apps.Models/
 - [x] EDepartmentDb, ERankDb 구현 (각 7개 메서드)
 - [x] 빌드 성공 (오류 0개, 7.587초)
 
-### 개발 단계 (Phase 2-2)
-- [ ] ProcessDb 구현 (평가 프로세스)
-- [ ] ReportDb 구현 (개별 평가)
-- [ ] TotalReportDb 구현 (종합 평가)
-- [ ] EvaluationUsers 구현 (평가자 관리)
+### 개발 단계 (Phase 2-2) ✅ 완료
+- [x] ProcessDb 구현 (평가 프로세스, 15개 메서드)
+- [x] ReportDb 구현 (개별 평가, 6개 메서드)
+- [x] TotalReportDb 구현 (종합 평가, 6개 메서드)
+- [x] EvaluationUsers 구현 (평가자 관리, 9개 메서드)
+- [x] DbContext 업데이트 (4개 DbSet 추가)
+- [x] Extensions 업데이트 (4개 Repository DI 등록)
+- [x] 빌드 성공 (오류 0개, 경고 0개)
 
 ### 개발 단계 (Phase 2-3)
 - [ ] DeptObjectiveDb 구현 (부서 목표)
@@ -316,7 +319,8 @@ MdcHR26Apps.Models/
 
 **작업지시서**:
 - [20260116_01_phase2_model_development.md](../tasks/20260116_01_phase2_model_development.md) - ✅ 개발자 승인 완료 (2026-01-19)
-- [20260119_01_phase2_1_project_setup.md](../tasks/20260119_01_phase2_1_project_setup.md) - ✅ 작업 완료 (2026-01-19)
+- [20260119_01_phase2_1_project_setup.md](../tasks/20260119_01_phase2_1_project_setup.md) - ✅ Phase 2-1 완료 (2026-01-19)
+- [20260119_02_phase2_2_evaluation_core.md](../tasks/20260119_02_phase2_2_evaluation_core.md) - ✅ Phase 2-2 완료 (2026-01-19)
 
 **선행 이슈**:
 - [#004: Phase 1 데이터베이스 설계](004_phase1_database_design.md)
@@ -376,6 +380,18 @@ MdcHR26Apps.Models/
 - ✅ Dapper + EF Core 하이브리드 구조
 
 **다음 단계**:
-1. ✅ Phase 2-1 개발 완료
-2. ⏳ Phase 2-2 작업지시서 작성 (ProcessDb, ReportDb, TotalReportDb, EvaluationUsers)
-3. Phase 2-2 개발 진행
+1. ✅ Phase 2-1 개발 완료 (2026-01-19)
+2. ✅ Phase 2-2 작업지시서 작성 (2026-01-19)
+3. ✅ Phase 2-2 개발 완료 (2026-01-19)
+4. ⏳ Phase 2-3 작업지시서 작성 (DeptObjectiveDb, Agreement, SubAgreement, TasksDb, EvaluationLists)
+
+**Phase 2-2 완료 내용** (2026-01-19):
+- ✅ 12개 파일 작성 완료 (Entity 4개, Interface 4개, Repository 4개)
+- ✅ ProcessDb: 15개 필드, 15개 메서드 (평가 프로세스 상태 관리)
+- ✅ ReportDb: 22개 필드, 6개 메서드 (개별 평가 항목)
+- ✅ TotalReportDb: 21개 필드, 6개 메서드 (종합 평가 결과)
+- ✅ EvaluationUsers: 7개 필드, 9개 메서드 (평가 참여자 관리)
+- ✅ Boolean BIT 비교 오류 수정 (1/0 사용)
+- ✅ FK 관계 정규화 (UserId string → Uid Int64)
+- ✅ DbContext 및 Extensions 업데이트
+- ✅ 빌드 성공 (오류 0개, 경고 0개, 7.49초)

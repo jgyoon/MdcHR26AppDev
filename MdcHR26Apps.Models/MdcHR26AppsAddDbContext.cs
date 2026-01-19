@@ -2,6 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using MdcHR26Apps.Models.User;
 using MdcHR26Apps.Models.Department;
 using MdcHR26Apps.Models.Rank;
+using MdcHR26Apps.Models.EvaluationProcess;
+using MdcHR26Apps.Models.EvaluationReport;
+using MdcHR26Apps.Models.Result;
+using MdcHR26Apps.Models.EvaluationUsers;
 
 namespace MdcHR26Apps.Models;
 
@@ -26,14 +30,16 @@ public class MdcHR26AppsAddDbContext(DbContextOptions<MdcHR26AppsAddDbContext> o
     public DbSet<EDepartmentDb> EDepartmentDb { get; set; } = null!;
     public DbSet<ERankDb> ERankDb { get; set; } = null!;
 
-    // === Phase 2-2, 2-3: 나머지 9개 테이블 (추후 추가) ===
+    // === Phase 2-2: 평가 핵심 테이블 (4개) ===
+    public DbSet<ProcessDb> ProcessDb { get; set; } = null!;
+    public DbSet<ReportDb> ReportDb { get; set; } = null!;
+    public DbSet<TotalReportDb> TotalReportDb { get; set; } = null!;
+    public DbSet<EvaluationUsers.EvaluationUsers> EvaluationUsers { get; set; } = null!;
+
+    // === Phase 2-3: 나머지 5개 테이블 (추후 추가) ===
     // public DbSet<DeptObjectiveDb> DeptObjectiveDb { get; set; }
     // public DbSet<AgreementDb> AgreementDb { get; set; }
     // public DbSet<SubAgreementDb> SubAgreementDb { get; set; }
-    // public DbSet<ProcessDb> ProcessDb { get; set; }
-    // public DbSet<ReportDb> ReportDb { get; set; }
-    // public DbSet<TotalReportDb> TotalReportDb { get; set; }
-    // public DbSet<EvaluationUsers> EvaluationUsers { get; set; }
     // public DbSet<TasksDb> TasksDb { get; set; }
     // public DbSet<EvaluationLists> EvaluationLists { get; set; }
 
@@ -52,6 +58,12 @@ public class MdcHR26AppsAddDbContext(DbContextOptions<MdcHR26AppsAddDbContext> o
         modelBuilder.Entity<UserDb>().ToTable("UserDb");
         modelBuilder.Entity<EDepartmentDb>().ToTable("EDepartmentDb");
         modelBuilder.Entity<ERankDb>().ToTable("ERankDb");
+
+        // === Phase 2-2: 평가 핵심 테이블 매핑 ===
+        modelBuilder.Entity<ProcessDb>().ToTable("ProcessDb");
+        modelBuilder.Entity<ReportDb>().ToTable("ReportDb");
+        modelBuilder.Entity<TotalReportDb>().ToTable("TotalReportDb");
+        modelBuilder.Entity<EvaluationUsers.EvaluationUsers>().ToTable("EvaluationUsers");
 
         // === Phase 2-1: BIT 타입 매핑 (UserDb.EStatus) ===
         //  EStatusDb 는 존재하지 않으므로 EStatus 필드를 명시적으로 할 필요는 없음
