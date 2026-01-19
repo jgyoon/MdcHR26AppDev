@@ -6,6 +6,11 @@ using MdcHR26Apps.Models.EvaluationProcess;
 using MdcHR26Apps.Models.EvaluationReport;
 using MdcHR26Apps.Models.Result;
 using MdcHR26Apps.Models.EvaluationUsers;
+using MdcHR26Apps.Models.DeptObjective;
+using MdcHR26Apps.Models.EvaluationAgreement;
+using MdcHR26Apps.Models.EvaluationSubAgreement;
+using MdcHR26Apps.Models.EvaluationTasks;
+using MdcHR26Apps.Models.EvaluationLists;
 
 namespace MdcHR26Apps.Models;
 
@@ -36,12 +41,12 @@ public class MdcHR26AppsAddDbContext(DbContextOptions<MdcHR26AppsAddDbContext> o
     public DbSet<TotalReportDb> TotalReportDb { get; set; } = null!;
     public DbSet<EvaluationUsers.EvaluationUsers> EvaluationUsers { get; set; } = null!;
 
-    // === Phase 2-3: 나머지 5개 테이블 (추후 추가) ===
-    // public DbSet<DeptObjectiveDb> DeptObjectiveDb { get; set; }
-    // public DbSet<AgreementDb> AgreementDb { get; set; }
-    // public DbSet<SubAgreementDb> SubAgreementDb { get; set; }
-    // public DbSet<TasksDb> TasksDb { get; set; }
-    // public DbSet<EvaluationLists> EvaluationLists { get; set; }
+    // === Phase 2-3: 목표/협의/업무 모델 (5개) ===
+    public DbSet<DeptObjectiveDb> DeptObjectiveDb { get; set; } = null!;
+    public DbSet<AgreementDb> AgreementDb { get; set; } = null!;
+    public DbSet<SubAgreementDb> SubAgreementDb { get; set; } = null!;
+    public DbSet<TasksDb> TasksDb { get; set; } = null!;
+    public DbSet<EvaluationLists.EvaluationLists> EvaluationLists { get; set; } = null!;
 
     // === Phase 2-4: 5개 뷰 (추후 추가) ===
     // public DbSet<v_MemberListDB> v_MemberListDB { get; set; }
@@ -64,6 +69,13 @@ public class MdcHR26AppsAddDbContext(DbContextOptions<MdcHR26AppsAddDbContext> o
         modelBuilder.Entity<ReportDb>().ToTable("ReportDb");
         modelBuilder.Entity<TotalReportDb>().ToTable("TotalReportDb");
         modelBuilder.Entity<EvaluationUsers.EvaluationUsers>().ToTable("EvaluationUsers");
+
+        // === Phase 2-3: 목표/협의/업무 모델 매핑 ===
+        modelBuilder.Entity<DeptObjectiveDb>().ToTable("DeptObjectiveDb");
+        modelBuilder.Entity<AgreementDb>().ToTable("AgreementDb");
+        modelBuilder.Entity<SubAgreementDb>().ToTable("SubAgreementDb");
+        modelBuilder.Entity<TasksDb>().ToTable("TasksDb");
+        modelBuilder.Entity<EvaluationLists.EvaluationLists>().ToTable("EvaluationLists");
 
         // === Phase 2-1: BIT 타입 매핑 (UserDb.EStatus) ===
         //  EStatusDb 는 존재하지 않으므로 EStatus 필드를 명시적으로 할 필요는 없음

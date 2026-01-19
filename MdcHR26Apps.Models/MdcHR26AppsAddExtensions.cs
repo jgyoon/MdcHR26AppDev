@@ -9,6 +9,11 @@ using MdcHR26Apps.Models.EvaluationProcess;
 using MdcHR26Apps.Models.EvaluationReport;
 using MdcHR26Apps.Models.Result;
 using MdcHR26Apps.Models.EvaluationUsers;
+using MdcHR26Apps.Models.DeptObjective;
+using MdcHR26Apps.Models.EvaluationAgreement;
+using MdcHR26Apps.Models.EvaluationSubAgreement;
+using MdcHR26Apps.Models.EvaluationTasks;
+using MdcHR26Apps.Models.EvaluationLists;
 
 namespace MdcHR26Apps.Models;
 
@@ -76,12 +81,36 @@ public static class MdcHR26AppsAddExtensions
             return new EvaluationUsersRepository(connectionString, loggerFactory);
         });
 
-        // === Phase 2-3: 나머지 5개 Repository (추후 추가) ===
-        // services.AddScoped<IDeptObjectiveRepository>(provider => new DeptObjectiveRepository(connectionString));
-        // services.AddScoped<IAgreementRepository>(provider => new AgreementRepository(connectionString));
-        // services.AddScoped<ISubAgreementRepository>(provider => new SubAgreementRepository(connectionString));
-        // services.AddScoped<ITasksRepository>(provider => new TasksRepository(connectionString));
-        // services.AddScoped<IEvaluationListsRepository>(provider => new EvaluationListsRepository(connectionString));
+        // === Phase 2-3: 목표/협의/업무 Repository 등록 (5개) ===
+        services.AddScoped<IDeptObjectiveRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new DeptObjectiveRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<IAgreementRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new AgreementRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<ISubAgreementRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new SubAgreementRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<ITasksRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new TasksRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<IEvaluationListsRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new EvaluationListsRepository(connectionString, loggerFactory);
+        });
 
         // === Phase 2-4: View Repository (추후 추가) ===
         // services.AddScoped<Iv_MemberListRepository>(provider => new v_MemberListRepository(connectionString));
