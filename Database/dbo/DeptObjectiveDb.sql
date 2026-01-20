@@ -30,13 +30,13 @@ CREATE TABLE [dbo].[DeptObjectiveDb]
 
     CONSTRAINT FK_DeptObjectiveDb_UserDb_CreatedBy
         FOREIGN KEY (CreatedBy)
-        REFERENCES [dbo].[UserDb](UId)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
 
     CONSTRAINT FK_DeptObjectiveDb_UserDb_UpdatedBy
         FOREIGN KEY (UpdatedBy)
-        REFERENCES [dbo].[UserDb](UId)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION
 );

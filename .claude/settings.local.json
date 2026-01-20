@@ -4,7 +4,13 @@
       "Bash(dir \"C:\\Codes\\29_MdcHR25\\MdcHR25Apps\" /b)",
       "Bash(dir \"C:\\Codes\\00_Develop_Cursor\\01_MdcLibrary\" /b)",
       "Bash(dir \"c:\\Codes\\00_Develop_Cursor\\10_MdcHR26Apps\" /b)",
-      "Read(//c/Codes/00_Develop_Cursor/01_MdcLibrary/Database/**)"
+      "Read(//c/Codes/00_Develop_Cursor/01_MdcLibrary/Database/**)",
+      "Read(//c/Codes/**)",
+      "Bash(find:*)",
+      "Bash(dir \"C:\\\\Codes\\\\29_MdcHR25\" /s /b)",
+      "Bash(findstr:*)",
+      "Bash(powershell:*)",
+      "Bash(dotnet build:*)"
     ]
   }
 }

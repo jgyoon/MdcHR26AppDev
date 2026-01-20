@@ -1,7 +1,7 @@
 CREATE VIEW [dbo].[v_TotalReportListDB]
 AS SELECT
 	A.TRid,
-	A.UId,
+	A.Uid,
 	B.UserId,
 	B.UserName,
 	A.User_Evaluation_1,
@@ -25,4 +25,4 @@ AS SELECT
 	A.TeamLeader_Score
 FROM
 	[dbo].[TotalReportDb] A
-	INNER JOIN [dbo].[UserDb] B ON A.UId = B.UId
+	INNER JOIN [dbo].[UserDb] B ON A.Uid = B.Uid

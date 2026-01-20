@@ -1,6 +1,6 @@
 CREATE VIEW [dbo].[v_MemberListDB]
 AS SELECT
-    U.UId,
+    U.Uid,
     U.UserId,
     U.UserName,
     U.ENumber,

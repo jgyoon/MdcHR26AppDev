@@ -1,6 +1,6 @@
 # 이슈 인덱스
 
-**최종 업데이트**: 2026-01-16
+**최종 업데이트**: 2026-01-20
 
 ---
 
@@ -8,18 +8,15 @@
 
 - **총 이슈**: 8개 (참조 이슈 2개 포함)
 - **프로젝트 이슈**: 6개 (#003부터 시작)
-- **완료**: 7개
+- **완료**: 8개
 - **진행 중**: 0개
-- **작업지시서 작성 완료**: 1개
 - **보류**: 0개
 
 ---
 
-## 작업지시서 작성 완료된 이슈
+## 진행 중인 이슈
 
-| 번호 | 제목 | 우선순위 | 작성일 | 상태 |
-|------|------|----------|--------|------|
-| [#008](issues/008_phase2_model_development.md) | Phase 2 - Model 개발 (Dapper) | 높음 | 2026-01-16 | 개발자 승인 대기 |
+**현재 진행 중인 이슈가 없습니다.**
 
 ---
 
@@ -27,11 +24,11 @@
 
 | 번호 | 제목 | 완료일 | 관련 작업지시서 |
 |------|------|--------|----------------|
+| [#008](issues/008_phase2_model_development.md) | Phase 2 - Model 개발 (Dapper) | 2026-01-20 | 20260119_01~04 (4개) |
 | [#007](issues/007_remove_memberdb_optimize_structure.md) | MemberDb 제거 및 부서 목표 권한 관리 최적화 | 2026-01-16 | 20260114_02 |
 | [#006](issues/006_enhance_password_security.md) | UserDb 비밀번호 보안 강화 | 2026-01-14 | 20260114_01 |
 | [#005](issues/005_phase1_progress_summary.md) | Phase 1 작업 완료 보고서 | 2025-12-16 | 20251216_03 |
 | [#004](issues/004_phase1_database_design.md) | Phase 1 데이터베이스 설계 및 구축 | 2025-12-16 | 20251216_02 |
-| [#003](issues/003_project_roadmap.md) | 2026년 인사평가프로그램 개발 로드맵 | 2025-12-16 | 20251216_01 |
 
 ---
 
@@ -54,7 +51,7 @@
 - [#007](issues/007_remove_memberdb_optimize_structure.md) - MemberDb 제거 및 부서 목표 권한 관리 최적화 (완료, 2026-01-16)
 
 ### Model 개발
-- [#008](issues/008_phase2_model_development.md) - Phase 2 Model 개발 (Dapper) (작업지시서 작성 완료, 2026-01-16)
+- [#008](issues/008_phase2_model_development.md) - Phase 2 Model 개발 (Dapper) (완료, 2026-01-20)
 
 </details>
 
@@ -77,7 +74,11 @@
     ↓
 [#007] MemberDb 제거 및 최적화 (완료)
     ↓
-[#008] Phase 2 Model 개발 (작업지시서 작성 완료) ← 현재
+[#008] Phase 2 Model 개발 (완료 ✅)
+    ├─ Phase 2-1: 프로젝트 생성 및 기본 모델 (완료 ✅)
+    ├─ Phase 2-2: 평가 핵심 모델 (완료 ✅)
+    ├─ Phase 2-3: 목표/협의/업무 모델 (완료 ✅)
+    └─ Phase 2-4: View 모델 (완료 ✅)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   참조 이슈 (다른 프로젝트)
@@ -134,7 +135,11 @@ works/
 | 20251216_03_phase1_progress_summary.md | 완료 | [#005](issues/005_phase1_progress_summary.md) |
 | 20260114_01_enhance_password_security.md | 완료 | [#006](issues/006_enhance_password_security.md) |
 | 20260114_02_remove_memberdb_optimize_structure.md | 완료 | [#007](issues/007_remove_memberdb_optimize_structure.md) |
-| 20260116_01_phase2_model_development.md | 작업지시서 작성 완료 | [#008](issues/008_phase2_model_development.md) |
+| 20260116_01_phase2_model_development.md | 승인 완료 | [#008](issues/008_phase2_model_development.md) |
+| 20260119_01_phase2_1_project_setup.md | 완료 (13개 파일) | [#008](issues/008_phase2_model_development.md) |
+| 20260119_02_phase2_2_evaluation_core.md | 완료 (12개 파일) | [#008](issues/008_phase2_model_development.md) |
+| 20260119_03_phase2_3_objective_agreement.md | 완료 (15개 파일) | [#008](issues/008_phase2_model_development.md) |
+| 20260119_04_phase2_4_view_models.md | 완료 (15개 파일) | [#008](issues/008_phase2_model_development.md) |
 
 ---
 
