@@ -1,8 +1,9 @@
 # 이슈 #008: Phase 2 - Model 개발 (Dapper)
 
 **날짜**: 2026-01-16
-**상태**: 진행중
+**상태**: 완료
 **우선순위**: 높음
+**완료일**: 2026-01-20
 **관련 이슈**: [#004](004_phase1_database_design.md), [#007](007_remove_memberdb_optimize_structure.md)
 
 ---
@@ -136,15 +137,23 @@ MdcHR26Apps.Models/
 - [x] Extensions 업데이트 (4개 Repository DI 등록)
 - [x] 빌드 성공 (오류 0개, 경고 0개)
 
-### 개발 단계 (Phase 2-3)
-- [ ] DeptObjectiveDb 구현 (부서 목표)
-- [ ] AgreementDb, SubAgreementDb 구현 (직무평가 협의)
-- [ ] TasksDb 구현 (업무 관리)
-- [ ] EvaluationLists 구현 (평가 항목 마스터)
+### 개발 단계 (Phase 2-3) ✅ 완료
+- [x] DeptObjectiveDb 구현 (부서 목표, 7개 메서드)
+- [x] AgreementDb, SubAgreementDb 구현 (직무평가 협의, 각 9개/10개 메서드)
+- [x] TasksDb 구현 (업무 관리, 8개 메서드)
+- [x] EvaluationLists 구현 (평가 항목 마스터, 8개 메서드)
+- [x] DbContext 업데이트 (5개 DbSet 추가)
+- [x] Extensions 업데이트 (5개 Repository DI 등록)
+- [x] 빌드 성공 (오류 0개, 경고 0개)
 
-### 개발 단계 (Phase 2-4)
-- [ ] v_MemberListDB 구현 (재직자 목록 - EStatus=1 필터링)
-- [ ] 나머지 4개 View 모델 구현
+### 개발 단계 (Phase 2-4) ✅ 완료
+- [x] v_MemberListDB 구현 (재직자 목록 - EStatus=1 필터링)
+- [x] v_DeptObjectiveListDb 구현 (부서 목표 목록)
+- [x] v_ProcessTRListDB 구현 (프로세스 & 종합 보고서)
+- [x] v_ReportTaskListDB 구현 (평가 보고서 & 업무)
+- [x] v_TotalReportListDB 구현 (종합 보고서 목록)
+- [x] DbContext 업데이트 (5개 View 엔티티 추가, HasNoKey 설정)
+- [x] 빌드 성공 (오류 0개, 경고 0개)
 
 ### 테스트 단계
 - [ ] 단위 테스트 작성
@@ -321,6 +330,8 @@ MdcHR26Apps.Models/
 - [20260116_01_phase2_model_development.md](../tasks/20260116_01_phase2_model_development.md) - ✅ 개발자 승인 완료 (2026-01-19)
 - [20260119_01_phase2_1_project_setup.md](../tasks/20260119_01_phase2_1_project_setup.md) - ✅ Phase 2-1 완료 (2026-01-19)
 - [20260119_02_phase2_2_evaluation_core.md](../tasks/20260119_02_phase2_2_evaluation_core.md) - ✅ Phase 2-2 완료 (2026-01-19)
+- [20260119_03_phase2_3_objective_agreement.md](../tasks/20260119_03_phase2_3_objective_agreement.md) - ✅ Phase 2-3 완료 (2026-01-20)
+- [20260119_04_phase2_4_view_models.md](../tasks/20260119_04_phase2_4_view_models.md) - ✅ Phase 2-4 완료 (2026-01-20)
 
 **선행 이슈**:
 - [#004: Phase 1 데이터베이스 설계](004_phase1_database_design.md)
@@ -395,3 +406,35 @@ MdcHR26Apps.Models/
 - ✅ FK 관계 정규화 (UserId string → Uid Int64)
 - ✅ DbContext 및 Extensions 업데이트
 - ✅ 빌드 성공 (오류 0개, 경고 0개, 7.49초)
+
+**Phase 2-3 완료 내용** (2026-01-20):
+- ✅ 15개 파일 작성 완료 (Entity 5개, Interface 5개, Repository 5개)
+- ✅ DeptObjectiveDb: 6개 필드, 7개 메서드 (부서 목표 관리)
+- ✅ AgreementDb: 10개 필드, 9개 메서드 (직무평가 협의서)
+- ✅ SubAgreementDb: 8개 필드, 10개 메서드 (상세 직무평가 협의서)
+- ✅ TasksDb: 8개 필드, 8개 메서드 (업무/과업 관리)
+- ✅ EvaluationLists: 6개 필드, 8개 메서드 (평가 항목 마스터)
+- ✅ DbContext 및 Extensions 업데이트 (5개 DbSet, 5개 DI 등록)
+- ✅ 빌드 성공 (오류 0개, 경고 0개)
+
+**Phase 2-4 완료 내용** (2026-01-20):
+- ✅ 15개 파일 작성 완료 (View Entity 5개, Interface 5개, Repository 5개)
+- ✅ v_MemberListDB: 재직자 목록 (UserDb + 부서/직급 정보, EStatus=1 필터링)
+- ✅ v_DeptObjectiveListDb: 부서 목표 목록 (DeptObjectiveDb + 부서명)
+- ✅ v_ProcessTRListDB: 프로세스 & 종합 보고서 (ProcessDb + TotalReportDb + User)
+- ✅ v_ReportTaskListDB: 평가 보고서 & 업무 (ReportDb + TasksDb)
+- ✅ v_TotalReportListDB: 종합 보고서 목록 (TotalReportDb + User)
+- ✅ DbContext 업데이트 (5개 View 엔티티 추가, HasNoKey 설정)
+- ✅ 빌드 성공 (오류 0개, 경고 0개)
+
+**Phase 2 전체 완료 통계**:
+- ✅ **총 파일 수**: 55개
+  - Entity: 12개 (테이블) + 5개 (뷰) = 17개
+  - Interface: 12개 (테이블) + 5개 (뷰) = 17개
+  - Repository: 12개 (테이블) + 5개 (뷰) = 17개
+  - 공통: 4개 (SelectListModel, DbContext, Extensions, csproj)
+- ✅ **총 메서드 수**: 147개 (테이블 Repository 기준)
+- ✅ **C# 13 신기능**: Primary Constructors, Raw String Literals, Collection Expressions 적용
+- ✅ **보안**: SHA-256 + Salt 비밀번호 해싱
+- ✅ **패턴**: Repository Pattern, Dependency Injection
+- ✅ **ORM**: Dapper (주) + EF Core (보조) 하이브리드
