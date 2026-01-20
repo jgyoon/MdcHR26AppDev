@@ -10,7 +10,18 @@
       "Bash(dir \"C:\\\\Codes\\\\29_MdcHR25\" /s /b)",
       "Bash(findstr:*)",
       "Bash(powershell:*)",
-      "Bash(dotnet build:*)"
+      "Bash(dotnet build:*)",
+      "Bash(dotnet new:*)",
+      "Bash(dotnet sln add:*)",
+      "Bash(dotnet add reference:*)",
+      "Bash(dotnet add:*)",
+      "Bash(libman restore:*)",
+      "Bash(dotnet tool install:*)",
+      "Bash(pwsh:*)",
+      "Bash(curl:*)",
+      "Bash(pkill:*)",
+      "Bash(taskkill:*)",
+      "Bash(git add:*)"
     ]
   }
 }

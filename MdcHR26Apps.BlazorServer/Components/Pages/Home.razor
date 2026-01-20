@@ -1,0 +1,66 @@
+﻿@page "/"
+@inject LoginStatusService LoginStatus
+@inject AppStateService AppState
+
+<PageTitle>Home</PageTitle>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">2026년 인사평가 시스템</h1>
+
+            @if (LoginStatus.LoginStatus.IsLogin)
+            {
+                <div class="alert alert-success">
+                    <h4>
+                        <i class="bi bi-person-check-fill"></i>
+                        환영합니다, @LoginStatus.LoginStatus.LoginUserName 님!
+                    </h4>
+                    <p class="mb-0">부서: @LoginStatus.LoginStatus.LoginUserEDepartment</p>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">내 권한</h5>
+                        <ul class="list-group list-group-flush">
+                            @if (LoginStatus.LoginStatus.LoginIsAdministrator)
+                            {
+                                <li class="list-group-item">
+                                    <i class="bi bi-shield-check"></i> 시스템 관리자
+                                </li>
+                            }
+                            @if (LoginStatus.LoginStatus.LoginIsDirector)
+                            {
+                                <li class="list-group-item">
+                                    <i class="bi bi-star-fill"></i> 임원
+                                </li>
+                            }
+                            @if (LoginStatus.LoginStatus.LoginIsTeamLeader)
+                            {
+                                <li class="list-group-item">
+                                    <i class="bi bi-people-fill"></i> 팀장
+                                </li>
+                            }
+                            @if (LoginStatus.LoginStatus.LoginIsDeptObjectiveWriter)
+                            {
+                                <li class="list-group-item">
+                                    <i class="bi bi-pencil-square"></i> 부서목표 작성자
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <h4>
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        로그인이 필요합니다
+                    </h4>
+                    <p class="mb-0">인사평가 시스템을 이용하시려면 로그인해주세요.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

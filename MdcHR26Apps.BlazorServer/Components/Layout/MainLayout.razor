@@ -1,0 +1,33 @@
+﻿@inherits LayoutComponentBase
+@inject LoginStatusService LoginStatus
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            @if (LoginStatus.LoginStatus.IsLogin)
+            {
+                <span class="text-muted">
+                    <i class="bi bi-person-circle"></i> @LoginStatus.LoginStatus.LoginUserName
+                </span>
+            }
+            else
+            {
+                <span class="text-muted">로그인이 필요합니다</span>
+            }
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+<div id="blazor-error-ui">
+    An error has occurred. This application may no longer respond until reloaded.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">✖</a>
+</div>
