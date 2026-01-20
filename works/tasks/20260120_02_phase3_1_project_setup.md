@@ -106,14 +106,14 @@ dotnet add reference ..\MdcHR26Apps.Models\MdcHR26Apps.Models.csproj
 
 ```bash
 cd MdcHR26Apps.BlazorServer
-dotnet add package ClosedXML --version 0.104.2
+dotnet add package ClosedXML --version 0.105.0
 ```
 
 **MdcHR26Apps.BlazorServer.csproj 확인**:
 
 ```xml
 <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.104.2" />
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
 </ItemGroup>
 ```
 
