@@ -1,0 +1,197 @@
+@page "/auth/manage"
+@using MdcHR26Apps.Models.User
+@inject IUserRepository UserRepository
+@inject LoginStatusService LoginStatusService
+@inject NavigationManager NavigationManager
+
+<PageTitle>비밀번호 변경 - 2026 인사평가</PageTitle>
+
+<div class="manage-container">
+    <div class="manage-card">
+        <div class="manage-header">
+            <h2>비밀번호 변경</h2>
+            <p class="text-muted">안전한 비밀번호로 변경하세요</p>
+        </div>
+
+        <EditForm Model="@changePasswordModel" OnValidSubmit="@HandlePasswordChange" FormName="ChangePasswordForm">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label for="currentPassword" class="form-label">현재 비밀번호</label>
+                <InputText id="currentPassword"
+                           type="password"
+                           class="form-control"
+                           @bind-Value="changePasswordModel.CurrentPassword"
+                           placeholder="현재 비밀번호를 입력하세요"
+                           autocomplete="current-password" />
+                <ValidationMessage For="@(() => changePasswordModel.CurrentPassword)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="newPassword" class="form-label">새 비밀번호</label>
+                <InputText id="newPassword"
+                           type="password"
+                           class="form-control"
+                           @bind-Value="changePasswordModel.NewPassword"
+                           placeholder="새 비밀번호를 입력하세요 (4~50자)"
+                           autocomplete="new-password" />
+                <ValidationMessage For="@(() => changePasswordModel.NewPassword)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">새 비밀번호 확인</label>
+                <InputText id="confirmPassword"
+                           type="password"
+                           class="form-control"
+                           @bind-Value="changePasswordModel.ConfirmPassword"
+                           placeholder="새 비밀번호를 다시 입력하세요"
+                           autocomplete="new-password" />
+                <ValidationMessage For="@(() => changePasswordModel.ConfirmPassword)" />
+            </div>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i> @errorMessage
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert alert-success" role="alert">
+                    <i class="bi bi-check-circle-fill"></i> @successMessage
+                </div>
+            }
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary" disabled="@isLoading">
+                    @if (isLoading)
+                    {
+                        <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                        <span>처리 중...</span>
+                    }
+                    else
+                    {
+                        <i class="bi bi-check-circle"></i>
+                        <span>비밀번호 변경</span>
+                    }
+                </button>
+                <button type="button" class="btn btn-secondary" @onclick="GoBack">
+                    <i class="bi bi-arrow-left"></i> 돌아가기
+                </button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private ChangePasswordModel changePasswordModel = new();
+    private string? errorMessage;
+    private string? successMessage;
+    private bool isLoading = false;
+
+    protected override void OnInitialized()
+    {
+        // 로그인 확인
+        if (!LoginStatusService.IsloginCheck())
+        {
+            NavigationManager.NavigateTo("/auth/login");
+        }
+    }
+
+    private async Task HandlePasswordChange()
+    {
+        try
+        {
+            isLoading = true;
+            errorMessage = null;
+            successMessage = null;
+
+            // 1. 새 비밀번호 확인 검증
+            if (changePasswordModel.NewPassword != changePasswordModel.ConfirmPassword)
+            {
+                errorMessage = "새 비밀번호와 확인 비밀번호가 일치하지 않습니다.";
+                return;
+            }
+
+            // 2. 비밀번호 강도 검증
+            var validationError = Utils.PasswordHasher.ValidatePasswordStrength(changePasswordModel.NewPassword);
+            if (validationError != null)
+            {
+                errorMessage = validationError;
+                return;
+            }
+
+            // 3. 현재 로그인 사용자 정보 가져오기
+            var userId = LoginStatusService.LoginStatus.LoginUserId;
+            if (string.IsNullOrEmpty(userId))
+            {
+                errorMessage = "로그인 정보를 찾을 수 없습니다.";
+                return;
+            }
+
+            var user = await UserRepository.GetByUserIdAsync(userId);
+
+            if (user == null)
+            {
+                errorMessage = "사용자 정보를 찾을 수 없습니다.";
+                return;
+            }
+
+            // 4. 현재 비밀번호 검증
+            bool isCurrentPasswordValid = Utils.PasswordHasher.VerifyPassword(
+                changePasswordModel.CurrentPassword,
+                user.UserPassword,
+                user.UserPasswordSalt
+            );
+
+            if (!isCurrentPasswordValid)
+            {
+                errorMessage = "현재 비밀번호가 일치하지 않습니다.";
+                return;
+            }
+
+            // 5. 새 비밀번호 해시 생성
+            var newSalt = Utils.PasswordHasher.GenerateSalt();
+            var newHash = Utils.PasswordHasher.HashPassword(changePasswordModel.NewPassword, newSalt);
+
+            // 6. 비밀번호 업데이트
+            await UserRepository.UpdatePasswordAsync(user.Uid, newHash, newSalt);
+
+            // 7. 성공 메시지 표시
+            successMessage = "비밀번호가 성공적으로 변경되었습니다.";
+            changePasswordModel = new(); // 폼 초기화
+
+            // 8. 3초 후 홈으로 리다이렉트
+            await Task.Delay(2000);
+            NavigationManager.NavigateTo("/");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"비밀번호 변경 중 오류가 발생했습니다: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    private class ChangePasswordModel
+    {
+        [Required(ErrorMessage = "현재 비밀번호를 입력해주세요.")]
+        public string CurrentPassword { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "새 비밀번호를 입력해주세요.")]
+        [StringLength(50, MinimumLength = 4, ErrorMessage = "비밀번호는 4~50자 이내로 입력해주세요.")]
+        public string NewPassword { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "새 비밀번호 확인을 입력해주세요.")]
+        [StringLength(50, MinimumLength = 4, ErrorMessage = "비밀번호는 4~50자 이내로 입력해주세요.")]
+        public string ConfirmPassword { get; set; } = string.Empty;
+    }
+}

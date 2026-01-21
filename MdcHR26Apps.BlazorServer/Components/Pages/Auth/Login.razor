@@ -1,0 +1,170 @@
+@page "/auth/login"
+@using MdcHR26Apps.Models.User
+@using MdcHR26Apps.Models.Department
+@inject IUserRepository UserRepository
+@inject IEDepartmentRepository DepartmentRepository
+@inject LoginStatusService LoginStatusService
+@inject NavigationManager NavigationManager
+
+<PageTitle>로그인페이지</PageTitle>
+
+@if (isLoading)
+{
+    <div class="spinner-container">
+        <div class="spinner"></div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <EditForm Model="@loginModel">
+                <div class="input-group mb-1">
+                    <span class="input-group-text input-width" for="userId">ID</span>
+                    <InputText id="userId"
+                               autocomplete="off"
+                               class="form-control"
+                               placeholder="ID"
+                               @bind-Value="loginModel.UserId"
+                               @onkeydown="EnterKeyLogin" />
+                </div>
+                <div class="input-group mb-1">
+                    <span class="input-group-text input-width" for="password">PW</span>
+                    <InputText type="@passwordInputType"
+                               id="password"
+                               class="form-control"
+                               placeholder="Password"
+                               @bind-Value="loginModel.Password"
+                               @onkeydown="EnterKeyLogin" />
+                    <span class="input-group-text">
+                        <i class="@eyeIcon" @onclick="PasswordVisionToggle"></i>
+                    </span>
+                </div>
+                <div class="input-group mb-1">
+                    <button id="loginButton" class="btn btn-primary" @onclick="HandleLogin">로그인</button>
+                </div>
+            </EditForm>
+        </div>
+        <div>
+            <span>@errorMessage</span>
+        </div>
+    </div>
+}
+
+@code {
+    private LoginModel loginModel = new();
+    private string? errorMessage;
+    private bool isLoading = false;
+    private string passwordInputType = "password";
+    private string eyeIcon = "bi bi-eye-slash";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // 이미 로그인된 경우 홈으로 리다이렉트
+        if (LoginStatusService.IsloginCheck())
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    private void PasswordVisionToggle()
+    {
+        if (passwordInputType == "password")
+        {
+            passwordInputType = "text";
+            eyeIcon = "bi bi-eye";
+        }
+        else
+        {
+            passwordInputType = "password";
+            eyeIcon = "bi bi-eye-slash";
+        }
+    }
+
+    private async Task EnterKeyLogin(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            await HandleLogin();
+        }
+    }
+
+    private async Task HandleLogin()
+    {
+        try
+        {
+            isLoading = true;
+            errorMessage = null;
+
+            // 1. 사용자 조회
+            var user = await UserRepository.GetByUserIdAsync(loginModel.UserId);
+
+            if (user == null)
+            {
+                errorMessage = "사용자 ID 또는 비밀번호가 일치하지 않습니다.";
+                return;
+            }
+
+            // 2. 비밀번호 검증
+            bool isValid = Utils.PasswordHasher.VerifyPassword(
+                loginModel.Password,
+                user.UserPassword,
+                user.UserPasswordSalt
+            );
+
+            if (!isValid)
+            {
+                errorMessage = "사용자 ID 또는 비밀번호가 일치하지 않습니다.";
+                return;
+            }
+
+            // 3. 활성 상태 확인
+            if (!user.EStatus)
+            {
+                errorMessage = "비활성화된 계정입니다. 관리자에게 문의하세요.";
+                return;
+            }
+
+            // 4. 부서 정보 조회
+            string departmentName = "부서 없음";
+            if (user.EDepartId.HasValue)
+            {
+                var department = await DepartmentRepository.GetByIdAsync(user.EDepartId.Value);
+                if (department != null)
+                {
+                    departmentName = department.EDepartmentName;
+                }
+            }
+
+            // 5. 로그인 상태 설정
+            LoginStatusService.SetLoginStatus(
+                isLogin: true,
+                uid: user.Uid,
+                userid: user.UserId,
+                username: user.UserName,
+                isadmin: user.IsAdministrator,
+                isteamleader: user.IsTeamLeader,
+                isdirector: user.IsDirector,
+                isdeptobjwriter: user.IsDeptObjectiveWriter,
+                department: departmentName
+            );
+
+            // 6. 홈으로 리다이렉트
+            NavigationManager.NavigateTo("/", forceLoad: true);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"로그인 중 오류가 발생했습니다: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private class LoginModel
+    {
+        public string UserId { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+}

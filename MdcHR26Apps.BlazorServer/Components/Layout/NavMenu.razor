@@ -1,38 +1,75 @@
 ﻿@inject LoginStatusService LoginStatus
+@implements IDisposable
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">2026 인사평가</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
     </div>
 </div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="nav flex-column">
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
 
-        @if (LoginStatus.LoginStatus.IsLogin)
+        @if (!LoginStatus.IsloginCheck())
         {
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="mypage">
-                    <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> 내 정보
+                <NavLink class="nav-link" href="/auth/login">
+                    <span class="oi oi-power-standby" aria-hidden="true"></span> Login
                 </NavLink>
             </div>
         }
-
-        @if (LoginStatus.IsloginAndIsAdminCheck())
+        else
         {
+            @* 관리자 페이지 *@
+            @if (LoginStatus.IsloginAndIsAdminCheck())
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/admin">
+                        <span class="oi oi-list" aria-hidden="true"></span> 관리자 페이지
+                    </NavLink>
+                </div>
+            }
+
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="admin">
-                    <span class="bi bi-gear-fill-nav-menu" aria-hidden="true"></span> 관리자
+                <NavLink class="nav-link" href="/auth/manage">
+                    <span class="oi oi-wrench" aria-hidden="true"></span> 비밀번호수정
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/auth/logout">
+                    <span class="oi bi-box-arrow-right" aria-hidden="true"></span> Logout
                 </NavLink>
             </div>
         }
     </nav>
 </div>
 
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LoginStatus.OnChange += StateHasChanged;
+        await base.OnInitializedAsync();
+    }
+
+    public void Dispose()
+    {
+        LoginStatus.OnChange -= StateHasChanged;
+    }
+}

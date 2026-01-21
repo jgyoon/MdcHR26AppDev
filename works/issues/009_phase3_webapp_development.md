@@ -106,15 +106,18 @@ builder.Services.AddRazorComponents()
 
 ## 진행 사항
 
-### Phase 3-1: 프로젝트 생성 및 기본 설정
-- [ ] Blazor Server 프로젝트 생성 (.NET 10.0)
-- [ ] 프로젝트 참조 추가 (MdcHR26Apps.Models)
-- [ ] NuGet 패키지 설치
-- [ ] Program.cs DI 설정
-- [ ] appsettings.json 환경 설정
-- [ ] 기본 레이아웃 (MainLayout, NavMenu)
-- [ ] 상태 관리 서비스
-- [ ] 빌드 및 실행 확인
+### Phase 3-1: 프로젝트 생성 및 기본 설정 ✅
+- [x] Blazor Server 프로젝트 생성 (.NET 10.0)
+- [x] 프로젝트 참조 추가 (MdcHR26Apps.Models)
+- [x] NuGet 패키지 설치
+- [x] Program.cs DI 설정
+- [x] appsettings.json 환경 설정
+- [x] 기본 레이아웃 (MainLayout, NavMenu)
+- [x] 상태 관리 서비스
+- [x] 빌드 및 실행 확인
+- [x] .NET 10 최신 기능 적용 (@Assets[], ResourcePreloader, ImportMap, ReconnectModal)
+- [x] Playwright 테스트 환경 구축 (Chromium 브라우저, 4개 테스트)
+- [x] test-runner Agent 생성 (자동 테스트 실행)
 
 ### Phase 3-2: 로그인 및 인증
 - [ ] Login.razor 구현
@@ -246,7 +249,8 @@ builder.Services.AddRazorComponents()
 ## 관련 문서
 
 **작업지시서**:
-- [20260120_01_phase3_blazor_webapp.md](../tasks/20260120_01_phase3_blazor_webapp.md) - Phase 3-1 프로젝트 생성
+- [20260120_01_phase3_blazor_webapp.md](../tasks/20260120_01_phase3_blazor_webapp.md) - Phase 3 전체 계획
+- [20260120_02_phase3_1_project_setup.md](../tasks/20260120_02_phase3_1_project_setup.md) - Phase 3-1 프로젝트 생성 ✅
 
 **선행 이슈**:
 - [#008: Phase 2 Model 개발](008_phase2_model_development.md)
@@ -281,11 +285,16 @@ builder.Services.AddRazorComponents()
 ## 개발자 피드백
 
 **작업 시작**: 2026-01-20
-**작업지시서 작성**: 2026-01-20
-**개발자 승인**: 대기 중
-**현재 상태**: 작업지시서 검토 중
+**작업지시서 작성**: 2026-01-20 (2개)
+**Phase 3-1 완료**: 2026-01-20 ✅
+**현재 상태**: Phase 3-1 완료, Phase 3-2 준비 중
+
+**완료 내역**:
+1. ✅ Blazor Server 프로젝트 생성 및 기본 설정
+2. ✅ .NET 10 최신 기능 적용 (프로덕션 정렬)
+3. ✅ Playwright 자동 테스트 환경 구축
+4. ✅ test-runner Agent 생성
 
 **다음 단계**:
-1. 개발자 승인 대기
-2. feature/phase3-webapp 브랜치 생성
-3. Phase 3-1 작업지시서 기반 개발 시작
+1. Phase 3-2: 로그인 및 인증 시스템 구현
+2. Login.razor, Logout.razor, Manage.razor 개발

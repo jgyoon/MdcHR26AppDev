@@ -18,6 +18,14 @@
         "font/fonts/bootstrap-icons.woff",
         "font/fonts/bootstrap-icons.woff2"
       ]
+    },
+    {
+      "library": "open-iconic@1.1.1",
+      "destination": "wwwroot/lib/open-iconic/",
+      "files": [
+        "font/css/open-iconic-bootstrap.min.css",
+        "font/fonts/open-iconic.woff"
+      ]
     }
   ]
 }

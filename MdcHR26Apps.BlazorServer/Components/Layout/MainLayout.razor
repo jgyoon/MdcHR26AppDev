@@ -10,13 +10,17 @@
         <div class="top-row px-4">
             @if (LoginStatus.LoginStatus.IsLogin)
             {
-                <span class="text-muted">
-                    <i class="bi bi-person-circle"></i> @LoginStatus.LoginStatus.LoginUserName
-                </span>
+                <div>
+                    <strong>
+                        @LoginStatus.LoginStatus.LoginUserName (ID : @LoginStatus.LoginStatus.LoginUserId )
+                    </strong>
+                </div>
+                <a href="/auth/logout">Logout</a>
+                <a href="/auth/manage">비밀번호 변경</a>
             }
             else
             {
-                <span class="text-muted">로그인이 필요합니다</span>
+                <a href="/auth/login">Login</a>
             }
         </div>
 

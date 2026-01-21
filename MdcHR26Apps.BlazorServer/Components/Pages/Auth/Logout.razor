@@ -1,0 +1,26 @@
+@page "/auth/logout"
+@inject LoginStatusService LoginStatusService
+@inject NavigationManager NavigationManager
+
+<PageTitle>로그아웃</PageTitle>
+
+@code {
+    protected override void OnInitialized()
+    {
+        // 로그인 상태 초기화
+        LoginStatusService.SetLoginStatus(
+            isLogin: false,
+            uid: 0,
+            userid: string.Empty,
+            username: string.Empty,
+            isadmin: false,
+            isteamleader: false,
+            isdirector: false,
+            isdeptobjwriter: false,
+            department: string.Empty
+        );
+
+        // 로그인 페이지로 리다이렉트
+        NavigationManager.NavigateTo("/auth/login", forceLoad: true);
+    }
+}
