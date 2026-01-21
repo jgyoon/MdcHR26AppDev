@@ -21,7 +21,18 @@
       "Bash(curl:*)",
       "Bash(pkill:*)",
       "Bash(taskkill:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(Select-String -Pattern \"error|warning|Build succeeded\")",
+      "Bash(Select-Object -First 20)",
+      "Bash(git commit:*)",
+      "Bash(npx --version:*)",
+      "Bash(npm --version)",
+      "Bash(ls:*)",
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(npx playwright install chromium)",
+      "Bash(npm test:*)",
+      "Bash(dotnet restore:*)"
     ]
   }
 }
