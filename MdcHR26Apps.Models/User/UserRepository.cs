@@ -251,16 +251,16 @@ public class UserRepository(string connectionString, ILoggerFactory loggerFactor
         byte[] salt = result.UserPasswordSalt;
         byte[] storedHash = result.UserPassword;
 
-        // 비밀번호 + Salt 조합하여 해시 생성
+        // 비밀번호 + Salt 조합하여 해시 생성 (SQL NVARCHAR는 Unicode 인코딩)
         using var sha256 = System.Security.Cryptography.SHA256.Create();
-        var passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
+        var passwordBytes = System.Text.Encoding.Unicode.GetBytes(password);
         var combined = new byte[passwordBytes.Length + salt.Length];
         Buffer.BlockCopy(passwordBytes, 0, combined, 0, passwordBytes.Length);
         Buffer.BlockCopy(salt, 0, combined, passwordBytes.Length, salt.Length);
         byte[] inputHash = sha256.ComputeHash(combined);
 
         // 해시 비교
-        return storedHash.SequenceEqual(inputHash);
+        return System.Collections.StructuralComparisons.StructuralEqualityComparer.Equals(inputHash, storedHash);
     }
     #endregion
 

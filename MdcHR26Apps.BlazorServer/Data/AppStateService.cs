@@ -9,7 +9,9 @@ public class AppStateService
         _configuration = configuration;
     }
 
+    // 상태값이 변화됨을 알림
     public event Action? OnChange;
+    private void AppStateChanged() => OnChange?.Invoke();
 
     public bool GetIsOpen()
     {
@@ -23,5 +25,18 @@ public class AppStateService
         return text.Length <= maxLength ? text : $"{text.Substring(0, maxLength)}...";
     }
 
-    private void NotifyStateChanged() => OnChange?.Invoke();
+    #region + 개발환경관련
+    public bool IsProduction { get; private set; } = false;
+
+    public void SetIsProduction(int no)
+    {
+        IsProduction = no == 1 ? true : false;
+        AppStateChanged();
+    }
+
+    public bool GetIsProduction()
+    {
+        return IsProduction;
+    }
+    #endregion
 }

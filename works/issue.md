@@ -1,14 +1,14 @@
 # 이슈 인덱스
 
-**최종 업데이트**: 2026-01-20
+**최종 업데이트**: 2026-01-21
 
 ---
 
 ## 이슈 현황 통계
 
-- **총 이슈**: 9개 (참조 이슈 2개 포함)
-- **프로젝트 이슈**: 7개 (#003부터 시작)
-- **완료**: 8개
+- **총 이슈**: 10개 (참조 이슈 2개 포함)
+- **프로젝트 이슈**: 8개 (#003부터 시작)
+- **완료**: 9개
 - **진행 중**: 1개
 - **보류**: 0개
 
@@ -26,18 +26,18 @@
 
 | 번호 | 제목 | 완료일 | 관련 작업지시서 |
 |------|------|--------|----------------|
+| [#010](issues/010_login_password_hash_order_mismatch.md) | 로그인 비밀번호 검증 실패 - 해시 순서 및 인코딩 불일치 | 2026-01-21 | 20260121_01 |
 | [#008](issues/008_phase2_model_development.md) | Phase 2 - Model 개발 (Dapper) | 2026-01-20 | 20260119_01~04 (4개) |
 | [#007](issues/007_remove_memberdb_optimize_structure.md) | MemberDb 제거 및 부서 목표 권한 관리 최적화 | 2026-01-16 | 20260114_02 |
 | [#006](issues/006_enhance_password_security.md) | UserDb 비밀번호 보안 강화 | 2026-01-14 | 20260114_01 |
 | [#005](issues/005_phase1_progress_summary.md) | Phase 1 작업 완료 보고서 | 2025-12-16 | 20251216_03 |
-| [#004](issues/004_phase1_database_design.md) | Phase 1 데이터베이스 설계 및 구축 | 2025-12-16 | 20251216_02 |
 
 ---
 
 ## 전체 이슈 목록
 
 <details>
-<summary>전체 이슈 보기 (8개)</summary>
+<summary>전체 이슈 보기 (10개)</summary>
 
 ### 참조 이슈 (다른 프로젝트)
 - [#001](issues/001_checkup_mode_alimtalk_fix.md) - 알림톡 발송 시 검진 모드 시간 반영 (참조, 2025-11-10)
@@ -57,6 +57,7 @@
 
 ### WebApp 개발
 - [#009](issues/009_phase3_webapp_development.md) - Phase 3 Blazor Server WebApp 개발 (진행중, 2026-01-20~)
+- [#010](issues/010_login_password_hash_order_mismatch.md) - 로그인 비밀번호 검증 실패 - 해시 순서 및 인코딩 불일치 (완료, 2026-01-21)
 
 </details>
 
@@ -96,6 +97,10 @@
     ├─ Phase 3-4: 평가 프로세스 (예정 ⏳)
     ├─ Phase 3-5: 공통 컴포넌트 (예정 ⏳)
     └─ Phase 3-6: 엑셀 및 유틸리티 (예정 ⏳)
+    ↓
+[#010] 로그인 비밀번호 검증 실패 (완료 ✅)
+    ├─ 해시 순서 불일치 (Password+Salt 순서로 수정)
+    └─ 인코딩 불일치 (UTF-8 → Unicode 변경)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   참조 이슈 (다른 프로젝트)
@@ -159,12 +164,13 @@ works/
 | 20260119_04_phase2_4_view_models.md | 완료 (15개 파일) | [#008](issues/008_phase2_model_development.md) |
 | 20260120_01_phase3_blazor_webapp.md | 승인 완료 | [#009](issues/009_phase3_webapp_development.md) |
 | 20260120_02_phase3_1_project_setup.md | 완료 ✅ | [#009](issues/009_phase3_webapp_development.md) |
+| 20260121_01_fix_password_hash_order.md | 완료 (코드 수정) | [#010](issues/010_login_password_hash_order_mismatch.md) |
 
 ---
 
 ## 다음 이슈 번호
 
-**다음 생성할 이슈**: #010
+**다음 생성할 이슈**: #011
 
 ---
 

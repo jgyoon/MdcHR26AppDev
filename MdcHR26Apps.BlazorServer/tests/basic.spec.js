@@ -7,7 +7,7 @@ test.describe('Blazor Server 기본 테스트', () => {
     await page.goto('/');
 
     // 페이지 제목 확인
-    await expect(page).toHaveTitle(/Home/);
+    await expect(page).toHaveTitle(/2026년 인사평가프로그램/);
 
     // 메인 헤딩 확인
     await expect(page.locator('h1')).toContainText('2026년 인사평가 시스템');
@@ -36,6 +36,9 @@ test.describe('Blazor Server 기본 테스트', () => {
 
   test('404 페이지가 정상적으로 작동하는지 확인', async ({ page }) => {
     await page.goto('/non-existent-page');
+
+    // Blazor 로드 대기
+    await page.waitForLoadState('networkidle');
 
     // 404 메시지 확인
     await expect(page.locator('h3')).toContainText('페이지를 찾을 수 없습니다');

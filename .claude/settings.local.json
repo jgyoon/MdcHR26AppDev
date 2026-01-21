@@ -32,7 +32,12 @@
       "Bash(npm install:*)",
       "Bash(npx playwright install chromium)",
       "Bash(npm test:*)",
-      "Bash(dotnet restore:*)"
+      "Bash(dotnet restore:*)",
+      "Skill(issue)",
+      "Skill(issue:*)",
+      "Bash(dir:*)",
+      "Bash(timeout /t 6)",
+      "Bash(npx playwright:*)"
     ]
   }
 }

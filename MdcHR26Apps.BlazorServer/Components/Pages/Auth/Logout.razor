@@ -1,6 +1,7 @@
 @page "/auth/logout"
 @inject LoginStatusService LoginStatusService
 @inject NavigationManager NavigationManager
+@inject UrlActions UrlActions
 
 <PageTitle>로그아웃</PageTitle>
 
@@ -20,7 +21,7 @@
             department: string.Empty
         );
 
-        // 로그인 페이지로 리다이렉트
+        // 로그인 페이지로 리다이렉트 (forceLoad로 세션 완전 초기화)
         NavigationManager.NavigateTo("/auth/login", forceLoad: true);
     }
 }

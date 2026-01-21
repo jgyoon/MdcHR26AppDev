@@ -28,13 +28,13 @@ public static class PasswordHasher
     {
         using var sha256 = SHA256.Create();
 
-        // 비밀번호를 UTF-8 바이트로 변환
-        var passwordBytes = Encoding.UTF8.GetBytes(password);
+        // 비밀번호를 Unicode(UTF-16) 바이트로 변환 (SQL NVARCHAR와 일치)
+        var passwordBytes = Encoding.Unicode.GetBytes(password);
 
-        // Salt + Password 결합
-        var combined = new byte[salt.Length + passwordBytes.Length];
-        Buffer.BlockCopy(salt, 0, combined, 0, salt.Length);
-        Buffer.BlockCopy(passwordBytes, 0, combined, salt.Length, passwordBytes.Length);
+        // Password + Salt 결합 (SQL HASHBYTES와 동일한 순서)
+        var combined = new byte[passwordBytes.Length + salt.Length];
+        Buffer.BlockCopy(passwordBytes, 0, combined, 0, passwordBytes.Length);
+        Buffer.BlockCopy(salt, 0, combined, passwordBytes.Length, salt.Length);
 
         // SHA-256 해시
         return sha256.ComputeHash(combined);

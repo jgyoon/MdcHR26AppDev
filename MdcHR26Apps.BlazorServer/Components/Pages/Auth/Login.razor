@@ -1,10 +1,11 @@
 @page "/auth/login"
 @using MdcHR26Apps.Models.User
-@using MdcHR26Apps.Models.Department
+@using MdcHR26Apps.Models.Views.v_MemberListDB
 @inject IUserRepository UserRepository
-@inject IEDepartmentRepository DepartmentRepository
+@inject Iv_MemberListRepository MemberListRepository
 @inject LoginStatusService LoginStatusService
 @inject NavigationManager NavigationManager
+@inject UrlActions UrlActions
 
 <PageTitle>로그인페이지</PageTitle>
 
@@ -35,7 +36,7 @@ else
                                class="form-control"
                                placeholder="Password"
                                @bind-Value="loginModel.Password"
-                               @onkeydown="EnterKeyLogin" />
+                               @onkeydown="EnterKeyLogin"></InputText>
                     <span class="input-group-text">
                         <i class="@eyeIcon" @onclick="PasswordVisionToggle"></i>
                     </span>
@@ -85,7 +86,11 @@ else
     {
         if (e.Code == "Enter" || e.Code == "NumpadEnter")
         {
-            await HandleLogin();
+            // 입력된 값이 있을 경우만 로그인
+            if (!String.IsNullOrEmpty(loginModel.UserId) && !String.IsNullOrEmpty(loginModel.Password))
+            {
+                await HandleLogin();
+            }
         }
     }
 
@@ -96,21 +101,8 @@ else
             isLoading = true;
             errorMessage = null;
 
-            // 1. 사용자 조회
-            var user = await UserRepository.GetByUserIdAsync(loginModel.UserId);
-
-            if (user == null)
-            {
-                errorMessage = "사용자 ID 또는 비밀번호가 일치하지 않습니다.";
-                return;
-            }
-
-            // 2. 비밀번호 검증
-            bool isValid = Utils.PasswordHasher.VerifyPassword(
-                loginModel.Password,
-                user.UserPassword,
-                user.UserPasswordSalt
-            );
+            // 1. 로그인 체크 (UserRepository.LoginCheckAsync 사용)
+            bool isValid = await UserRepository.LoginCheckAsync(loginModel.UserId, loginModel.Password);
 
             if (!isValid)
             {
@@ -118,39 +110,30 @@ else
                 return;
             }
 
-            // 3. 활성 상태 확인
-            if (!user.EStatus)
+            // 2. v_MemberListDB에서 사용자 정보 조회 (부서명 포함, 1회 쿼리)
+            var member = await MemberListRepository.GetByUserIdAsync(loginModel.UserId);
+
+            if (member == null)
             {
-                errorMessage = "비활성화된 계정입니다. 관리자에게 문의하세요.";
+                errorMessage = "사용자 정보를 찾을 수 없습니다.";
                 return;
             }
 
-            // 4. 부서 정보 조회
-            string departmentName = "부서 없음";
-            if (user.EDepartId.HasValue)
-            {
-                var department = await DepartmentRepository.GetByIdAsync(user.EDepartId.Value);
-                if (department != null)
-                {
-                    departmentName = department.EDepartmentName;
-                }
-            }
-
-            // 5. 로그인 상태 설정
+            // 3. 로그인 상태 설정
             LoginStatusService.SetLoginStatus(
                 isLogin: true,
-                uid: user.Uid,
-                userid: user.UserId,
-                username: user.UserName,
-                isadmin: user.IsAdministrator,
-                isteamleader: user.IsTeamLeader,
-                isdirector: user.IsDirector,
-                isdeptobjwriter: user.IsDeptObjectiveWriter,
-                department: departmentName
+                uid: member.Uid,
+                userid: member.UserId,
+                username: member.UserName,
+                isadmin: member.IsAdministrator,
+                isteamleader: member.IsTeamLeader,
+                isdirector: member.IsDirector,
+                isdeptobjwriter: member.IsDeptObjectiveWriter,
+                department: member.EDepartmentName
             );
 
-            // 6. 홈으로 리다이렉트
-            NavigationManager.NavigateTo("/", forceLoad: true);
+            // 4. 홈으로 리다이렉트
+            UrlActions.MoveMainPage();
         }
         catch (Exception ex)
         {

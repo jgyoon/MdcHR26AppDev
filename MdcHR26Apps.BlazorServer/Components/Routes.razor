@@ -1,4 +1,5 @@
 @using Microsoft.AspNetCore.Components.Routing
+@using MdcHR26Apps.BlazorServer.Components.Pages
 
 <Router AppAssembly="typeof(Program).Assembly">
     <Found Context="routeData">
@@ -6,9 +7,8 @@
         <FocusOnNavigate RouteData="routeData" Selector="h1" />
     </Found>
     <NotFound>
-        <PageTitle>Not found</PageTitle>
         <LayoutView Layout="typeof(Layout.MainLayout)">
-            <p role="alert">죄송합니다. 페이지를 찾을 수 없습니다.</p>
+            <NotFound />
         </LayoutView>
     </NotFound>
 </Router>
