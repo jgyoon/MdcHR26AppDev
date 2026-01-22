@@ -222,3 +222,6 @@ works/**/*.backup
 **/playwright-report/
 **/test-results/
 **/playwright/.cache/
+
+# Sync logs (project synchronization)
+.sync/

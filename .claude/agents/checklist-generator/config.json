@@ -1,0 +1,45 @@
+{
+  "name": "checklist-generator",
+  "description": "현재 프로젝트에서 실제 프로젝트로 코드 동기화를 위한 체크리스트 자동 생성 에이전트",
+  "version": "1.0.0",
+  "author": "MdcHR2026 Team",
+  "type": "agent",
+  "capabilities": [
+    "Git log 기반 변경 파일 추출",
+    "동기화 체크리스트 마크다운 생성",
+    "파일별 변경 내용 분석",
+    "복사 절차 단계별 가이드 제공",
+    "마지막 동기화 이후 변경사항 추적"
+  ],
+  "tools": [
+    "Bash",
+    "Read",
+    "Write",
+    "Glob"
+  ],
+  "activation_triggers": [
+    "작업 완료 후 Git commit 시",
+    "개발자 명시적 요청",
+    "실제 프로젝트 동기화 전"
+  ],
+  "environment": {
+    "currentProject": "C:\\Codes\\00_Develop_Cursor\\10_MdcHR26Apps",
+    "productionProject": "C:\\Codes\\41_MdcHR26\\MdcHR26App",
+    "namespace": "MdcHR26Apps.BlazorServer",
+    "syncLogDir": ".sync",
+    "checklistDir": "works/sync-checklists"
+  },
+  "output_format": "Markdown",
+  "safety": {
+    "readOnly": true,
+    "noFileModification": true,
+    "checklistOnly": true
+  },
+  "tags": [
+    "sync",
+    "checklist",
+    "git",
+    "automation",
+    "documentation"
+  ]
+}
