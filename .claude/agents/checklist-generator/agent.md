@@ -9,8 +9,8 @@
 ## 핵심 원칙
 
 1. **읽기 전용**: 파일을 수정하지 않음
-2. **체크리스트 생성**: 개발자가 따라할 수 있는 단계별 가이드 제공
-3. **Git 기반**: 마지막 동기화 이후 변경된 파일만 추출
+2. **간소화된 체크리스트**: 생성/수정/삭제로 파일 분류
+3. **Git 기반**: 마지막 동기화 이후 변경된 파일만 추출 (`git diff --name-status`)
 
 ---
 
@@ -40,79 +40,34 @@
 **생성일시**: 2026-01-22 15:30
 **현재 커밋**: acca6c3
 **마지막 동기화**: c8eb65f (선택사항)
+**변경 파일**: 5개
 
 ---
 
-## 📋 변경 파일 목록 (5개)
+## 📋 작업 파일 목록
 
-### MdcHR26Apps.BlazorServer (3개)
-- [ ] Components/Pages/Auth/Login.razor
-- [ ] Components/Pages/Auth/Logout.razor
-- [ ] Components/Routes.razor
+### 1. 생성:
+- MdcHR26Apps.BlazorServer/Components/Pages/NewPage.razor
+- MdcHR26Apps.Models/NewModel/NewModel.cs
 
-### MdcHR26Apps.Models (2개)
-- [ ] Views/v_MemberListDB/v_MemberListDB.cs
-- [ ] User/UserRepository.cs
+### 2. 수정:
+- MdcHR26Apps.BlazorServer/Components/Pages/Auth/Login.razor
+- MdcHR26Apps.BlazorServer/Components/Pages/Auth/Logout.razor
+- MdcHR26Apps.BlazorServer/appsettings.json
 
----
-
-## 🔄 복사 절차
-
-### 파일 1: Login.razor
-
-**현재 프로젝트:**
-```
-C:\Codes\00_Develop_Cursor\10_MdcHR26Apps\MdcHR26Apps.BlazorServer\Components\Pages\Auth\Login.razor
-```
-
-**실제 프로젝트:**
-```
-C:\Codes\41_MdcHR26\MdcHR26App\MdcHR26Apps.BlazorServer\Components\Pages\Auth\Login.razor
-```
-
-**변경 사항:**
-- v_MemberListDB 활용으로 DB 쿼리 최적화
-- forceLoad 제거, UrlActions.MoveMainPage() 사용
-
-**복사 단계:**
-1. [ ] VSCode에서 Login.razor 열기
-2. [ ] Ctrl+A (전체 선택)
-3. [ ] Ctrl+C (복사)
-4. [ ] Visual Studio 2022에서 Login.razor 열기
-5. [ ] Ctrl+A (전체 선택)
-6. [ ] Ctrl+V (붙여넣기)
-7. [ ] Ctrl+S (저장)
-8. [ ] 빌드 확인 (Ctrl+Shift+B)
-
----
-
-### 파일 2: Logout.razor
-
-(동일한 형식 반복)
-
----
-
-## ✅ 최종 검증
-
-### 빌드
-- [ ] Visual Studio에서 전체 빌드 성공
-- [ ] 경고 메시지 확인
-
-### 수동 테스트
-- [ ] 로그인 기능 테스트
-- [ ] 로그아웃 기능 테스트
-- [ ] 404 페이지 테스트
-
-### Git Commit
-- [ ] 실제 프로젝트 Git commit
-- [ ] 커밋 메시지 작성
-- [ ] .sync/last-sync-commit.txt 업데이트
+### 3. 삭제:
+- MdcHR26Apps.BlazorServer/wwwroot/css/LoadingSpinner.css
+- MdcHR26Apps.BlazorServer/wwwroot/css/app.css
 
 ---
 
 ## 📌 메모
 
-(추가 메모 작성 공간)
+**커밋 정보**: acca6c3 (fix: 로그인 인증 수정)
+
+**주요 변경 사항**:
+- 로그인 인증 로직 개선
+- 미사용 CSS 파일 제거
 
 ---
 
@@ -132,17 +87,21 @@ C:\Codes\41_MdcHR26\MdcHR26App\MdcHR26Apps.BlazorServer\Components\Pages\Auth\Lo
 ### 2. Agent 작업 순서
 
 1. `.sync/last-sync-commit.txt` 읽기 (없으면 전체 파일)
-2. `git log --name-only` 실행
-3. 변경된 파일 목록 추출
-4. 각 파일의 변경 내용 분석 (`git diff`)
-5. 체크리스트 마크다운 생성
+2. `git diff --name-status <마지막커밋>..HEAD` 실행
+3. 파일 상태별로 분류:
+   - `A` (Added) → **생성** 목록
+   - `M` (Modified) → **수정** 목록
+   - `D` (Deleted) → **삭제** 목록
+4. Git 커밋 메시지 및 주요 변경 사항 요약
+5. 간소화된 체크리스트 마크다운 생성
 6. `works/sync-checklists/` 폴더에 저장
 
 ### 3. 개발자 작업
 
 생성된 체크리스트를 보면서:
-- 각 파일을 수동으로 복사
-- 체크박스 체크
+- **생성** 파일: 현재 프로젝트 → 실제 프로젝트로 복사
+- **수정** 파일: 현재 프로젝트 → 실제 프로젝트로 덮어쓰기
+- **삭제** 파일: 실제 프로젝트에서 삭제
 - 빌드 및 테스트
 - Git commit
 
@@ -155,27 +114,39 @@ C:\Codes\41_MdcHR26\MdcHR26App\MdcHR26Apps.BlazorServer\Components\Pages\Auth\Lo
 
 **생성일시**: 2026-01-22 15:30
 **현재 커밋**: acca6c3 (fix: 로그인 인증 수정)
+**마지막 동기화**: b18a50f
 **변경 파일**: 5개
 
-## 📋 파일 목록
+---
 
-- [ ] Login.razor
-- [ ] Logout.razor
-- [ ] Routes.razor
-- [ ] v_MemberListDB.cs
-- [ ] UserRepository.cs
+## 📋 작업 파일 목록
 
-## 🔄 복사 절차
+### 1. 생성:
+없음
 
-### Login.razor
-경로: MdcHR26Apps.BlazorServer\Components\Pages\Auth\Login.razor
-변경: v_MemberListDB 사용, forceLoad 제거
+### 2. 수정:
+- MdcHR26Apps.BlazorServer/Components/Pages/Auth/Login.razor
+- MdcHR26Apps.BlazorServer/Components/Pages/Auth/Logout.razor
+- MdcHR26Apps.BlazorServer/Components/Routes.razor
+- MdcHR26Apps.Models/Views/v_MemberListDB/v_MemberListDB.cs
+- MdcHR26Apps.Models/User/UserRepository.cs
 
-1. [ ] VSCode에서 복사
-2. [ ] Visual Studio에 붙여넣기
-3. [ ] 빌드 확인
+### 3. 삭제:
+없음
 
-(반복)
+---
+
+## 📌 메모
+
+**커밋 정보**: acca6c3 (fix: 로그인 인증 수정)
+
+**주요 변경 사항**:
+- v_MemberListDB 활용으로 DB 쿼리 최적화
+- forceLoad 제거, UrlActions.MoveMainPage() 사용
+
+---
+
+**완료 일시**: __________
 ```
 
 ---
@@ -202,5 +173,8 @@ C:\Codes\41_MdcHR26\MdcHR26App\MdcHR26Apps.BlazorServer\Components\Pages\Auth\Lo
 ---
 
 **작성일**: 2026-01-22
-**버전**: 1.0
+**버전**: 2.0 (간소화된 형식)
 **담당**: Claude AI
+**변경 이력**:
+- v2.0 (2026-01-22): 복사 단계 제거, 생성/수정/삭제 분류 방식으로 변경
+- v1.0 (2026-01-22): 초기 버전
