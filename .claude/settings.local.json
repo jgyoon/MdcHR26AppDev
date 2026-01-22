@@ -37,7 +37,8 @@
       "Skill(issue:*)",
       "Bash(dir:*)",
       "Bash(timeout /t 6)",
-      "Bash(npx playwright:*)"
+      "Bash(npx playwright:*)",
+      "Bash(test -f:*)"
     ]
   }
 }
