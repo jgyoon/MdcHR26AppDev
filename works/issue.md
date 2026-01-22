@@ -6,10 +6,10 @@
 
 ## 이슈 현황 통계
 
-- **총 이슈**: 10개 (참조 이슈 2개 포함)
-- **프로젝트 이슈**: 8개 (#003부터 시작)
+- **총 이슈**: 11개 (참조 이슈 2개 포함)
+- **프로젝트 이슈**: 9개 (#003부터 시작)
 - **완료**: 9개
-- **진행 중**: 1개
+- **진행 중**: 2개
 - **보류**: 0개
 
 ---
@@ -18,7 +18,8 @@
 
 | 번호 | 제목 | 시작일 | 진행률 | 현재 단계 |
 |------|------|--------|--------|----------|
-| [#009](issues/009_phase3_webapp_development.md) | Phase 3 - Blazor Server WebApp 개발 | 2026-01-20 | 25% (Phase 3-2 완료) | Phase 3-3 준비 중 |
+| [#009](issues/009_phase3_webapp_development.md) | Phase 3 - Blazor Server WebApp 개발 | 2026-01-20 | 25% (Phase 3-2 완료) | Phase 3-3 대기 중 |
+| [#011](issues/011_phase3_3_admin_pages_build_errors.md) | Phase 3-3 관리자 페이지 빌드 오류 및 재작업 | 2026-01-22 | 롤백 완료 | 내일 재작업 예정 |
 
 ---
 
@@ -37,7 +38,7 @@
 ## 전체 이슈 목록
 
 <details>
-<summary>전체 이슈 보기 (10개)</summary>
+<summary>전체 이슈 보기 (11개)</summary>
 
 ### 참조 이슈 (다른 프로젝트)
 - [#001](issues/001_checkup_mode_alimtalk_fix.md) - 알림톡 발송 시 검진 모드 시간 반영 (참조, 2025-11-10)
@@ -57,7 +58,8 @@
 
 ### WebApp 개발
 - [#009](issues/009_phase3_webapp_development.md) - Phase 3 Blazor Server WebApp 개발 (진행중, 2026-01-20~)
-- [#010](issues/010_login_password_hash_order_mismatch.md) - 로그인 비밀번호 검증 실패 - 해시 순서 및 인코딩 불일치 (완료, 2026-01-21)
+- [#010](issues/010_login_password_hash_order_mismatch.md) - 로그인 비밀번호 검증 실패 - 해시 순서 및 인코딩 불일치 (완료, 2026-01-22)
+- [#011](issues/011_phase3_3_admin_pages_build_errors.md) - Phase 3-3 관리자 페이지 빌드 오류 및 재작업 (진행중, 2026-01-22~)
 
 </details>
 
@@ -97,7 +99,8 @@
     │   ├─ 로그인 인증 로직
     │   ├─ 로그아웃 기능
     │   └─ LoginStatusService (상태 관리)
-    ├─ Phase 3-3: 관리자 페이지 (예정 ⏳)
+    ├─ Phase 3-3: 관리자 페이지 (작업중 🔄)
+    │   └─ [#011] 빌드 오류로 롤백, 내일 재작업 (진행중 🔄)
     ├─ Phase 3-4: 평가 프로세스 (예정 ⏳)
     ├─ Phase 3-5: 공통 컴포넌트 (예정 ⏳)
     └─ Phase 3-6: 엑셀 및 유틸리티 (예정 ⏳)
@@ -112,6 +115,12 @@
         ├─ checklist-generator Agent
         ├─ sync-validator Agent
         └─ CLAUDE.md 동기화 가이드
+    ↓
+[#011] Phase 3-3 관리자 페이지 빌드 오류 (진행중 🔄)
+    ├─ 기존 코드 API 시그니처 미확인
+    ├─ 모델 속성 불일치
+    ├─ 한글 문자열 오류
+    └─ 롤백 후 내일 재작업 예정
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   참조 이슈 (다른 프로젝트)
@@ -181,7 +190,7 @@ works/
 
 ## 다음 이슈 번호
 
-**다음 생성할 이슈**: #011
+**다음 생성할 이슈**: #012
 
 ---
 
