@@ -1,6 +1,6 @@
 # 이슈 인덱스
 
-**최종 업데이트**: 2026-01-21
+**최종 업데이트**: 2026-01-22
 
 ---
 
@@ -18,7 +18,7 @@
 
 | 번호 | 제목 | 시작일 | 진행률 | 현재 단계 |
 |------|------|--------|--------|----------|
-| [#009](issues/009_phase3_webapp_development.md) | Phase 3 - Blazor Server WebApp 개발 | 2026-01-20 | 15% (Phase 3-1 완료) | Phase 3-2 준비 중 |
+| [#009](issues/009_phase3_webapp_development.md) | Phase 3 - Blazor Server WebApp 개발 | 2026-01-20 | 25% (Phase 3-2 완료) | Phase 3-3 준비 중 |
 
 ---
 
@@ -26,7 +26,7 @@
 
 | 번호 | 제목 | 완료일 | 관련 작업지시서 |
 |------|------|--------|----------------|
-| [#010](issues/010_login_password_hash_order_mismatch.md) | 로그인 비밀번호 검증 실패 - 해시 순서 및 인코딩 불일치 | 2026-01-21 | 20260121_01 |
+| [#010](issues/010_login_password_hash_order_mismatch.md) | 로그인 비밀번호 검증 실패 - 해시 순서 및 인코딩 불일치 | 2026-01-22 | 20260121_01 |
 | [#008](issues/008_phase2_model_development.md) | Phase 2 - Model 개발 (Dapper) | 2026-01-20 | 20260119_01~04 (4개) |
 | [#007](issues/007_remove_memberdb_optimize_structure.md) | MemberDb 제거 및 부서 목표 권한 관리 최적화 | 2026-01-16 | 20260114_02 |
 | [#006](issues/006_enhance_password_security.md) | UserDb 비밀번호 보안 강화 | 2026-01-14 | 20260114_01 |
@@ -92,7 +92,11 @@
     │   ├─ .NET 10 최신 기능 적용
     │   ├─ Playwright 테스트 환경
     │   └─ test-runner Agent
-    ├─ Phase 3-2: 로그인 및 인증 (예정 ⏳)
+    ├─ Phase 3-2: 로그인 및 인증 (완료 ✅)
+    │   ├─ 로그인 페이지 UI (2025년 스타일)
+    │   ├─ 로그인 인증 로직
+    │   ├─ 로그아웃 기능
+    │   └─ LoginStatusService (상태 관리)
     ├─ Phase 3-3: 관리자 페이지 (예정 ⏳)
     ├─ Phase 3-4: 평가 프로세스 (예정 ⏳)
     ├─ Phase 3-5: 공통 컴포넌트 (예정 ⏳)
@@ -100,7 +104,14 @@
     ↓
 [#010] 로그인 비밀번호 검증 실패 (완료 ✅)
     ├─ 해시 순서 불일치 (Password+Salt 순서로 수정)
-    └─ 인코딩 불일치 (UTF-8 → Unicode 변경)
+    ├─ 인코딩 불일치 (UTF-8 → Unicode 변경)
+    ├─ DB 쿼리 최적화 (v_MemberListDB 활용)
+    ├─ Navigation 상태 관리 개선 (forceLoad 정리)
+    ├─ Playwright 테스트 환경 구축
+    └─ 프로젝트 동기화 시스템 구축
+        ├─ checklist-generator Agent
+        ├─ sync-validator Agent
+        └─ CLAUDE.md 동기화 가이드
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   참조 이슈 (다른 프로젝트)

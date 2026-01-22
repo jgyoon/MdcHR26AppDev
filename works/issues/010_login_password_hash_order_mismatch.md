@@ -78,6 +78,10 @@ Buffer.BlockCopy(passwordBytes, 0, combined, salt.Length, passwordBytes.Length);
 - [x] Login.razor 수정 (UserRepository.LoginCheckAsync 사용)
 - [x] 인코딩 불일치 발견 및 수정 (UTF-8 → Unicode)
 - [x] 테스트 (jgyoon 계정으로 로그인) - 성공
+- [x] 로그인 DB 쿼리 최적화 (v_MemberListDB 활용)
+- [x] forceLoad 사용 정리 (Login 제거, Logout 유지)
+- [x] Playwright 테스트 환경 구축
+- [x] 프로젝트 동기화 관리 시스템 구축
 
 ---
 
@@ -138,11 +142,76 @@ PW: xnd0580+
 
 ---
 
+## 추가 최적화 작업 (2026-01-22)
+
+### 1. DB 쿼리 최적화
+**문제**: Login.razor에서 3개의 쿼리 실행
+- UserRepository.LoginCheckAsync (로그인 검증)
+- IUserRepository.GetUserByIdAsync (사용자 정보)
+- IDepartmentRepository.GetDepartmentByIdAsync (부서 정보)
+
+**해결**:
+- v_MemberListDB 뷰 활용
+- Iv_MemberListRepository.GetByUserIdAsync 사용
+- 쿼리 3개 → 2개로 감소
+
+**수정 파일**:
+- `MdcHR26Apps.Models/Views/v_MemberListDB/v_MemberListDB.cs`
+- `MdcHR26Apps.BlazorServer/Components/Pages/Auth/Login.razor`
+
+---
+
+### 2. Navigation 상태 관리 개선
+**문제**: Login.razor에서 `forceLoad: true` 사용으로 상태 손실
+
+**해결**:
+- `UrlActions.MoveMainPage()` 사용
+- SPA 라우팅으로 상태 유지
+- Logout.razor는 `forceLoad: true` 유지 (세션 초기화 필요)
+
+**수정 파일**:
+- `MdcHR26Apps.BlazorServer/Components/Pages/Auth/Login.razor`
+- `MdcHR26Apps.BlazorServer/Components/Pages/Auth/Logout.razor`
+
+---
+
+### 3. Playwright 테스트 환경 구축
+**추가 파일**:
+- `tests/basic.spec.js` (4개 테스트) ✅ 통과
+- `tests/auth.spec.js` (7개 로그인 테스트) - 내일 수정 예정
+- `MdcHR26Apps.BlazorServer/Components/Routes.razor` (404 페이지 수정)
+
+**테스트 결과**:
+- basic.spec.js: 3개 통과, 1개 flaky
+- auth.spec.js: 아직 미실행 (PageTitle, selector 수정 필요)
+
+---
+
+### 4. 프로젝트 동기화 관리 시스템
+**목적**: 현재 프로젝트 ↔ 실제 프로젝트 간 안전한 코드 동기화
+
+**추가 사항**:
+- Custom Agent: `checklist-generator` (체크리스트 생성)
+- Custom Agent: `sync-validator` (동기화 검증)
+- `CLAUDE.md`에 "프로젝트 동기화" 섹션 추가
+- `.gitignore`에 `.sync/` 폴더 제외
+
+**워크플로우**:
+1. 작업 완료 → Git commit
+2. checklist-generator로 체크리스트 생성
+3. 개발자가 수동 복사
+4. sync-validator로 검증
+5. 실제 프로젝트 빌드 및 테스트
+
+---
+
 ## 개발자 피드백
 
-**작업 완료 확인**: 2026-01-21
+**작업 완료 확인**: 2026-01-22
 **최종 상태**: 완료 ✅
 **비고**:
 - 로그인 정상 작동 확인
 - 근본 원인: SQL NVARCHAR(Unicode)와 C# UTF-8 인코딩 불일치
 - 도서관리프로그램 코드 참조하여 해결
+- DB 쿼리 최적화 및 테스트 인프라 구축 완료
+- 프로젝트 동기화 시스템 구축 완료
