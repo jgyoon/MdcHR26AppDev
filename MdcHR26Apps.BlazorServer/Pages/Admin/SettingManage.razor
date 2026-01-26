@@ -1,0 +1,131 @@
+@page "/Admin/SettingManage"
+@rendermode InteractiveServer
+
+<PageTitle>기초정보 관리</PageTitle>
+
+<h3>기초정보 관리</h3>
+<hr />
+
+<!-- 탭 헤더 -->
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link @(activeTab == "dept" ? "active" : "")"
+                type="button"
+                @onclick='() => SetActiveTab("dept")'>
+            부서 관리
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link @(activeTab == "rank" ? "active" : "")"
+                type="button"
+                @onclick='() => SetActiveTab("rank")'>
+            직급 관리
+        </button>
+    </li>
+</ul>
+
+<!-- 탭 컨텐츠 -->
+<div class="tab-content mt-3">
+    @if (activeTab == "dept")
+    {
+        <!-- 부서 관리 영역 -->
+        <div class="tab-pane active">
+            <div class="input-group mb-1">
+                <button class="btn btn-primary" @onclick="MoveDeptCreatePage">부서생성</button>
+            </div>
+            <hr />
+
+            @if (deptLists == null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else if (!deptLists.Any())
+            {
+                <p><em>부서정보가 없습니다.</em></p>
+            }
+            else
+            {
+                <table class="table table-hover table-responsive-md">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>부서번호</th>
+                            <th>부서명</th>
+                            <th>사용여부</th>
+                            <th>비고</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int deptSortNo = 1;
+                        }
+                        @foreach (var item in deptLists)
+                        {
+                            <tr>
+                                <td>@deptSortNo</td>
+                                <td>@item.EDepartmentNo</td>
+                                <td>@GetDeptName(item.EDepartmentName)</td>
+                                <td>@GetStatusText(item.ActivateStatus)</td>
+                                <td>
+                                    <button type="button" class="btn btn-info" @onclick="() => MoveDeptDetailsPage(item.EDepartId)">상세</button>
+                                </td>
+                            </tr>
+                            deptSortNo++;
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    }
+    else if (activeTab == "rank")
+    {
+        <!-- 직급 관리 영역 -->
+        <div class="tab-pane active">
+            <div class="input-group mb-1">
+                <button class="btn btn-primary" @onclick="MoveRankCreatePage">직급생성</button>
+            </div>
+            <hr />
+
+            @if (rankLists == null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else if (!rankLists.Any())
+            {
+                <p><em>직급정보가 없습니다.</em></p>
+            }
+            else
+            {
+                <table class="table table-hover table-responsive-md">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>직급번호</th>
+                            <th>직급명</th>
+                            <th>사용여부</th>
+                            <th>비고</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int rankSortNo = 1;
+                        }
+                        @foreach (var item in rankLists)
+                        {
+                            <tr>
+                                <td>@rankSortNo</td>
+                                <td>@item.ERankNo</td>
+                                <td>@GetRankName(item.ERankName)</td>
+                                <td>@GetStatusText(item.ActivateStatus)</td>
+                                <td>
+                                    <button type="button" class="btn btn-info" @onclick="() => MoveRankDetailsPage(item.ERankId)">상세</button>
+                                </td>
+                            </tr>
+                            rankSortNo++;
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    }
+</div>

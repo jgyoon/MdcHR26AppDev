@@ -1,0 +1,43 @@
+@page "/Admin/Users/Delete/{Uid:long}"
+
+<PageTitle>사용자 삭제</PageTitle>
+
+<h3>사용자 삭제</h3>
+<hr />
+
+<div>
+    <p>@resultText</p>
+</div>
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item">[01] ID : @model.UserId</li>
+                <li class="list-group-item">[02] 사용자이름 : @model.UserName</li>
+                <li class="list-group-item">[03] 부서 : @model.EDepartmentName</li>
+                <li class="list-group-item">[04] 직급 : @model.ERank</li>
+                <li class="list-group-item">[05] 사번 : @model.ENumber</li>
+                <li class="list-group-item">[06] 재직여부 : @EStatusString(model.ActivateStatus)</li>
+                <li class="list-group-item">[07] 관리자여부 : @IsAdminString(model.IsAdministrator)</li>
+            </ul>
+        </div>
+        <hr />
+        <div class="col-md-12">
+            <button id="movelistpage" class="btn btn-outline-primary" @onclick="UserManagePage">목록</button>
+            <button id="movedetailpage" class="btn btn-outline-info" @onclick="(() => UserDetailsAction(model.Uid))">상세</button>
+            <button id="moveeditpage" class="btn btn-outline-secondary" @onclick="(() => UserEditAction(model.Uid))">수정</button>
+            <button id="deletebutton" class="btn btn-danger" @onclick="ShowDeleteModal">삭제</button>
+        </div>
+    </div>
+
+    @if (showModal)
+    {
+        <UserDeleteModal Uid="@model.Uid"></UserDeleteModal>
+    }
+}

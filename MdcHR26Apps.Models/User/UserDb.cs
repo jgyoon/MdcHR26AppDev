@@ -47,6 +47,13 @@ public class UserDb
     public byte[] UserPasswordSalt { get; set; } = Array.Empty<byte>();
 
     /// <summary>
+    /// 비밀번호 (UI 바인딩용, DB에 저장 안 됨)
+    /// Repository에서 해싱 후 UserPassword로 변환
+    /// </summary>
+    [NotMapped]
+    public string Password { get; set; } = string.Empty;
+
+    /// <summary>
     /// 사원번호
     /// </summary>
     [StringLength(10)]

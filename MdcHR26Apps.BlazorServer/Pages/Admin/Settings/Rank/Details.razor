@@ -1,0 +1,53 @@
+@page "/Admin/Settings/Rank/Details/{Id:long}"
+@rendermode InteractiveServer
+
+<PageTitle>직급 상세</PageTitle>
+
+<h3>직급 상세</h3>
+<hr />
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="col-md-12">
+        <button class="btn btn-outline-primary" @onclick="MoveSettingManagePage">목록</button>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <label for="ERankNo">직급번호 : </label>
+                    @model.ERankNo.ToString()
+                </li>
+                <li class="list-group-item">
+                    <label for="ERankName">직급명 : </label>
+                    @model.ERankName
+                </li>
+                <li class="list-group-item">
+                    <label for="ActivateStatus">사용여부 : </label>
+                    @utils.isuse(model.ActivateStatus)
+                </li>
+                <li class="list-group-item">
+                    <label for="Remarks">비고 : </label>
+                    @utils.GetRemarks(model.Remarks)
+                </li>
+            </ul>
+        </div>
+    </div>
+}
+<hr />
+@if (memberList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!memberList.Any())
+{
+    <p><em>구성원 정보가 없습니다.</em></p>
+}
+else
+{
+    <MemberListTable memberList="@memberList"></MemberListTable>
+}

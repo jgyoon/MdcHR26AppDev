@@ -1,0 +1,74 @@
+@page "/Admin/Users/Edit/{Uid:long}"
+
+<PageTitle>사용자 수정</PageTitle>
+
+<h3>사용자 수정</h3>
+<hr />
+
+<div>
+    <p>@resultText</p>
+</div>
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <EditForm Model="model" OnValidSubmit="EditUser">
+                <label for="UserId" class="form-label mb-1">ID : </label>
+                <div class="input-group mb-1">
+                    <InputText id="UserId" class="form-control"
+                               @bind-Value="@model.UserId" disabled></InputText>
+                </div>
+                <label for="UserName" class="form-label mb-1">사용자이름</label>
+                <div class="input-group mb-1">
+                    <InputText id="UserName" class="form-control" placeholder="사용자 이름"
+                               @bind-Value="@model.UserName"></InputText>
+                </div>
+                <label for="Deptment" class="form-label mb-1">부서</label>
+                <div class="input-group mb-1">
+                    <InputSelect id="Deptment" class="form-select" @bind-Value="model.EDepartId">
+                        <option value=@model.EDepartId selected disabled hidden>@eDepartmentName</option>
+                        @foreach (var item in eDepartmentDbList)
+                        {
+                            <option value="@item.EDepartId">@item.EDepartmentName</option>
+                        }
+                    </InputSelect>
+                </div>
+                <label for="Rank" class="form-label mb-1">직급/직책</label>
+                <div class="input-group mb-1">
+                    <InputSelect id="Rank" class="form-select" @bind-Value="model.ERankId">
+                        <option value=@model.ERankId selected disabled hidden>@eRankName</option>
+                        @foreach (var item in eRankDbList)
+                        {
+                            <option value="@item.ERankId">@item.ERankName</option>
+                        }
+                    </InputSelect>
+                </div>
+                <label for="UserEmail" class="form-label mb-1">Email</label>
+                <div class="input-group mb-1">
+                    <InputText id="UserEmail" class="form-control" placeholder="이메일"
+                               @bind-Value="@model.Email"></InputText>
+                </div>
+                <label for="UserENumber" class="form-label mb-1">사번</label>
+                <div class="input-group mb-1">
+                    <InputText id="UserENumber" class="form-control" placeholder="사원번호"
+                               @bind-Value="@model.ENumber"></InputText>
+                </div>
+                <label for="Admin" class="form-label mb-1">관리자</label>
+                <div class="input-group mb-1">
+                    <InputCheckbox @bind-Value="@model.IsAdministrator"></InputCheckbox>
+                </div>
+                <hr />
+                <div class="input-group mb-1">
+                    <button type="submit" id="editButton" class="btn btn-primary">변경</button>
+                    <button type="button" id="movePageButton" class="btn btn-light" @onclick="UserManagePage">목록</button>
+                    <button type="button" id="initButton" class="btn btn-secondary" @onclick="PasswordInitialize">비밀번호초기화</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}

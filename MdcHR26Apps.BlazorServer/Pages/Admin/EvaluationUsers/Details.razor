@@ -1,0 +1,60 @@
+@page "/Admin/EUsersDetails/{Id:long}"
+@rendermode InteractiveServer
+
+<PageTitle>평가대상자 상세</PageTitle>
+
+<h3>평가대상자 상세</h3>
+<hr />
+
+@if (model == null || user == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <label for="UserId">ID : </label>
+                    @user.UserId
+                </li>
+                <li class="list-group-item">
+                    <label for="UserName">이름 : </label>
+                    @user.UserName
+                </li>
+                <li class="list-group-item">
+                    <label for="EDepartment">평가자여부 : </label>
+                    @isuse(model.Is_Evaluation)
+                </li>
+                <li class="list-group-item">
+                    <label for="ERank">부서장이름 : </label>
+                    @if (teamLeaderName != null && teamLeaderName != string.Empty)
+                    {
+                        @teamLeaderName
+                    }
+                    else
+                    {
+                        @isSetupString
+                    }
+                </li>
+                <li class="list-group-item">
+                    <label for="Email">임원이름 : </label>
+                    @if (directorName != null && directorName != string.Empty)
+                    {
+                        @directorName
+                    }
+                    else
+                    {
+                        @isSetupString
+                    }
+                </li>
+            </ul>
+        </div>
+        <hr />
+        <div class="col-md-12">
+            <button class="btn btn-outline-primary" @onclick="MoveEUserManagePage">목록</button>
+            <button class="btn btn-outline-info" @onclick="() => MoveEUsersEditPage(model.EUid)">수정</button>
+        </div>
+    </div>
+}
