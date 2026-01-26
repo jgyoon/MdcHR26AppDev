@@ -395,5 +395,192 @@ MdcHR25Apps.Data/
 
 ---
 
-**작업 예정일**: 2026-01-26 (오늘 - 개발자 승인 후 진행)
-**최종 상태**: 진행중 (작업지시서 작성 완료, 개발자 검토 대기)
+## 작업 진행 상황 (2026-01-26)
+
+### ✅ 완료된 작업
+
+#### 1. 빌드 경고 수정 (14개)
+- CS9113 경고 수정: 사용하지 않는 매개변수 제거 (2개)
+- CS8601 경고 수정: null 처리 추가 (12개)
+- 커밋: `830a8ef`
+
+#### 2. 프로젝트 구조 재정리
+- **배경**: 도서관리 프로젝트(.NET 10)의 최신 구조 적용
+- **작업지시서**: [20260126_02_restructure_blazor_project.md](../tasks/20260126_02_restructure_blazor_project.md)
+- **주요 변경사항**:
+  - `Pages/` 폴더 → `Components/Pages/` 통합
+  - 공용 컴포넌트 재정리:
+    - `Components/Pages/Components/Common/` (SearchbarComponent)
+    - `Components/Pages/Components/Modal/` (UserDeleteModal)
+    - `Components/Pages/Components/Table/` (UserListTable)
+  - 폴더명 복수형 적용: `Dept` → `Depts`, `Rank` → `Ranks`
+  - 네임스페이스 업데이트: `Pages.Admin` → `Components.Pages.Admin`
+  - @page 경로 업데이트: `/Admin/Settings/Dept/` → `/Admin/Settings/Depts/`
+  - UrlActions 메서드 경로 업데이트
+- **빌드 결과**: ✅ 성공 (경고 10개, 오류 0개)
+- **커밋**: `86c5871`
+
+---
+
+### 📋 미구현 컴포넌트 (3개)
+
+**체크리스트**: [20260126_03_missing_components_checklist.md](../tasks/20260126_03_missing_components_checklist.md)
+
+1. **EUserListTable** (평가대상자 목록)
+   - 사용 위치: `Admin/EUsersManage.razor`
+   - 참고: 2025년 프로젝트, UserListTable.razor
+
+2. **DisplayResultText** (결과 메시지 표시)
+   - 사용 위치: `Settings/Depts/Create.razor`, `Settings/Ranks/Create.razor`
+   - 참고: 도서관리 프로젝트
+
+3. **MemberListTable** (부서/직급별 사용자 목록)
+   - 사용 위치: `Settings/Depts/Details.razor`, `Settings/Ranks/Details.razor`
+   - 참고: 2025년 프로젝트, UserListTable.razor
+
+---
+
+### 🎯 이후 개발 참고사항
+
+#### 1. 참고 프로젝트
+
+##### 2025년 인사평가 (비즈니스 로직)
+- **경로**: `C:\Codes\29_MdcHR25\MdcHR25Apps\MdcHR25Apps.BlazorApp`
+- **용도**:
+  - 컴포넌트 구조 및 UI 참고
+  - 평가 프로세스 로직 참고
+  - 순차적 생성 로직 (UserDb → EvaluationUsers → ProcessDb)
+- **주의사항**:
+  - DB 구조 변경 반영 필요 (UserId → Uid, VARCHAR → BIGINT)
+  - Primary Constructor 미사용 (기존 Inject 방식)
+
+##### 도서관리 프로젝트 (최신 기술)
+- **경로**: `C:\Codes\36_MdcLibrary\MdcLibrary\MdcLibrary.Server`
+- **용도**:
+  - .NET 10 최신 기능 참고
+  - Primary Constructor 사용 패턴
+  - InteractiveServer 렌더 모드
+  - 프로젝트 구조 (Components/Pages/Components/)
+  - 컴포넌트 명명 및 네임스페이스 규칙
+
+#### 2. .NET 10 형식 활용
+
+##### Primary Constructor (C# 13)
+```csharp
+// 기존 방식 (2025년)
+public partial class Create
+{
+    [Inject]
+    public IUserRepository userRepository { get; set; } = null!;
+}
+
+// .NET 10 방식 (2026년)
+public partial class Create(
+    IUserRepository userRepository,
+    LoginStatusService loginStatusService,
+    UrlActions urlActions)
+{
+    // 필드로 직접 사용 가능
+}
+```
+
+##### InteractiveServer 렌더 모드
+```razor
+@page "/Admin/Users/Create"
+@rendermode InteractiveServer
+```
+
+##### 컬렉션 초기화
+```csharp
+// 기존
+private List<UserDb> users { get; set; } = new List<UserDb>();
+
+// .NET 10
+private List<UserDb> users { get; set; } = new();
+```
+
+#### 3. DB 구조 변경 사항
+
+| 항목 | 2025년 | 2026년 |
+|------|--------|--------|
+| 사용자 ID | UserId (VARCHAR) | Uid (BIGINT FK) |
+| 부서장 ID | TeamLeader_Id (VARCHAR) | TeamLeaderId (BIGINT FK) |
+| 임원 ID | Director_Id (VARCHAR) | DirectorId (BIGINT FK) |
+| 부서 | EDepartment (NVARCHAR) | EDepartId (BIGINT FK) |
+| 직급 | ERank (NVARCHAR) | ERankId (BIGINT FK) |
+| 하위 합의 | 없음 | Is_SubRequest, Is_SubAgreement |
+
+**v_MemberListDB 뷰 주의**:
+- ✅ `ERank` (ERankName의 별칭)
+- ❌ `ERankId` (뷰에 없음!)
+
+#### 4. 프로젝트 구조 규칙
+
+```
+Components/
+├── Layout/                            # 레이아웃
+├── Pages/                             # 모든 페이지
+│   ├── Auth/                          # 인증 페이지
+│   ├── Admin/                         # 관리자 페이지
+│   │   ├── Users/                     # 복수형
+│   │   ├── Settings/
+│   │   │   ├── Depts/                 # 복수형
+│   │   │   └── Ranks/                 # 복수형
+│   │   └── EvaluationUsers/
+│   └── Components/                    # 공용 컴포넌트
+│       ├── Common/                    # 공통 UI
+│       ├── Modal/                     # 모달
+│       └── Table/                     # 테이블
+```
+
+#### 5. 네임스페이스 규칙
+
+```csharp
+// 페이지
+namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin.Users;
+
+// 공용 컴포넌트 - Common
+namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Common;
+
+// 공용 컴포넌트 - Modal
+namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Modal;
+
+// 공용 컴포넌트 - Table
+namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Table;
+```
+
+#### 6. UrlActions 사용 규칙
+
+```csharp
+// 하드코딩 금지
+❌ NavigationManager.NavigateTo("/Admin/Users/Create");
+❌ <a href="/Admin/Users/Create">등록</a>
+
+// UrlActions 사용
+✅ urlActions.MoveUserCreatePage();
+✅ <button @onclick="urlActions.MoveUserCreatePage">등록</button>
+```
+
+---
+
+### 📝 다음 작업 계획
+
+#### Phase 1: 미구현 컴포넌트 완성
+1. DisplayResultText 구현 (우선순위 1)
+2. EUserListTable 구현 (우선순위 2)
+3. MemberListTable 구현 (우선순위 3)
+
+#### Phase 2: Admin 페이지 완성
+1. 2025년 코드 복사 및 수정
+2. CRUD 기능 구현
+3. 단계별 빌드 테스트
+
+#### Phase 3: 테스트 및 검증
+1. 기능 테스트
+2. 빌드 경고 최종 확인
+3. Phase 3-3 완료
+
+---
+
+**작업 일자**: 2026-01-26
+**최종 상태**: 진행중 (구조 재정리 완료, 컴포넌트 구현 대기)
