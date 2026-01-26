@@ -26,17 +26,17 @@ public class UrlActions(NavigationManager navigationManager)
     public void MoveUserEditPage(long uid) => _navigationManager.NavigateTo($"/Admin/Users/Edit/{uid}");
     public void MoveUserDeletePage(long uid) => _navigationManager.NavigateTo($"/Admin/Users/Delete/{uid}");
 
-    // === [3] 부서 관리 (Dept) - 2026년 경로 변경: /Admin/Dept → /Admin/Settings/Dept ===
-    public void MoveDeptCreatePage() => _navigationManager.NavigateTo("/Admin/Settings/Dept/Create");
-    public void MoveDeptDetailsPage(long deptId) => _navigationManager.NavigateTo($"/Admin/Settings/Dept/Details/{deptId}");
-    public void MoveDeptEditPage(long deptId) => _navigationManager.NavigateTo($"/Admin/Settings/Dept/Edit/{deptId}");
-    public void MoveDeptDeletePage(long deptId) => _navigationManager.NavigateTo($"/Admin/Settings/Dept/Delete/{deptId}");
+    // === [3] 부서 관리 (Depts) - 2026년 경로 변경: /Admin/Dept → /Admin/Settings/Depts ===
+    public void MoveDeptCreatePage() => _navigationManager.NavigateTo("/Admin/Settings/Depts/Create");
+    public void MoveDeptDetailsPage(long deptId) => _navigationManager.NavigateTo($"/Admin/Settings/Depts/Details/{deptId}");
+    public void MoveDeptEditPage(long deptId) => _navigationManager.NavigateTo($"/Admin/Settings/Depts/Edit/{deptId}");
+    public void MoveDeptDeletePage(long deptId) => _navigationManager.NavigateTo($"/Admin/Settings/Depts/Delete/{deptId}");
 
-    // === [4] 직급 관리 (Rank) - 2026년 신규 ===
-    public void MoveRankCreatePage() => _navigationManager.NavigateTo("/Admin/Settings/Rank/Create");
-    public void MoveRankDetailsPage(long rankId) => _navigationManager.NavigateTo($"/Admin/Settings/Rank/Details/{rankId}");
-    public void MoveRankEditPage(long rankId) => _navigationManager.NavigateTo($"/Admin/Settings/Rank/Edit/{rankId}");
-    public void MoveRankDeletePage(long rankId) => _navigationManager.NavigateTo($"/Admin/Settings/Rank/Delete/{rankId}");
+    // === [4] 직급 관리 (Ranks) - 2026년 신규 ===
+    public void MoveRankCreatePage() => _navigationManager.NavigateTo("/Admin/Settings/Ranks/Create");
+    public void MoveRankDetailsPage(long rankId) => _navigationManager.NavigateTo($"/Admin/Settings/Ranks/Details/{rankId}");
+    public void MoveRankEditPage(long rankId) => _navigationManager.NavigateTo($"/Admin/Settings/Ranks/Edit/{rankId}");
+    public void MoveRankDeletePage(long rankId) => _navigationManager.NavigateTo($"/Admin/Settings/Ranks/Delete/{rankId}");
 
     // === [5] 평가대상자 관리 (EvaluationUsers) ===
     public void MoveEUserManagePage() => _navigationManager.NavigateTo("/Admin/EUsersManage");
