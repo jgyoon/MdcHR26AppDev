@@ -194,5 +194,206 @@ Step 1 완료 → 빌드 테스트 → Step 2 진행
 
 ---
 
-**작업 예정일**: 2026-01-23
-**최종 상태**: 진행중 (연기)
+## 개발자 문제 진단 (2026-01-26)
+
+### 근본 원인 분석
+
+#### 1. 임의로 코드 개발 ⚠️
+
+**문제점**:
+- 본 프로젝트는 **2025년 인사평가를 복사해서 2026년에 적용**하는 것이 목적
+- 변경 사항(.NET 10, DB 최적화)만 적용하면 됨
+- **하지만 임의의 효율성을 고려해 코드를 임의로 수정**한 것이 문제
+
+**영향**:
+- API 시그니처 불일치
+- 모델 속성 불일치
+- 기존 동작 로직 손상
+
+**해결책**:
+- **참고 프로젝트 코드를 먼저 복사**
+- 변경 사항만 최소한으로 적용
+- 임의 수정 금지
+
+#### 2. 코드 이해 부족 - 순차적 생성 로직 미반영 ⚠️⚠️
+
+**문제점**:
+- 사용자 생성 시 **순차적으로 3개 정보를 생성**해야 함:
+  1. 사용자 정보 생성 (UserDb)
+  2. 인사평가 대상자 정보 생성 (테이블명 확인 필요)
+  3. 프로세스 정보 생성 (ProcessDb)
+
+**현재 프로그램의 문제**:
+- ProcessDb 구조를 잘못 이해:
+  - 잘못된 이해: `ProcessName`, `SortNo` 필드로 3개 레코드 생성 (1st, 2nd, 3rd)
+  - 실제 구조: 사용자당 **단일 레코드**, 평가 워크플로우 상태 관리
+- 순차적 생성 로직이 전혀 반영되지 않음
+
+**해결책**:
+- **2025년 인사평가 프로젝트의 사용자 생성 코드를 분석**
+- 순차적 생성 로직 정확히 파악
+- 작업지시서에 명확히 기술
+
+---
+
+## 참고 프로젝트 정보
+
+### 2025년 인사평가 (주 참고)
+**프로젝트명**: MdcHR25Apps.BlazorApp
+**경로**: `C:\Codes\29_MdcHR25\MdcHR25Apps\MdcHR25Apps.BlazorApp`
+
+**복사 대상**:
+- Admin 폴더 (사용자, 부서, 직급, 평가대상자 관리)
+- 사용자 생성 순차 로직
+- 모델 및 Repository 사용 패턴
+
+### 도서관리 (기술 참고)
+**프로젝트명**: MdcLibrary.Server
+**경로**: `C:\Codes\36_MdcLibrary\MdcLibrary\MdcLibrary.Server`
+
+**참고 사항**:
+- .NET 10 적용 방법
+- InteractiveServer 렌더 모드
+- 최신 Blazor 패턴
+
+---
+
+## 재작업 계획 (수정)
+
+### Phase 1: 참고 프로젝트 분석 (필수 선행)
+
+#### 1-1. 2025년 Admin 폴더 분석
+```
+C:\Codes\29_MdcHR25\MdcHR25Apps\MdcHR25Apps.BlazorApp\Pages\Admin\
+├── User/ (사용자 관리)
+│   ├── UserList.razor
+│   ├── UserInsert.razor  ← 순차적 생성 로직 확인
+│   ├── UserUpdate.razor
+│   ├── UserDelete.razor
+│   └── UserDetail.razor
+├── Department/ (부서 관리)
+├── Rank/ (직급 관리)
+└── Member/ (평가대상자 관리)
+```
+
+**확인 사항**:
+- UserInsert.razor의 사용자 생성 로직
+- 순차적 생성: UserDb → 대상자 정보 → ProcessDb
+- ProcessDb 초기값 설정 방법
+- 사용되는 Repository 메서드 시그니처
+
+#### 1-2. 모델 및 Repository 확인
+```
+MdcHR25Apps.Data/
+├── Models/
+│   ├── UserDb.cs
+│   ├── ProcessDb.cs  ← 필드 구조 확인
+│   └── (대상자 모델 확인)
+└── Repositories/
+    ├── IUserRepository.cs
+    ├── IProcessRepository.cs
+    └── (기타 Repository)
+```
+
+**확인 사항**:
+- ProcessDb의 실제 필드 구조
+- 사용자당 ProcessDb 레코드 개수 (단일 vs 다중)
+- Repository 메서드 시그니처
+
+### Phase 2: 세밀한 작업지시서 재작성
+
+**TEMPLATE_detailed.md 기반**:
+
+```markdown
+# Step 0: 참고 코드 복사
+- 2025년 Admin 폴더 파일 복사
+- 네임스페이스 변경 (MdcHR25Apps → MdcHR26Apps)
+- .NET 10 적용 사항만 반영
+
+# Step 1: 사용자 관리 - UserList.razor
+- 2025년 코드 복사
+- API 시그니처 확인 후 최소 변경
+- 빌드 테스트
+
+# Step 2: 사용자 관리 - UserInsert.razor
+- 2025년 코드 복사
+- 순차적 생성 로직 그대로 유지:
+  1. UserDb 생성
+  2. 대상자 정보 생성
+  3. ProcessDb 생성 (초기값 설정)
+- 빌드 테스트
+
+(계속)
+```
+
+### Phase 3: 점진적 개발
+
+- **복사 우선, 수정 최소화**
+- Step 단위로 빌드 테스트
+- 오류 발견 시 즉시 수정
+
+---
+
+---
+
+## 분석 완료 (2026-01-26)
+
+### Phase 1: 2025년 Admin 폴더 구조 분석 ✅
+
+**분석 결과**:
+- 사용자 생성 순차 로직 확인 (Users/Create.razor.cs)
+- 3단계 생성: UserDb → EvaluationUsers → ProcessDb
+- 평가대상자 테이블명 확인: **EvaluationUsers**
+- ProcessDb는 사용자당 **단일 레코드**
+
+### Phase 2: DB 구조 변경 사항 파악 ✅
+
+**2025년 vs 2026년 핵심 차이**:
+
+| 테이블 | 필드 | 2025년 | 2026년 |
+|--------|------|--------|--------|
+| EvaluationUsers | 사용자 | UserId (VARCHAR) | Uid (BIGINT FK) |
+| | 부서장 | TeamLeader_Id (VARCHAR) | TeamLeaderId (BIGINT FK) |
+| ProcessDb | 사용자 | UserId (VARCHAR) | Uid (BIGINT FK) |
+| | 하위 합의 | 없음 | Is_SubRequest, Is_SubAgreement |
+| UserDb | 부서 | EDepartment (NVARCHAR) | EDepartId (BIGINT FK) |
+| | 직급 | ERank (NVARCHAR) | ERankId (BIGINT FK) |
+
+### Phase 3: 작업지시서 작성 ✅
+
+**작업지시서**: [20260126_01_phase3_3_admin_pages_rebuild.md](../tasks/20260126_01_phase3_3_admin_pages_rebuild.md)
+
+**주요 내용**:
+- 2025년 코드 복사 → DB 구조 변경만 최소 수정
+- 12개 Step (각 Step마다 빌드 테스트)
+- 순차적 생성 로직 수정 가이드
+- Repository API 확인 필수 사항
+- **페이지 이동 통일** (Step 1):
+  - UrlActions.cs에 모든 페이지 이동 메서드 추가
+  - 하드코딩된 `<a href="/Admin/...">` 사용 금지
+  - `urlActions.Move...Page()` 메서드로 통일
+  - 2025년: UrlControls.cs 참고
+- **폴더 구조 개선**: Settings 폴더로 기초정보 그룹화
+  - `Admin/Dept/` → `Admin/Settings/Dept/` (부서 관리)
+  - `Admin/Settings/Rank/` 추가 (직급 관리)
+  - 외래키 연결된 마스터 데이터로 관리
+  - 향후 확장 가능 (평가기간 설정 등)
+- **UI 개선**: SettingManage.razor 통합 페이지
+  - 탭 방식으로 부서/직급 관리 (DeptManage + RankManage 통합)
+  - 탭 전환으로 빠른 이동
+  - 향후 설정 항목 추가 용이
+
+---
+
+## 관련 문서 (업데이트)
+
+**작업지시서**:
+- [20260126_01_phase3_3_admin_pages_rebuild.md](../tasks/20260126_01_phase3_3_admin_pages_rebuild.md) ✅
+
+**관련 이슈**:
+- [#009: Phase 3 Blazor Server WebApp 개발](009_phase3_webapp_development.md)
+
+---
+
+**작업 예정일**: 2026-01-26 (오늘 - 개발자 승인 후 진행)
+**최종 상태**: 진행중 (작업지시서 작성 완료, 개발자 검토 대기)

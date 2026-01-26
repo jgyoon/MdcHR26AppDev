@@ -1,0 +1,874 @@
+# 작업지시서: Phase 3-3 - 관리자 페이지 (재작업)
+
+**날짜**: 2026-01-26
+**작업 유형**: 기능 추가 (Phase 3-3 재작업)
+**관련 이슈**:
+- [#009: Phase 3 WebApp 개발](../issues/009_phase3_webapp_development.md)
+- [#011: Phase 3-3 빌드 오류 및 재작업](../issues/011_phase3_3_admin_pages_build_errors.md)
+**선행 작업지시서**: `20260120_02_phase3_1_project_setup.md` (Phase 3-1 완료)
+
+---
+
+## 1. 작업 개요
+
+### 1.1. 재작업 배경
+
+이슈 #011에서 확인된 문제점:
+1. **임의로 코드 개발**: 2025년 코드를 복사하지 않고 임의로 작성하여 API 불일치 발생
+2. **코드 이해 부족**: 순차적 생성 로직 미반영, DB 구조 변경 미인지
+
+### 1.2. 작업 원칙
+
+✅ **2025년 코드를 먼저 복사**
+✅ **DB 구조 변경 사항만 최소한으로 적용**
+✅ **임의 수정 금지**
+✅ **각 Step마다 빌드 테스트**
+
+### 1.3. 참고 프로젝트
+
+**2025년 인사평가** (복사 원본):
+- 경로: `C:\Codes\29_MdcHR25\MdcHR25Apps\MdcHR25Apps.BlazorApp\Pages\Admin`
+
+**도서관리** (기술 참고):
+- 경로: `C:\Codes\36_MdcLibrary\MdcLibrary\MdcLibrary.Server`
+- .NET 10, InteractiveServer 렌더 모드
+
+---
+
+## 2. DB 구조 변경 사항 (중요!)
+
+### 2.1. 핵심 차이점
+
+| 테이블 | 필드명 | 2025년 | 2026년 |
+|--------|--------|--------|--------|
+| **EvaluationUsers** | 사용자 식별 | `UserId` VARCHAR + `UserName` | `Uid` BIGINT (외래키) |
+| | 부서장 | `TeamLeader_Id` VARCHAR | `TeamLeaderId` BIGINT (외래키) |
+| | 임원 | `Director_Id` VARCHAR | `DirectorId` BIGINT (외래키) |
+| **ProcessDb** | 사용자 식별 | `UserId` VARCHAR + `UserName` | `Uid` BIGINT (외래키) |
+| | 부서장 | `TeamLeader_Id` VARCHAR | `TeamLeaderId` BIGINT (외래키) |
+| | 임원 | `Director_Id` VARCHAR | `DirectorId` BIGINT (외래키) |
+| | 하위 합의 | 없음 | `Is_SubRequest`, `Is_SubAgreement`, `SubAgreement_Comment` |
+| **UserDb** | 부서 | `EDepartment` NVARCHAR | `EDepartId` BIGINT (외래키) |
+| | 직급 | `ERank` NVARCHAR | `ERankId` BIGINT (외래키) |
+
+### 2.2. 순차적 생성 로직 (2025년 코드 분석 결과)
+
+**사용자 생성 시 3단계**:
+
+```csharp
+// 1단계: UserDb 생성
+model = await UserDbRepository.AddAsync(model);
+
+// 2단계: EvaluationUsers 생성 (평가대상자 정보)
+evaluationUsers.Uid = model.Uid;  // ← 2026년 변경: UserId → Uid
+evaluationUsers.Is_Evaluation = true;
+evaluationUsers.TeamLeaderId = null;  // ← 2026년 변경: String.Empty → null
+evaluationUsers.DirectorId = null;    // ← 2026년 변경: String.Empty → null
+await evaluationUsersRepository.AddAsync(evaluationUsers);
+
+// 3단계: ProcessDb 생성 (평가 워크플로우)
+processDb.Uid = model.Uid;  // ← 2026년 변경: UserId → Uid
+processDb.TeamLeaderId = null;  // ← 2026년 변경: String.Empty → null
+processDb.DirectorId = null;    // ← 2026년 변경: String.Empty → null
+processDb.Is_Request = false;
+processDb.Is_Agreement = false;
+processDb.Agreement_Comment = String.Empty;
+processDb.Is_SubRequest = false;  // ← 2026년 추가
+processDb.Is_SubAgreement = false;  // ← 2026년 추가
+processDb.SubAgreement_Comment = String.Empty;  // ← 2026년 추가
+processDb.Is_User_Submission = false;
+processDb.Is_Teamleader_Submission = false;
+processDb.Is_Director_Submission = false;
+processDb.FeedBackStatus = false;
+processDb.FeedBack_Submission = false;
+await processDbRepository.AddAsync(processDb);
+```
+
+### 2.3. v_MemberListDB 뷰 주의사항
+
+**사용 가능한 필드**:
+- `Uid`, `UserId`, `UserName`, `ENumber`
+- `ERank` (ERankName의 별칭) ✅
+- `EDepartId`, `EDepartmentName`
+- `ActivateStatus`, `IsTeamLeader`, `IsDirector`, `IsAdministrator`, `IsDeptObjectiveWriter`
+
+**사용 불가능한 필드**:
+- ❌ `ERankId` (뷰에 없음!)
+
+---
+
+## 3. 작업 단계
+
+### Step 0: 프로젝트 구조 확인
+
+**현재 프로젝트 구조**:
+```
+MdcHR26Apps.BlazorServer/
+├── Pages/
+│   ├── Auth/
+│   │   └── Login.razor  (Phase 3-2 완료)
+│   └── Admin/  ← 여기에 작업
+```
+
+**2025년 프로젝트 구조**:
+```
+MdcHR25Apps.BlazorApp/Pages/Admin/
+├── Users/
+│   ├── Create.razor
+│   ├── Create.razor.cs
+│   ├── Edit.razor
+│   ├── Edit.razor.cs
+│   ├── Delete.razor
+│   ├── Delete.razor.cs
+│   └── Details.razor
+│   └── Details.razor.cs
+├── Dept/
+│   ├── Create.razor
+│   ├── Edit.razor
+│   ├── Delete.razor
+│   └── Details.razor
+├── EvaluationUsers/
+│   ├── Edit.razor
+│   └── Details.razor
+├── UserManage.razor
+├── DeptManage.razor
+├── EUsersManage.razor
+└── Index.razor
+```
+
+**2026년 프로젝트 구조 (변경)**:
+```
+MdcHR26Apps.BlazorServer/Pages/Admin/
+├── Users/            # 사용자 관리 (2025년과 동일)
+│   ├── Create.razor
+│   ├── Edit.razor
+│   ├── Delete.razor
+│   └── Details.razor
+├── Settings/         # ✅ 기초정보 (조직 마스터 데이터)
+│   ├── Dept/         # 부서 관리
+│   │   ├── Create.razor
+│   │   ├── Edit.razor
+│   │   ├── Delete.razor
+│   │   └── Details.razor
+│   └── Rank/         # 직급 관리
+│       ├── Create.razor
+│       ├── Edit.razor
+│       ├── Delete.razor
+│       └── Details.razor
+├── EvaluationUsers/  # 평가대상자 관리 (2025년과 동일)
+│   ├── Edit.razor
+│   └── Details.razor
+├── UserManage.razor      # 사용자 목록
+├── SettingManage.razor   # ✅ 기초정보 관리 (탭: 부서/직급)
+├── EUsersManage.razor    # 평가대상자 목록
+└── Index.razor           # 관리자 메인
+```
+
+**변경 이유**:
+- 부서/직급은 외래키로 연결된 **기초정보 (마스터 데이터)**
+- **SettingManage.razor**: 탭 방식으로 부서/직급 통합 관리
+  - 페이지 통합으로 사용자 경험 개선
+  - 탭 전환으로 빠른 이동
+  - 향후 확장 용이 (평가기간, 워크플로우 등 탭 추가)
+- Settings 폴더로 그룹화하여 관리 용이
+
+---
+
+### Step 1: UrlActions 메서드 추가 (페이지 이동 통일)
+
+**파일**: `MdcHR26Apps.BlazorServer/Data/UrlActions.cs`
+
+**2025년 참고**: `UrlControls.cs` (2025년 파일명)
+
+**목적**: 하드코딩된 `<a href="/Admin/...">` 사용 금지, `urlActions.Move...Page()` 메서드로 통일
+
+**현재 상태** (4개 메서드만 존재):
+```csharp
+public void MoveMainPage() => _navigationManager.NavigateTo("/");
+public void MoveLoginPage() => _navigationManager.NavigateTo("/auth/login");
+public void MoveLogoutPage() => _navigationManager.NavigateTo("/auth/logout");
+public void MoveAdminPage() => _navigationManager.NavigateTo("/admin");
+```
+
+**추가할 메서드** (Phase 3-3 관련):
+```csharp
+// [1] 기초정보 관리 (Settings) - 2026년 신규
+public void MoveSettingManagePage() => _navigationManager.NavigateTo("/Admin/SettingManage");
+
+// [2] 사용자 관리 (User)
+public void MoveUserManagePage() => _navigationManager.NavigateTo("/Admin/UserManage");
+public void MoveUserCreatePage() => _navigationManager.NavigateTo("/Admin/Users/Create");
+public void MoveUserDetailsPage(long uid) => _navigationManager.NavigateTo($"/Admin/Users/Details/{uid}");
+public void MoveUserEditPage(long uid) => _navigationManager.NavigateTo($"/Admin/Users/Edit/{uid}");
+public void MoveUserDeletePage(long uid) => _navigationManager.NavigateTo($"/Admin/Users/Delete/{uid}");
+
+// [3] 부서 관리 (Dept) - 2026년 경로 변경: /Admin/Dept → /Admin/Settings/Dept
+public void MoveDeptCreatePage() => _navigationManager.NavigateTo("/Admin/Settings/Dept/Create");
+public void MoveDeptDetailsPage(long deptId) => _navigationManager.NavigateTo($"/Admin/Settings/Dept/Details/{deptId}");
+public void MoveDeptEditPage(long deptId) => _navigationManager.NavigateTo($"/Admin/Settings/Dept/Edit/{deptId}");
+public void MoveDeptDeletePage(long deptId) => _navigationManager.NavigateTo($"/Admin/Settings/Dept/Delete/{deptId}");
+
+// [4] 직급 관리 (Rank) - 2026년 신규
+public void MoveRankCreatePage() => _navigationManager.NavigateTo("/Admin/Settings/Rank/Create");
+public void MoveRankDetailsPage(long rankId) => _navigationManager.NavigateTo($"/Admin/Settings/Rank/Details/{rankId}");
+public void MoveRankEditPage(long rankId) => _navigationManager.NavigateTo($"/Admin/Settings/Rank/Edit/{rankId}");
+public void MoveRankDeletePage(long rankId) => _navigationManager.NavigateTo($"/Admin/Settings/Rank/Delete/{rankId}");
+
+// [5] 평가대상자 관리 (EvaluationUsers)
+public void MoveEUserManagePage() => _navigationManager.NavigateTo("/Admin/EUsersManage");
+public void MoveEUserDetailsPage(long uid) => _navigationManager.NavigateTo($"/Admin/EvaluationUsers/Details/{uid}");
+public void MoveEUsersEditPage(long uid) => _navigationManager.NavigateTo($"/Admin/EvaluationUsers/Edit/{uid}");
+```
+
+**빌드 테스트**: `dotnet build`
+
+---
+
+### Step 2: UserUtils 유틸리티 생성
+
+**파일**: `MdcHR26Apps.BlazorServer/Utils/UserUtils.cs`
+
+**2025년 참고**: 2025년 프로젝트에서 복사 후 수정
+
+**2025년 vs 2026년 차이**:
+
+| 구분 | 2025년 | 2026년 |
+|------|--------|--------|
+| 데이터 소스 | 하드코딩된 부서/직급 리스트 | DB에서 동적으로 조회 |
+| Repository | 사용 안 함 (또는 간단히 사용) | IEDepartmentRepository, IERankRepository |
+| 활성화 필터 | 없음 | ActivateStatus = true 필터링 |
+
+**수정 사항**:
+```csharp
+// 2026년: DB에서 활성화된(ActivateStatus=true) 부서/직급 조회
+// EDepartId, ERankId (BIGINT) 사용
+
+public class UserUtils
+{
+    private readonly IEDepartmentRepository _departmentRepository;
+    private readonly IERankRepository _rankRepository;
+
+    public UserUtils(
+        IEDepartmentRepository departmentRepository,
+        IERankRepository rankRepository)
+    {
+        _departmentRepository = departmentRepository;
+        _rankRepository = rankRepository;
+    }
+
+    // 부서 목록 가져오기 (EDepartmentName 리스트)
+    // 2025년: 하드코딩 → 2026년: DB에서 활성화된 부서만 조회
+    public async Task<List<string>> GetDeptListAsync()
+    {
+        var depts = await _departmentRepository.GetAllAsync();
+        return depts
+            .Where(d => d.ActivateStatus)  // ✅ 활성화된 부서만
+            .OrderBy(d => d.EDepartmentNo)
+            .Select(d => d.EDepartmentName)
+            .ToList();
+    }
+
+    // 직급 목록 가져오기 (ERankName 리스트)
+    // 2025년: 하드코딩 → 2026년: DB에서 활성화된 직급만 조회
+    public List<string> GetRankList()
+    {
+        var ranks = _rankRepository.GetAll();
+        return ranks
+            .Where(r => r.ActivateStatus)  // ✅ 활성화된 직급만
+            .OrderBy(r => r.ERankNo)
+            .Select(r => r.ERankName)
+            .ToList();
+    }
+}
+```
+
+**중요**:
+- 2025년 코드에 하드코딩이 있더라도 **복사하지 말고** 위 코드 사용
+- DB의 EDepartmentDb, ERankDb 테이블에서 **활성화된 데이터만** 조회
+- 정렬 순서: EDepartmentNo, ERankNo (숫자 순서)
+
+**DI 등록** (Program.cs):
+```csharp
+builder.Services.AddScoped<UserUtils>();
+```
+
+**빌드 테스트**: `dotnet build`
+
+---
+
+### Step 2: 관리자 메인 페이지 (Index.razor)
+
+**파일**: `MdcHR26Apps.BlazorServer/Pages/Admin/Index.razor`
+
+**2025년에서 복사**: 전체 복사 후 수정
+
+**변경 사항**:
+1. 네임스페이스: `MdcHR25Apps.BlazorApp` → `MdcHR26Apps.BlazorServer`
+2. 메뉴 항목 수정 (Settings 통합):
+   ```razor
+   <!-- 2025년: 부서 관리 링크 -->
+   <a href="/Admin/DeptManage">부서 관리</a>
+
+   <!-- 2026년: 기초정보 통합 페이지 -->
+   <h4>기초정보 관리</h4>
+   <a href="/Admin/SettingManage">기초정보 관리 (부서/직급)</a>
+   ```
+
+**메뉴 구조 예시**:
+```razor
+<h3>관리자 메뉴</h3>
+
+<h4>사용자 관리</h4>
+<a href="/Admin/UserManage">사용자 관리</a>
+
+<h4>기초정보 관리</h4>
+<a href="/Admin/SettingManage">기초정보 관리</a>
+
+<h4>평가대상자 관리</h4>
+<a href="/Admin/EUsersManage">평가대상자 관리</a>
+```
+
+**빌드 테스트**: `dotnet build`
+
+---
+
+### Step 3: 사용자 관리 - UserManage.razor (목록)
+
+**파일**:
+- `MdcHR26Apps.BlazorServer/Pages/Admin/UserManage.razor`
+- `MdcHR26Apps.BlazorServer/Pages/Admin/UserManage.razor.cs`
+
+**2025년에서 복사**: 전체 복사
+
+**수정 사항**:
+
+#### UserManage.razor.cs 수정
+
+```csharp
+// 2025년 코드
+// ❌ 잘못된 필드 사용
+var ERankId = member.ERankId;  // v_MemberListDB에 없음!
+
+// 2026년 코드
+// ✅ 올바른 필드 사용
+var ERank = member.ERank;  // ERankName의 별칭
+```
+
+**빌드 테스트**: `dotnet build`
+
+---
+
+### Step 4: 사용자 관리 - Create.razor (생성)
+
+**파일**:
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Users/Create.razor`
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Users/Create.razor.cs`
+
+**2025년에서 복사**: 전체 복사
+
+**수정 사항**:
+
+#### Create.razor.cs - EvaluationUsersAdd 메서드 수정
+
+```csharp
+// 2025년 코드
+private async Task EvaluationUsersAdd(UserDb model)
+{
+    evaluationUsers.UserId = model.UserId;  // ❌ 문자열
+    evaluationUsers.UserName = model.UserName;  // ❌ 필드 없음
+    evaluationUsers.Is_Evaluation = true;
+    evaluationUsers.TeamLeader_Id = String.Empty;  // ❌ 문자열
+    evaluationUsers.Director_Id = String.Empty;  // ❌ 문자열
+
+    if (!await evaluationUsersRepository.CheckUserIdAsync(evaluationUsers.UserId))
+    {
+        await evaluationUsersRepository.AddAsync(evaluationUsers);
+    }
+}
+
+// 2026년 수정 코드
+private async Task EvaluationUsersAdd(UserDb model)
+{
+    evaluationUsers.Uid = model.Uid;  // ✅ BIGINT (외래키)
+    // UserName 필드 제거 (2026년 DB에 없음)
+    evaluationUsers.Is_Evaluation = true;
+    evaluationUsers.TeamLeaderId = null;  // ✅ BIGINT nullable
+    evaluationUsers.DirectorId = null;    // ✅ BIGINT nullable
+    evaluationUsers.Is_TeamLeader = false;
+
+    // CheckUserIdAsync 대신 Uid로 확인 (Repository 메서드 확인 필요)
+    var existing = await evaluationUsersRepository.GetByUidAsync(evaluationUsers.Uid);
+    if (existing == null)
+    {
+        await evaluationUsersRepository.AddAsync(evaluationUsers);
+    }
+}
+```
+
+#### Create.razor.cs - ProcessAdd 메서드 수정
+
+```csharp
+// 2025년 코드
+private async Task ProcessAdd(UserDb model)
+{
+    processDb.UserId = model.UserId;  // ❌ 문자열
+    processDb.UserName = model.UserName;  // ❌ 필드 없음
+    processDb.TeamLeader_Id = String.Empty;  // ❌ 문자열
+    processDb.Director_Id = String.Empty;  // ❌ 문자열
+    processDb.Is_Request = false;
+    processDb.Is_Agreement = false;
+    processDb.Agreement_Comment = String.Empty;
+    processDb.Is_User_Submission = false;
+    processDb.Is_Teamleader_Submission = false;
+    processDb.Is_Director_Submission = false;
+    processDb.FeedBackStatus = false;
+    processDb.FeedBack_Submission = false;
+
+    if (!await processDbRepository.CheckUserIdAsync(processDb.UserId))
+    {
+        await processDbRepository.AddAsync(processDb);
+    }
+}
+
+// 2026년 수정 코드
+private async Task ProcessAdd(UserDb model)
+{
+    processDb.Uid = model.Uid;  // ✅ BIGINT (외래키)
+    // UserName 필드 제거 (2026년 DB에 없음)
+    processDb.TeamLeaderId = null;  // ✅ BIGINT nullable
+    processDb.DirectorId = null;    // ✅ BIGINT nullable
+    processDb.Is_Request = false;
+    processDb.Is_Agreement = false;
+    processDb.Agreement_Comment = String.Empty;
+    processDb.Is_SubRequest = false;  // ✅ 2026년 추가
+    processDb.Is_SubAgreement = false;  // ✅ 2026년 추가
+    processDb.SubAgreement_Comment = String.Empty;  // ✅ 2026년 추가
+    processDb.Is_User_Submission = false;
+    processDb.Is_Teamleader_Submission = false;
+    processDb.Is_Director_Submission = false;
+    processDb.FeedBackStatus = false;
+    processDb.FeedBack_Submission = false;
+
+    // CheckUserIdAsync 대신 Uid로 확인 (Repository 메서드 확인 필요)
+    var existing = await processDbRepository.GetByUidAsync(processDb.Uid);
+    if (existing == null)
+    {
+        await processDbRepository.AddAsync(processDb);
+    }
+}
+```
+
+#### Create.razor - 부서/직급 SelectList 수정
+
+```csharp
+// 2025년: 문자열 직접 바인딩
+<InputSelect id="Deptment" class="form-select" @bind-Value="model.EDepartment">
+    @foreach (var item in deptlist)
+    {
+        <option value="@item">@item</option>
+    }
+</InputSelect>
+
+// 2026년: EDepartId로 변경 (Repository에서 ID 조회 필요)
+// UserUtils에 GetDepartmentByName 메서드 추가 필요
+<InputSelect id="Deptment" class="form-select" @bind-Value="selectedDeptName">
+    @foreach (var item in deptlist)
+    {
+        <option value="@item">@item</option>
+    }
+</InputSelect>
+
+// Create.razor.cs에 변환 로직 추가
+private string selectedDeptName;
+private string selectedRankName;
+
+private async Task CreateUser()
+{
+    // 부서명 → EDepartId 변환
+    var dept = await utils.GetDepartmentByNameAsync(selectedDeptName);
+    model.EDepartId = dept?.EDepartId;
+
+    // 직급명 → ERankId 변환
+    var rank = utils.GetRankByName(selectedRankName);
+    model.ERankId = rank?.ERankId;
+
+    // ... (나머지 로직)
+}
+```
+
+**UserUtils에 추가 메서드**:
+```csharp
+public async Task<EDepartmentDb?> GetDepartmentByNameAsync(string name)
+{
+    var depts = await _departmentRepository.GetAllAsync();
+    return depts.FirstOrDefault(d => d.EDepartmentName == name);
+}
+
+public ERankDb? GetRankByName(string name)
+{
+    var ranks = _rankRepository.GetAll();
+    return ranks.FirstOrDefault(r => r.ERankName == name);
+}
+```
+
+**빌드 테스트**: `dotnet build`
+
+---
+
+### Step 5: 사용자 관리 - Edit.razor (수정)
+
+**파일**:
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Users/Edit.razor`
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Users/Edit.razor.cs`
+
+**2025년에서 복사**: 전체 복사
+
+**수정 사항**: Step 4와 유사 (부서/직급 ID 변환)
+
+**빌드 테스트**: `dotnet build`
+
+---
+
+### Step 6: 사용자 관리 - Delete.razor (삭제)
+
+**파일**:
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Users/Delete.razor`
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Users/Delete.razor.cs`
+
+**2025년에서 복사**: 전체 복사
+
+**수정 사항**:
+- 네임스페이스만 변경
+- Repository API 확인 (DeleteAsync 파라미터: ID vs Entity)
+
+**빌드 테스트**: `dotnet build`
+
+---
+
+### Step 7: 사용자 관리 - Details.razor (상세)
+
+**파일**:
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Users/Details.razor`
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Users/Details.razor.cs`
+
+**2025년에서 복사**: 전체 복사
+
+**수정 사항**: 네임스페이스만 변경
+
+**빌드 테스트**: `dotnet build`
+
+---
+
+### Step 8: 기초정보 관리 통합 페이지 (SettingManage.razor)
+
+**파일**: `MdcHR26Apps.BlazorServer/Pages/Admin/SettingManage.razor`
+
+**새로 작성** (2025년에 없음):
+
+**UI 구조** (탭 방식):
+```razor
+@page "/Admin/SettingManage"
+
+<PageTitle>기초정보 관리</PageTitle>
+
+<h3>기초정보 관리</h3>
+<hr />
+
+<!-- 탭 헤더 -->
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link @(activeTab == "dept" ? "active" : "")"
+                @onclick="() => SetActiveTab(\"dept\")">
+            부서 관리
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link @(activeTab == "rank" ? "active" : "")"
+                @onclick="() => SetActiveTab(\"rank\")">
+            직급 관리
+        </button>
+    </li>
+</ul>
+
+<!-- 탭 컨텐츠 -->
+<div class="tab-content mt-3">
+    @if (activeTab == "dept")
+    {
+        <!-- 부서 관리 영역 -->
+        <DeptManageContent />
+    }
+    else if (activeTab == "rank")
+    {
+        <!-- 직급 관리 영역 -->
+        <RankManageContent />
+    }
+</div>
+
+@code {
+    private string activeTab = "dept";
+
+    private void SetActiveTab(string tab)
+    {
+        activeTab = tab;
+    }
+}
+```
+
+**작성 방법**:
+1. 2025년 DeptManage.razor를 참고해서 작성
+2. 부서 관리 테이블을 DeptManageContent 컴포넌트로 분리
+3. 직급 관리도 동일하게 RankManageContent 컴포넌트 작성
+4. 탭 전환으로 부서/직급 관리
+
+**또는 간단한 방법**:
+- 탭별로 `<div>` 안에 직접 테이블 작성 (컴포넌트 분리 없이)
+- 2025년 DeptManage.razor의 테이블 구조 복사
+
+**빌드 테스트**: `dotnet build`
+
+---
+
+### Step 9: 기초정보 - 부서 관리 CRUD (Settings/Dept/)
+
+**폴더 생성**:
+```bash
+mkdir MdcHR26Apps.BlazorServer/Pages/Admin/Settings
+mkdir MdcHR26Apps.BlazorServer/Pages/Admin/Settings/Dept
+```
+
+**파일**:
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Settings/Dept/Create.razor`
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Settings/Dept/Edit.razor`
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Settings/Dept/Delete.razor`
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Settings/Dept/Details.razor`
+
+**2025년에서 복사**:
+- `Admin/Dept/*` → `Admin/Settings/Dept/*`로 복사
+
+**수정 사항**:
+- 네임스페이스 변경: `Pages.Admin.Dept` → `Pages.Admin.Settings.Dept`
+- @page 경로 변경: `/Admin/Dept/Create` → `/Admin/Settings/Dept/Create`
+- DeleteAsync 파라미터 확인 (EDepartId vs EDepartmentDb 객체)
+- 목록 페이지 링크: `/Admin/DeptManage` → `/Admin/SettingManage`
+
+**빌드 테스트**: `dotnet build`
+
+---
+
+### Step 10: 기초정보 - 직급 관리 CRUD (Settings/Rank/)
+
+**폴더 생성**:
+```bash
+mkdir MdcHR26Apps.BlazorServer/Pages/Admin/Settings/Rank
+```
+
+**파일**:
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Settings/Rank/Create.razor`
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Settings/Rank/Edit.razor`
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Settings/Rank/Delete.razor`
+- `MdcHR26Apps.BlazorServer/Pages/Admin/Settings/Rank/Details.razor`
+
+**2025년 참고**: 2025년에는 Rank 관리 페이지가 없을 수 있음
+- 있으면 복사
+- 없으면 Settings/Dept/ 파일들을 복사해서 수정
+
+**작성 방법 (2025년에 없을 경우)**:
+1. Settings/Dept/ 파일들을 Settings/Rank/로 복사
+2. 다음 내용 일괄 변경:
+   - `EDepartmentDb` → `ERankDb`
+   - `EDepartId` → `ERankId`
+   - `EDepartmentName` → `ERankName`
+   - `EDepartmentNo` → `ERankNo`
+   - `IEDepartmentRepository` → `IERankRepository`
+   - `departmentRepository` → `rankRepository`
+   - "부서" → "직급"
+   - `/Admin/Settings/Dept` → `/Admin/Settings/Rank`
+- 목록 페이지 링크: `/Admin/SettingManage` (탭 자동 전환)
+
+**빌드 테스트**: `dotnet build`
+
+---
+
+### Step 11: 평가대상자 관리 (EvaluationUsers/)
+
+**파일**:
+- `MdcHR26Apps.BlazorServer/Pages/Admin/EvaluationUsers/Edit.razor`
+- `MdcHR26Apps.BlazorServer/Pages/Admin/EvaluationUsers/Details.razor`
+- `MdcHR26Apps.BlazorServer/Pages/Admin/EUsersManage.razor`
+
+**2025년에서 복사**: 전체 복사
+
+**수정 사항**:
+- `UserId`, `UserName` → `Uid` (BIGINT)
+- `TeamLeader_Id`, `Director_Id` → `TeamLeaderId`, `DirectorId` (BIGINT)
+
+**빌드 테스트**: `dotnet build`
+
+---
+
+## 4. Repository 메서드 확인 필수
+
+작업 전에 다음 Repository 메서드 확인:
+
+### 4.1. IUserRepository
+```csharp
+Task<bool> UserIdCheck(string userId);  // 또는 CheckUserIdAsync?
+```
+
+### 4.2. IEvaluationUsersRepository
+```csharp
+Task<bool> CheckUserIdAsync(string userId);  // 2025년 메서드
+Task<EvaluationUsers?> GetByUidAsync(long uid);  // 2026년 필요 메서드
+```
+
+### 4.3. IProcessRepository
+```csharp
+Task<bool> CheckUserIdAsync(string userId);  // 2025년 메서드
+Task<ProcessDb?> GetByUidAsync(long uid);  // 2026년 필요 메서드
+```
+
+### 4.4. IEDepartmentRepository / IERankRepository
+```csharp
+Task DeleteAsync(long id);  // 또는 Task DeleteAsync(EDepartmentDb entity);
+```
+
+---
+
+## 5. 테스트 계획
+
+개발자가 테스트할 항목:
+
+### 5.1. 빌드 테스트
+
+각 Step 완료 후:
+```bash
+dotnet build
+```
+- 빌드 오류 0개 확인
+- 경고 확인
+
+### 5.2. 기능 테스트
+
+#### 시나리오 1: 사용자 생성
+1. `/Admin/UserCreate` 접속
+2. 사용자 정보 입력 (ID, 비밀번호, 이름, 부서, 직급)
+3. ID 중복 체크
+4. "사용자생성" 클릭
+5. **확인**:
+   - UserDb 레코드 생성 ✅
+   - EvaluationUsers 레코드 생성 (Uid, TeamLeaderId, DirectorId) ✅
+   - ProcessDb 레코드 생성 (Uid, 워크플로우 필드 초기화) ✅
+
+#### 시나리오 2: 사용자 목록 조회
+1. `/Admin/UserManage` 접속
+2. **확인**: v_MemberListDB 뷰에서 사용자 목록 표시 ✅
+3. **확인**: ERank 필드 정상 표시 (ERankId 아님!) ✅
+
+#### 시나리오 3: 기초정보 관리 (부서/직급 통합 페이지)
+1. `/Admin/SettingManage` 접속
+2. **확인**: 부서 관리 탭 표시 (기본) ✅
+3. 부서 생성 버튼 → `/Admin/Settings/Dept/Create` → 부서 생성
+4. `/Admin/SettingManage` 복귀 → 부서 목록 확인 ✅
+5. 직급 관리 탭 클릭 → 탭 전환 확인 ✅
+6. 직급 생성 버튼 → `/Admin/Settings/Rank/Create` → 직급 생성
+7. `/Admin/SettingManage` 복귀 → 직급 목록 확인 ✅
+8. **확인**: 탭 방식으로 부서/직급 통합 관리 ✅
+9. **확인**: EDepartId, ERankId (외래키) 정상 사용 ✅
+
+#### 시나리오 4: 평가대상자 관리
+1. 평가대상자 수정
+2. **확인**: Uid, TeamLeaderId, DirectorId 필드 정상 사용 ✅
+
+---
+
+## 6. 주의사항
+
+### 6.1. 절대 지킬 사항 ⚠️
+
+1. **2025년 코드를 먼저 복사**: 임의로 새로 작성 금지
+2. **DB 구조 변경만 적용**: 최소한의 수정
+3. **각 Step마다 빌드 테스트**: 오류 즉시 수정
+4. **Repository API 확인**: 추측하지 말고 실제 코드 확인
+
+### 6.2. DB 필드명 주의
+
+- ❌ `UserId` (문자열) → ✅ `Uid` (BIGINT)
+- ❌ `UserName` (EvaluationUsers, ProcessDb에서) → 필드 없음
+- ❌ `TeamLeader_Id` → ✅ `TeamLeaderId`
+- ❌ `Director_Id` → ✅ `DirectorId`
+- ❌ `EDepartment` → ✅ `EDepartId`
+- ❌ `ERank` → ✅ `ERankId`
+- ❌ `ERankId` (v_MemberListDB) → ✅ `ERank` (ERankName 별칭)
+
+### 6.3. 순차적 생성 순서 엄수
+
+```
+1단계: UserDb 생성 → model.Uid 획득
+2단계: EvaluationUsers 생성 (model.Uid 사용)
+3단계: ProcessDb 생성 (model.Uid 사용)
+```
+
+---
+
+## 7. 완료 조건
+
+- [ ] Step 1: UserUtils 생성 및 빌드 성공
+- [ ] Step 2: Admin Index.razor 복사 및 수정 (SettingManage 링크)
+- [ ] Step 3: UserManage.razor 복사 및 수정 (ERank 필드 사용)
+- [ ] Step 4: Users/Create.razor 복사 및 수정 (순차적 생성 로직)
+- [ ] Step 5: Users/Edit.razor 복사 및 수정
+- [ ] Step 6: Users/Delete.razor 복사 및 빌드 성공
+- [ ] Step 7: Users/Details.razor 복사 및 빌드 성공
+- [ ] Step 8: SettingManage.razor 생성 (탭 방식 통합 페이지)
+- [ ] Step 9: Settings/Dept/ 복사 및 빌드 성공 (경로 변경)
+- [ ] Step 10: Settings/Rank/ 생성 및 빌드 성공
+- [ ] Step 11: EvaluationUsers/ 복사 및 수정
+- [ ] 전체 빌드 성공 (오류 0개)
+- [ ] 테스트 시나리오 1 성공 (사용자 생성)
+- [ ] 테스트 시나리오 2 성공 (사용자 목록)
+- [ ] 테스트 시나리오 3 성공 (기초정보 관리 - 탭 방식)
+- [ ] 테스트 시나리오 4 성공 (평가대상자 관리)
+
+---
+
+## 8. 추가 필요 작업 (Repository 확인 후)
+
+### 8.1. Repository 메서드 추가 필요 (예상)
+
+IEvaluationUsersRepository:
+```csharp
+Task<EvaluationUsers?> GetByUidAsync(long uid);
+```
+
+IProcessRepository:
+```csharp
+Task<ProcessDb?> GetByUidAsync(long uid);
+```
+
+### 8.2. Model 속성 확인 필요
+
+- EvaluationUsers 모델
+- ProcessDb 모델
+- 필드명 일치 확인
+
+---
+
+## 9. 롤백 계획
+
+문제 발생 시:
+```bash
+git reset --hard HEAD
+```
+
+또는 이슈 #011에서 롤백한 커밋 지점:
+```bash
+git reset --hard 5ba9b4d
+```
+
+---
+
+**작업 시작 전 필수 확인**:
+1. ✅ Repository API 시그니처 확인 (Read 도구로 실제 코드 확인)
+2. ✅ Model 속성 확인 (EvaluationUsers, ProcessDb)
+3. ✅ 각 Step 완료 후 빌드 테스트
+4. ✅ 오류 발생 시 즉시 수정, 다음 Step 진행 금지

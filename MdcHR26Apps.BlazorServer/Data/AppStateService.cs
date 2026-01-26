@@ -1,13 +1,9 @@
 namespace MdcHR26Apps.BlazorServer.Data;
 
-public class AppStateService
+public class AppStateService(IConfiguration configuration)
 {
-    private readonly IConfiguration _configuration;
-
-    public AppStateService(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
+    /// Primary Constructor 사용 (C# 13)
+    private readonly IConfiguration _configuration = configuration;
 
     // 상태값이 변화됨을 알림
     public event Action? OnChange;
