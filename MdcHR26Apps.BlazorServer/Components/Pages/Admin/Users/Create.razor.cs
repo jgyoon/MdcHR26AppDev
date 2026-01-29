@@ -25,7 +25,7 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin.Users
         // 평가대상자 추가
         [Inject]
         public IEvaluationUsersRepository evaluationUsersRepository { get; set; } = null!;
-        public Models.EvaluationUsers.EvaluationUsers evaluationUsers { get; set; } = new Models.EvaluationUsers.EvaluationUsers();
+        public MdcHR26Apps.Models.EvaluationUsers.EvaluationUsers evaluationUsers { get; set; } = new MdcHR26Apps.Models.EvaluationUsers.EvaluationUsers();
 
         // 평가순서관리
         [Inject]

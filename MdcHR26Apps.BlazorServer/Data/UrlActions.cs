@@ -42,4 +42,10 @@ public class UrlActions(NavigationManager navigationManager)
     public void MoveEUserManagePage() => _navigationManager.NavigateTo("/Admin/EUsersManage");
     public void MoveEUserDetailsPage(long uid) => _navigationManager.NavigateTo($"/Admin/EvaluationUsers/Details/{uid}");
     public void MoveEUsersEditPage(long uid) => _navigationManager.NavigateTo($"/Admin/EvaluationUsers/Edit/{uid}");
+
+    // === [6] 전체 평가 관리 (TotalReport/Admin) ===
+    public void MoveTotalReportAdminIndexPage() => _navigationManager.NavigateTo("/Admin/TotalReport");
+    public void MoveTotalReportAdminDetailsPage(long pid) => _navigationManager.NavigateTo($"/Admin/TotalReport/Details/{pid}");
+    public void MoveTotalReportAdminEditPage(long pid) => _navigationManager.NavigateTo($"/Admin/TotalReport/Edit/{pid}");
+    public void MoveTotalReportAdminInitPage(long pid) => _navigationManager.NavigateTo($"/Admin/TotalReport/ReportInit/{pid}");
 }

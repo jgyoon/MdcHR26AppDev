@@ -17,8 +17,8 @@ public partial class Details(
     #endregion
 
     // 평가대상자정보
-    private Models.EvaluationUsers.EvaluationUsers model { get; set; } = new Models.EvaluationUsers.EvaluationUsers();
-    private UserDb user { get; set; } = new UserDb();
+    private MdcHR26Apps.Models.EvaluationUsers.EvaluationUsers? model { get; set; } = new MdcHR26Apps.Models.EvaluationUsers.EvaluationUsers();
+    private UserDb? user { get; set; } = new UserDb();
 
     // 평가자 이름
     private string? teamLeaderName { get; set; }

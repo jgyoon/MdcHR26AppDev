@@ -39,6 +39,7 @@ builder.Services.AddTransient<UrlActions>();
 // 2-1. 유틸리티 서비스 등록
 // ========================================
 builder.Services.AddScoped<UserUtils>();
+builder.Services.AddTransient<ScoreUtils>();
 
 // ========================================
 // 3. Model 계층 DI 등록 (Phase 2 연동)

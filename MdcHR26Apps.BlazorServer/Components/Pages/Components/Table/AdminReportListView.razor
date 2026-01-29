@@ -1,0 +1,89 @@
+@using MdcHR26Apps.Models.EvaluationProcess
+@using MdcHR26Apps.Models.Views.v_ProcessTRListDB
+@using MdcHR26Apps.BlazorServer.Utils
+@inject UrlActions urlActions
+@inject ScoreUtils scoreUtils
+
+@if (processTRLists == null || !processTRLists.Any())
+{
+    <p><em>평가 정보가 없습니다.</em></p>
+}
+else
+{
+    <!-- 데스크톱 테이블 -->
+    <div class="d-none d-md-block">
+        <table class="table table-hover table-responsive-md">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>ID</th>
+                    <th>이름</th>
+                    <th>상태</th>
+                    <th>최종등급</th>
+                    <th>비고</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int sortNo = 1;
+                }
+                @foreach (var item in processTRLists)
+                {
+                    <tr>
+                        <td>@sortNo</td>
+                        <td>@item.UserId</td>
+                        <td>@item.UserName</td>
+                        <td>@GetDisplayStatus(item)</td>
+                        <td>@scoreUtils.GetTotalScore(item.Total_Score)</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-info"
+                                @onclick="() => urlActions.MoveTotalReportAdminDetailsPage(item.Pid)">
+                                상세
+                            </button>
+                        </td>
+                    </tr>
+                    sortNo++;
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 모바일 카드 -->
+    <div class="d-block d-md-none">
+        @foreach (var item in processTRLists)
+        {
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h6 class="card-title">@item.UserName (@item.UserId)</h6>
+                    <p class="card-text">
+                        <strong>상태:</strong> @GetDisplayStatus(item)<br />
+                        <strong>최종등급:</strong> @scoreUtils.GetTotalScore(item.Total_Score)
+                    </p>
+                    <button type="button" class="btn btn-sm btn-info"
+                        @onclick="() => urlActions.MoveTotalReportAdminDetailsPage(item.Pid)">
+                        상세
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<v_ProcessTRListDB>? processTRLists { get; set; }
+
+    private string GetDisplayStatus(v_ProcessTRListDB item)
+    {
+        if (item.Is_Director_Submission) return "임원평가완료";
+        if (item.Is_Teamleader_Submission) return "팀장평가완료";
+        if (item.Is_User_Submission) return "본인평가완료";
+        if (item.Is_SubAgreement) return "세부합의완료";
+        if (item.Is_Agreement) return "직무합의완료";
+        if (item.Is_SubRequest) return "세부합의요청";
+        if (item.Is_Request) return "직무합의요청";
+        return "대기중";
+    }
+
+
+}

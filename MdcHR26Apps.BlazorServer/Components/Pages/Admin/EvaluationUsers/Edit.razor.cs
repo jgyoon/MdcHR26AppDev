@@ -24,7 +24,7 @@ public partial class Edit(
     private List<UserDb> directorlist { get; set; } = new List<UserDb>();
 
     // 평가대상자
-    private Models.EvaluationUsers.EvaluationUsers model { get; set; } = new Models.EvaluationUsers.EvaluationUsers();
+    private MdcHR26Apps.Models.EvaluationUsers.EvaluationUsers? model { get; set; } = new MdcHR26Apps.Models.EvaluationUsers.EvaluationUsers();
 
     // 평가순서관리
     private ProcessDb processDb { get; set; } = new ProcessDb();
@@ -104,7 +104,7 @@ public partial class Edit(
     private async Task EditUser()
     {
         // 평가 대상자만 수정하고 아니면 평가순서 삭제
-        if (model.Is_Evaluation)
+        if (model !=null && model.Is_Evaluation)
         {
             if (model.Uid != 0 &&
                 !string.IsNullOrEmpty(selectedTeamLeaderName) &&
@@ -150,7 +150,7 @@ public partial class Edit(
         }
         else
         {
-            if (model.Uid != 0)
+            if (model !=null && model.Uid != 0)
             {
                 model.TeamLeaderId = !string.IsNullOrEmpty(selectedTeamLeaderName)
                     ? SearchTeamLeaderUid(selectedTeamLeaderName)
@@ -211,7 +211,7 @@ public partial class Edit(
     #endregion
 
     #region Process Management
-    private async Task<bool> EditProcessUser(Models.EvaluationUsers.EvaluationUsers model)
+    private async Task<bool> EditProcessUser(MdcHR26Apps.Models.EvaluationUsers.EvaluationUsers model)
     {
         var result = await processRepository.GetByUidAsync(model.Uid);
 
@@ -229,7 +229,7 @@ public partial class Edit(
         return false;
     }
 
-    private async Task<bool> CreateProcessUser(Models.EvaluationUsers.EvaluationUsers model)
+    private async Task<bool> CreateProcessUser(MdcHR26Apps.Models.EvaluationUsers.EvaluationUsers model)
     {
         processDb = new ProcessDb
         {
@@ -253,7 +253,7 @@ public partial class Edit(
         return pid != 0;
     }
 
-    private async Task<bool> DeleteProcessUser(Models.EvaluationUsers.EvaluationUsers model)
+    private async Task<bool> DeleteProcessUser(MdcHR26Apps.Models.EvaluationUsers.EvaluationUsers model)
     {
         var result = await processRepository.GetByUidAsync(model.Uid);
 
