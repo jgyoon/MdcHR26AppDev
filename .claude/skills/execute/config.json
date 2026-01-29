@@ -1,0 +1,28 @@
+{
+  "name": "execute",
+  "description": "작업지시서를 읽고 자동으로 실행하는 스킬 (Plan Mode 기반 권한 일괄 승인)",
+  "version": "1.0.0",
+  "author": "MdcHR2026 Team",
+  "triggers": [
+    "/execute",
+    "/실행"
+  ],
+  "parameters": {
+    "taskNumber": {
+      "type": "string",
+      "description": "작업지시서 번호 (예: 20260128_01). 생략 시 최신 작업지시서 실행",
+      "required": false
+    }
+  },
+  "examples": [
+    "/execute 20260128_01",
+    "/execute",
+    "/실행 20260128_01"
+  ],
+  "tags": [
+    "execute",
+    "automation",
+    "workflow",
+    "plan-mode"
+  ]
+}

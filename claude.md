@@ -169,17 +169,32 @@ works/
 
 ---
 
-## 사용자 정의 도구 (Custom Tools)
+## 사용자 정의 도구 (절대명제)
 
-본 프로젝트는 `.claude` 폴더에 사용자 정의 Agent와 Skill이 구성되어 있습니다.
+**중요**: 본 프로젝트는 `.claude` 폴더에 사용자 정의 Agent와 Skill이 구성되어 있습니다.
 
-### 확인 방법
-- **Agents**: `.claude/agents/*/agent.md` 파일 확인
-- **Skills**: `.claude/skills/*/skill.md` 파일 확인
+### 세션 시작 시 필수 절차
 
-### 중요
-- 새 세션 시작 시 `.claude` 폴더의 도구들을 먼저 확인할 것
-- Agent와 Skill은 지속적으로 업데이트되므로 최신 내용 참조
+1. **세션 시작 시 자동으로 `.claude/README.md` 읽기**
+   - 위치: `.claude/README.md`
+   - 이 파일에 모든 Skills와 Agents의 최신 목록 및 사용법이 정의되어 있음
+   - **절대 생략하지 말 것** - 도구를 모르면 비효율적인 수동 작업을 하게 됨
+
+2. **도구 우선 사용 원칙**
+   - 작업지시서 작성 필요 → Skill 확인 후 사용
+   - DB 관련 작업 → Skill 또는 Agent 확인 후 사용
+   - 이슈 관리 필요 → Skill 확인 후 사용
+   - 분석 또는 검증 필요 → Agent 확인 후 사용
+
+3. **업데이트 주기**
+   - Skills와 Agents는 지속적으로 추가/변경됨
+   - 새 세션 시작 시 `.claude/README.md` 재확인 필수
+
+### 주의사항
+
+- **단일 소스 원칙**: 도구 정보는 `.claude/README.md`에서만 관리
+- **절대 수동 작업 금지**: 사용 가능한 Skill/Agent가 있으면 반드시 활용
+- **상세 문서**: 각 도구의 `agent.md` 또는 `skill.md` 파일 참조
 
 ---
 

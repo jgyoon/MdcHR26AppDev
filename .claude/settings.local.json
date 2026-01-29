@@ -42,7 +42,8 @@
       "Bash(if not exist \"c:\\\\Codes\\\\00_Develop_Cursor\\\\10_MdcHR26Apps\\\\MdcHR26Apps.BlazorServer\\\\Utils\" mkdir \"c:\\\\Codes\\\\00_Develop_Cursor\\\\10_MdcHR26Apps\\\\MdcHR26Apps.BlazorServer\\\\Utils\")",
       "Bash(dotnet clean:*)",
       "Bash(timeout /t 3 /nobreak)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(test:*)"
     ]
   }
 }
