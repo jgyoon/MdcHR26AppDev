@@ -226,6 +226,15 @@ works/
 2. **단순 복사**: 네임스페이스가 동일하므로 파일 그대로 복사
 3. **수동 동기화**: 자동 복사 금지, 개발자가 직접 확인 후 복사
 4. **검증 필수**: 복사 후 반드시 빌드 및 테스트
+5. **Database 제외**: Database 폴더는 개발자가 양쪽 프로젝트에서 직접 작업하므로 동기화 대상에서 제외
+
+**동기화 대상**:
+- `MdcHR26Apps.BlazorServer/` - Blazor Server 프로젝트
+- `MdcHR26Apps.Models/` - Models 프로젝트
+
+**동기화 제외**:
+- `Database/` - 개발자가 직접 작업
+- `.claude/`, `works/`, `claude.md` - 문서 및 설정
 
 ---
 
