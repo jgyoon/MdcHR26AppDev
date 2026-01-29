@@ -751,6 +751,75 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Table;
 
 ---
 
+## ✅ 긴급 문제 해결 완료 (2026-01-29)
+
+### 해결 내역: View/Model 동기화
+
+**작업지시서**: [20260129_04_fix_view_model_sync.md](../tasks/20260129_04_fix_view_model_sync.md)
+
+**실행 결과**: ✅ 완료
+- Commit: 0303316 "fix: View/Model 동기화 완료 - DB View와 100% 일치"
+- 빌드: 오류 0개
+
+**수정된 파일 (3개)**:
+1. `v_ProcessTRListDB.cs` - 15개 → **38개 필드** (23개 추가)
+   - ProcessDb 상태 필드: Is_Request, Is_Agreement, Is_SubRequest, Is_SubAgreement, Is_User_Submission, Is_Teamleader_Submission, Is_Director_Submission, FeedBackStatus, FeedBack_Submission
+   - 사용자 정보: UserId, UserName, TeamLeader_Id, TeamLeader_Name, Director_Id, Director_Name
+   - 평가 점수: User_Evaluation_1/2/3/4, TeamLeader_Evaluation_1/2/3 + Comment, Feedback_Evaluation_1/2/3 + Comment, Director_Evaluation_1/2/3 + Comment
+   - 종합 점수: Total_Score, Director_Score
+
+2. `v_TotalReportListDB.cs` - 17개 → **25개 필드** (8개 추가)
+   - 평가 점수: User_Evaluation_1/2/3/4, TeamLeader_Evaluation_1/2/3 + Comment, Feedback_Evaluation_1/2/3 + Comment, Director_Evaluation_1/2/3 + Comment
+   - 종합 점수: Total_Score, Director_Score, TeamLeader_Score
+
+3. `v_DeptObjectiveListDb.cs` - **6개 필드** (필드명 수정)
+   - DOid → DeptObjectiveDbId (SQL 일치)
+   - Objective_Title → ObjectiveTitle (SQL 일치)
+   - Objective_Description → ObjectiveContents (SQL 일치)
+   - Start_Date, End_Date 제거 (SQL에 없음)
+   - Remarks 추가 (SQL에 있음)
+
+**원칙 확립**:
+- Database/dbo/*.sql = 진리의 원천
+- 모든 필드를 순서대로 정확히 반영
+- 임의 축약 절대 금지
+- 타입 매핑만 수행 (BIGINT→Int64, FLOAT→double, BIT→bool)
+
+**차단 해제**:
+- ✅ 20260129_03 작업 재개 가능
+- ✅ 20260129_05 작업 진행 가능 (2025년 코드 복사 기반)
+
+---
+
+## ✅ 작업지시서 수정 완료 (2026-01-29)
+
+### 20260129_06: AdminReportListView 2025년 코드 기반 수정
+
+**배경**:
+- 20260129_03의 Step 4 (AdminReportListView)가 2025년 실제 코드와 다름
+- 테이블 구조 및 메서드가 단순화되어 있음
+- 점수 계산 로직 누락
+
+**작업지시서**: [20260129_06_phase3_3_totalreport_step4_14.md](../tasks/20260129_06_phase3_3_totalreport_step4_14.md)
+
+**수정 내용**:
+- Step 4를 2025년 코드 기반으로 완전 재작성
+- 테이블 구조: 4개 컬럼 그룹 (이름/평가자점수, 부서장/점수, 임원/점수, 등급/비고)
+- 점수 계산 메서드 반영:
+  - `IsReportSubmissionStatus(bool, double, double, double)` - 평가자 점수 합산 후 백분위 변환
+  - `IsTeamleaderSubmissionStatus(bool, double)` - 팀장 점수 표시
+  - `GetDirectorScore(bool, double)` - 임원 점수 표시
+  - `sortNoAdd3(int)` - 순번 관리
+- CSS 스타일: text_style_1/2/3 인라인 스타일 반영
+- 네임스페이스만 2026년으로 변경, 로직은 2025년 그대로 유지
+
+**Commit**: 752c352 "docs: AdminReportListView 2025년 코드 기반으로 수정"
+
+**다음 단계**:
+- 20260129_06의 Step 4-14를 기반으로 TotalReport/Admin 페이지 구현 진행
+
+---
+
 **작업 시작일**: 2026-01-22
 **최종 업데이트**: 2026-01-29
-**최종 상태**: 진행중 (View/Model 불일치로 작업 중단, 긴급 해소 필요)
+**최종 상태**: 진행중 (20260129_06 작성 완료, Step 4-14 구현 대기)
