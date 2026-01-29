@@ -1,17 +1,17 @@
 using MdcHR26Apps.BlazorServer.Data;
-using MdcHR26Apps.Models.EvaluationUsers;
+using MdcHR26Apps.Models.Views.v_EvaluationUsersList;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components;
 
 namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin;
 
 public partial class EUsersManage(
-    IEvaluationUsersRepository evaluationUsersRepository,
+    Iv_EvaluationUsersListRepository evaluationUsersListRepository,
     LoginStatusService loginStatusService,
     UrlActions urlActions)
 {
     // 평가사용자 관리
-    private List<Models.EvaluationUsers.EvaluationUsers> userlist { get; set; } = new List<Models.EvaluationUsers.EvaluationUsers>();
+    private List<v_EvaluationUsersList> userlist { get; set; } = new();
 
     // 검색창 추가
     private string searchTerm { get; set; } = string.Empty;
@@ -25,7 +25,7 @@ public partial class EUsersManage(
 
     private async Task SetData()
     {
-        var users = await evaluationUsersRepository.GetByAllAsync();
+        var users = await evaluationUsersListRepository.GetByAllAsync();
         userlist = users.ToList();
     }
 
@@ -53,9 +53,7 @@ public partial class EUsersManage(
     {
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            // 2026년: 검색은 UserName 기반이므로 전체 조회 후 필터링
-            var allUsers = await evaluationUsersRepository.GetByAllAsync();
-            // TODO: Navigation Property를 통한 UserName 검색 필요
+            var allUsers = await evaluationUsersListRepository.SearchByNameAsync(searchTerm);
             userlist = allUsers.ToList();
         }
         else

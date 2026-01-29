@@ -178,17 +178,52 @@ GO
 PRINT '뷰 생성 완료';
 GO
 
+-- 기존 뷰 삭제
+IF OBJECT_ID('[dbo].[v_EvaluationUsersList]', 'V') IS NOT NULL
+    DROP VIEW [dbo].[v_EvaluationUsersList];
+GO
+
+-- 뷰 생성
+CREATE VIEW [dbo].[v_EvaluationUsersList]
+AS SELECT
+    EU.EUid,
+    EU.Uid,
+    U.UserId,
+    U.UserName,
+    U.ENumber,
+    U.EDepartId,
+    D.EDepartmentName,
+    R.ERankName AS ERank,
+    EU.Is_Evaluation,
+    EU.TeamLeaderId,
+    TL.UserName AS TeamLeaderName,
+    EU.DirectorId,
+    DI.UserName AS DirectorName,
+    EU.Is_TeamLeader
+FROM [dbo].[EvaluationUsers] EU
+INNER JOIN [dbo].[UserDb] U ON EU.Uid = U.Uid
+LEFT JOIN [dbo].[EDepartmentDb] D ON U.EDepartId = D.EDepartId
+LEFT JOIN [dbo].[ERankDb] R ON U.ERankId = R.ERankId
+LEFT JOIN [dbo].[UserDb] TL ON EU.TeamLeaderId = TL.Uid
+LEFT JOIN [dbo].[UserDb] DI ON EU.DirectorId = DI.Uid
+WHERE U.EStatus = 1
+GO
+
+PRINT 'v_EvaluationUsersList 뷰 생성 완료';
+GO
+
 -- =============================================
 -- 완료 메시지
 -- =============================================
 PRINT '';
 PRINT '=============================================';
 PRINT '모든 뷰 생성이 완료되었습니다.';
-PRINT '총 5개 뷰 생성:';
+PRINT '총 6개 뷰 생성:';
 PRINT '  - v_MemberListDB (부서원 목록)';
 PRINT '  - v_DeptObjectiveListDb (부서 목표 목록)';
 PRINT '  - v_ProcessTRListDB (평가 프로세스 및 종합 리포트)';
 PRINT '  - v_ReportTaskListDB (평가 리포트 및 업무 목록)';
 PRINT '  - v_TotalReportListDB (종합 리포트 목록)';
+PRINT '  - v_EvaluationUsersList (평가자 목록 목록)';
 PRINT '=============================================';
 GO

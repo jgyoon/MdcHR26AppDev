@@ -619,25 +619,87 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Table;
   3. MemberListTable (부서/직급별 사용자 목록)
 - **상태**: 체크리스트 작성 완료, 구현 대기
 
+#### 4. [20260128_01_implement_missing_components.md](../tasks/20260128_01_implement_missing_components.md)
+- **내용**: 미구현 컴포넌트 3개 구현
+- **실행 결과**: ✅ 완료
+- **구현 완료**:
+  1. DisplayResultText.razor (결과 메시지 표시)
+  2. EUserListTable.razor + .cs (평가대상자 목록)
+  3. MemberListTable.razor + .cs (부서/직급별 사용자 목록)
+- **빌드 결과**: 경고 5개, 오류 0개
+- **날짜**: 2026-01-28
+
+---
+
+## 작업 완료 내역 (2026-01-29)
+
+### ✅ v_EvaluationUsersList 뷰 구현
+
+#### 문제 상황
+- **증상**: EUsersManage 페이지에서 사용자 이름이 "미지정"으로 표시됨
+- **원인**: EvaluationUsers 엔티티에 Uid (FK)만 있고 UserName이 없음
+- **근본 원인**: Dapper는 Navigation Property를 자동으로 로드하지 않음
+
+#### 5. [20260129_01_create_v_evaluation_users_list_view.md](../tasks/20260129_01_create_v_evaluation_users_list_view.md)
+- **내용**: v_EvaluationUsersList DB 뷰 생성 (Part 1)
+- **실행 결과**: ✅ 완료 (개발자 직접 실행)
+- **생성된 뷰**:
+  ```sql
+  CREATE VIEW [dbo].[v_EvaluationUsersList]
+  AS SELECT
+      EU.EUid, EU.Uid, U.UserId, U.UserName, U.ENumber,
+      U.EDepartId, D.EDepartmentName, R.ERankName AS ERank,
+      EU.Is_Evaluation, EU.TeamLeaderId, TL.UserName AS TeamLeaderName,
+      EU.DirectorId, DI.UserName AS DirectorName, EU.Is_TeamLeader
+  FROM [dbo].[EvaluationUsers] EU
+  INNER JOIN [dbo].[UserDb] U ON EU.Uid = U.Uid
+  LEFT JOIN [dbo].[EDepartmentDb] D ON U.EDepartId = D.EDepartId
+  LEFT JOIN [dbo].[ERankDb] R ON U.ERankId = R.ERankId
+  LEFT JOIN [dbo].[UserDb] TL ON EU.TeamLeaderId = TL.Uid
+  LEFT JOIN [dbo].[UserDb] DI ON EU.DirectorId = DI.Uid
+  WHERE U.EStatus = 1
+  ```
+- **주요 기능**:
+  - EvaluationUsers와 UserDb 조인하여 사용자 이름 제공
+  - TeamLeader, Director 이름 제공 (nullable)
+  - NVARCHAR 검색 지원
+- **날짜**: 2026-01-29
+
+#### 6. [20260129_02_implement_v_evaluation_users_list_models.md](../tasks/20260129_02_implement_v_evaluation_users_list_models.md)
+- **내용**: v_EvaluationUsersList Model/Repository/Page 구현 (Part 2)
+- **실행 결과**: ✅ 완료
+- **생성된 파일 (3개)**:
+  1. `v_EvaluationUsersList.cs` - 뷰 엔티티 ([Keyless], [Table])
+  2. `Iv_EvaluationUsersListRepository.cs` - Repository 인터페이스
+  3. `v_EvaluationUsersListRepository.cs` - Repository 구현 (Dapper, NVARCHAR 검색 지원)
+- **수정된 파일 (4개)**:
+  1. `MdcHR26AppsAddExtensions.cs` - using 및 DI 등록
+  2. `EUsersManage.razor.cs` - 뷰 Repository 사용, 검색 기능 활성화
+  3. `EUserListTable.razor` - 뷰 필드 직접 사용 (UserName, TeamLeaderName, DirectorName)
+  4. `EUserListTable.razor.cs` - 뷰 타입으로 변경
+- **빌드 결과**: 경고 5개, 오류 0개 ✅
+- **주요 개선**:
+  - "미지정" → 실제 사용자 이름 표시
+  - 검색 기능 활성화 (NVARCHAR 지원)
+  - N+1 쿼리 문제 해결
+- **날짜**: 2026-01-29
+
 ### 📊 현재 상태 요약
 
 **완료**:
 - ✅ 빌드 경고 14개 수정
 - ✅ 프로젝트 구조 재정리 (.NET 10 스타일)
-- ✅ Admin 페이지 기본 구조 완성 (페이지 파일만 생성됨)
-
-**진행 중**:
-- ⏳ 미구현 컴포넌트 3개 구현 필요
+- ✅ Admin 페이지 기본 구조 완성
+- ✅ 미구현 컴포넌트 3개 구현 (DisplayResultText, EUserListTable, MemberListTable)
+- ✅ v_EvaluationUsersList 뷰 생성 및 연동
+- ✅ EUsersManage 페이지 이름 표시 문제 해결
 
 **남은 작업**:
-1. DisplayResultText 컴포넌트 구현
-2. EUserListTable 컴포넌트 구현
-3. MemberListTable 컴포넌트 구현
-4. Admin CRUD 기능 완성 (Users/Settings/EvaluationUsers)
-5. 최종 테스트 및 검증
+1. Admin CRUD 기능 완성 (Users/Settings/EvaluationUsers)
+2. 최종 테스트 및 검증
 
 ---
 
 **작업 시작일**: 2026-01-22
-**최종 업데이트**: 2026-01-28
-**최종 상태**: 진행중 (구조 재정리 완료, 컴포넌트 구현 대기)
+**최종 업데이트**: 2026-01-29
+**최종 상태**: 진행중 (기본 컴포넌트 완성, CRUD 기능 구현 대기)

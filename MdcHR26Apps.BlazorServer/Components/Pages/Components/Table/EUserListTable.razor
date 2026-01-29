@@ -1,0 +1,33 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Table
+@rendermode InteractiveServer
+
+<table class="table table-hover table-responsive-md">
+    <thead>
+        <tr>
+            <th>순번</th>
+            <th>Uid</th>
+            <th>이름</th>
+            <th>평가부서장</th>
+            <th>평가임원</th>
+            <th>평가자여부</th>
+            <th>비고</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Users)
+        {
+            <tr>
+                <td>@sortNoAdd2(sortNo)</td>
+                <td>@item.Uid</td>
+                <td>@item.UserName</td>
+                <td>@(item.TeamLeaderName ?? "미지정")</td>
+                <td>@(item.DirectorName ?? "미지정")</td>
+                <td>@isuse(item.Is_Evaluation)</td>
+                <td>
+                    <button class="btn btn-info" @onclick="@(() => DetailsAction(item.Uid))">상세</button>
+                    <button class="btn btn-secondary" @onclick="@(() => EditAction(item.Uid))">수정</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

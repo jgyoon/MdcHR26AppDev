@@ -1,6 +1,6 @@
 # 이슈 인덱스
 
-**최종 업데이트**: 2026-01-22
+**최종 업데이트**: 2026-01-29
 
 ---
 
@@ -18,8 +18,8 @@
 
 | 번호 | 제목 | 시작일 | 진행률 | 현재 단계 |
 |------|------|--------|--------|----------|
-| [#009](issues/009_phase3_webapp_development.md) | Phase 3 - Blazor Server WebApp 개발 | 2026-01-20 | 35% (Phase 3-3 진행 중) | Admin 페이지 구조 완성, 컴포넌트 구현 대기 |
-| [#011](issues/011_phase3_3_admin_pages_build_errors.md) | Phase 3-3 관리자 페이지 빌드 오류 및 재작업 | 2026-01-22 | 75% (구조 재정리 완료) | 미구현 컴포넌트 3개 남음 |
+| [#009](issues/009_phase3_webapp_development.md) | Phase 3 - Blazor Server WebApp 개발 | 2026-01-20 | 40% (Phase 3-3 진행 중) | Admin 페이지 기본 컴포넌트 완성, CRUD 기능 구현 대기 |
+| [#011](issues/011_phase3_3_admin_pages_build_errors.md) | Phase 3-3 관리자 페이지 빌드 오류 및 재작업 | 2026-01-22 | 90% (기본 컴포넌트 완성) | v_EvaluationUsersList 뷰 구현 완료, CRUD 기능 구현 대기 |
 
 ---
 
@@ -120,22 +120,31 @@
         ├─ sync-validator Agent
         └─ CLAUDE.md 동기화 가이드
     ↓
-[#011] Phase 3-3 관리자 페이지 빌드 오류 (진행중 🔄 - 75%)
+[#011] Phase 3-3 관리자 페이지 빌드 오류 (진행중 🔄 - 90%)
     ├─ 롤백 후 재작업 진행 (2026-01-26)
-    ├─ ✅ 작업지시서 3개 작성 완료
+    ├─ ✅ 작업지시서 6개 작성 완료
     │   ├─ 20260126_01_phase3_3_admin_pages_rebuild.md (재작업 계획)
     │   ├─ 20260126_02_restructure_blazor_project.md (구조 재정리)
-    │   └─ 20260126_03_missing_components_checklist.md (미구현 목록)
+    │   ├─ 20260126_03_missing_components_checklist.md (미구현 목록)
+    │   ├─ 20260128_01_implement_missing_components.md (3개 컴포넌트 구현)
+    │   ├─ 20260129_01_create_v_evaluation_users_list_view.md (DB 뷰 생성)
+    │   └─ 20260129_02_implement_v_evaluation_users_list_models.md (Model/Repository/Page)
     ├─ ✅ 빌드 경고 14개 수정 완료
     ├─ ✅ 프로젝트 구조 재정리 (.NET 10 스타일)
     │   ├─ Pages/ → Components/Pages/ 통합
     │   ├─ 공용 컴포넌트 재정리 (Common/Modal/Table)
     │   ├─ 폴더명 복수형 적용 (Depts, Ranks)
     │   └─ 네임스페이스 및 경로 업데이트
-    └─ ⏳ 미구현 컴포넌트 3개 (다음 작업)
-        ├─ DisplayResultText (우선순위 1)
-        ├─ EUserListTable (우선순위 2)
-        └─ MemberListTable (우선순위 3)
+    ├─ ✅ 미구현 컴포넌트 3개 구현 완료 (2026-01-28)
+    │   ├─ DisplayResultText (결과 메시지 표시)
+    │   ├─ EUserListTable (평가대상자 목록)
+    │   └─ MemberListTable (부서/직급별 사용자 목록)
+    ├─ ✅ v_EvaluationUsersList 뷰 구현 완료 (2026-01-29)
+    │   ├─ DB 뷰 생성 (EvaluationUsers + UserDb 조인)
+    │   ├─ Model/Repository/Page 연동
+    │   ├─ 사용자 이름 표시 문제 해결 ("미지정" → 실제 이름)
+    │   └─ 검색 기능 활성화 (NVARCHAR 지원)
+    └─ ⏳ Admin CRUD 기능 구현 (다음 작업)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   참조 이슈 (다른 프로젝트)
@@ -203,6 +212,9 @@ works/
 | 20260126_01_phase3_3_admin_pages_rebuild.md | 작성 완료 (재작업 계획) | [#011](issues/011_phase3_3_admin_pages_build_errors.md) |
 | 20260126_02_restructure_blazor_project.md | 완료 ✅ (구조 재정리) | [#011](issues/011_phase3_3_admin_pages_build_errors.md) |
 | 20260126_03_missing_components_checklist.md | 작성 완료 (미구현 목록) | [#011](issues/011_phase3_3_admin_pages_build_errors.md) |
+| 20260128_01_implement_missing_components.md | 완료 ✅ (3개 컴포넌트 구현) | [#011](issues/011_phase3_3_admin_pages_build_errors.md) |
+| 20260129_01_create_v_evaluation_users_list_view.md | 완료 ✅ (DB 뷰 생성) | [#011](issues/011_phase3_3_admin_pages_build_errors.md) |
+| 20260129_02_implement_v_evaluation_users_list_models.md | 완료 ✅ (Model/Repository/Page) | [#011](issues/011_phase3_3_admin_pages_build_errors.md) |
 
 ---
 
