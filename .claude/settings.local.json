@@ -43,7 +43,8 @@
       "Bash(dotnet clean:*)",
       "Bash(timeout /t 3 /nobreak)",
       "Bash(tree:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(git restore:*)"
     ]
   }
 }

@@ -695,11 +695,62 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Table;
 - ✅ EUsersManage 페이지 이름 표시 문제 해결
 
 **남은 작업**:
-1. Admin CRUD 기능 완성 (Users/Settings/EvaluationUsers)
-2. 최종 테스트 및 검증
+1. ❌ **View/Model 불일치 해소 (긴급)** ← 2026-01-29 발견
+2. Admin CRUD 기능 완성 (Users/Settings/EvaluationUsers)
+3. 최종 테스트 및 검증
+
+---
+
+## ⚠️ 긴급 문제 발견 (2026-01-29)
+
+### 문제: View(SQL)와 View(Model) 불일치
+
+**발견 경위**:
+- 20260129_03 작업지시서 진행 중 (TotalReport/Admin 페이지 구현)
+- AdminReportListView 컴포넌트에서 v_ProcessTRListDB 사용 시도
+- Model에 평가 점수 필드가 없어 작업 차단
+
+**근본 원인**:
+- Phase 2에서 View Model 생성 시 **임의로 코드 축약**
+- DB View의 모든 필드를 Model에 반영하지 않음
+- "필요할 것 같은 것만" 선택하여 생성
+
+**영향받는 View**:
+
+| View | SQL 필드 | Model 필드 | 문제 |
+|------|----------|------------|------|
+| v_ProcessTRListDB | 38개 | 15개 | ❌ 심각 (평가 점수 20개 필드 누락) |
+| v_TotalReportListDB | 25개 | 17개 | ❌ 심각 (평가 점수 15개 필드 누락) |
+| v_DeptObjectiveListDb | 6개 | 7개 | ❌ 불일치 (필드명 다름, SQL에 없는 필드 존재) |
+| v_MemberListDB | 14개 | 14개 | ✅ 일치 |
+| v_EvaluationUsersList | 14개 | 14개 | ✅ 일치 (최근 작업) |
+| v_ReportTaskListDB | 가변 | 18개 | ✅ 의도한 구조 (SQL에 B.* 사용) |
+
+**누락된 핵심 필드 (v_ProcessTRListDB, v_TotalReportListDB)**:
+- User_Evaluation_1/2/3/4 (본인 평가)
+- TeamLeader_Evaluation_1/2/3 + Comment (팀장 평가)
+- Feedback_Evaluation_1/2/3 + Comment (피드백)
+- Director_Evaluation_1/2/3 + Comment (임원 평가)
+- Total_Score, Director_Score, TeamLeader_Score (종합 점수)
+- ProcessDb 상태 필드들 (Is_Request, Is_Agreement, FeedBackStatus 등)
+
+**영향도**:
+- TotalReport/Admin 페이지 구현 완전 차단
+- 평가 점수를 표시할 수 없음
+- Phase 3-3 작업 중단
+
+**해결 방안**:
+1. 작업지시서 작성: View/Model 동기화 (20260129_04)
+2. Database/dbo/*.sql 파일을 진리의 원천으로 삼음
+3. 모든 View Model을 DB View와 100% 일치하도록 수정
+4. 임의 축약 금지 원칙 재확인
+
+**작업 중단**:
+- 20260129_03 (Phase 3-3 TotalReport Admin 완성) - Step 3까지만 완료
+- Commit: b30db2a "feat: Phase 3-3 Step 1-3 완료"
 
 ---
 
 **작업 시작일**: 2026-01-22
 **최종 업데이트**: 2026-01-29
-**최종 상태**: 진행중 (기본 컴포넌트 완성, CRUD 기능 구현 대기)
+**최종 상태**: 진행중 (View/Model 불일치로 작업 중단, 긴급 해소 필요)
