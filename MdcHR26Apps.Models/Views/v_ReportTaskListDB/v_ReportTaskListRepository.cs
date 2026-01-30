@@ -22,11 +22,28 @@ public class v_ReportTaskListRepository(string connectionString, ILoggerFactory 
     {
         const string sql = """
             SELECT * FROM v_ReportTaskListDB
-            ORDER BY Pid DESC, Rid, Task_Start_Date
+            ORDER BY Pid DESC, Rid, TargetDate
             """;
 
         using var connection = new SqlConnection(dbContext);
         return await connection.QueryAsync<v_ReportTaskListDB>(sql);
+    }
+    #endregion
+
+    #region + [1-1] GetAllAsync (List 반환)
+    /// <summary>
+    /// 전체 평가 보고서-업무 목록 조회 (List 반환)
+    /// </summary>
+    public async Task<List<v_ReportTaskListDB>> GetAllAsync()
+    {
+        const string sql = """
+            SELECT * FROM v_ReportTaskListDB
+            ORDER BY Pid DESC, Rid, TargetDate
+            """;
+
+        using var connection = new SqlConnection(dbContext);
+        var result = await connection.QueryAsync<v_ReportTaskListDB>(sql);
+        return result.AsList();
     }
     #endregion
 
@@ -39,7 +56,7 @@ public class v_ReportTaskListRepository(string connectionString, ILoggerFactory 
         const string sql = """
             SELECT * FROM v_ReportTaskListDB
             WHERE Rid = @reportId
-            ORDER BY Task_Start_Date
+            ORDER BY TargetDate
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -56,7 +73,7 @@ public class v_ReportTaskListRepository(string connectionString, ILoggerFactory 
         const string sql = """
             SELECT * FROM v_ReportTaskListDB
             WHERE Uid = @uid
-            ORDER BY Pid DESC, Task_Start_Date
+            ORDER BY Pid DESC, TargetDate
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -73,7 +90,7 @@ public class v_ReportTaskListRepository(string connectionString, ILoggerFactory 
         const string sql = """
             SELECT * FROM v_ReportTaskListDB
             WHERE Pid = @processId
-            ORDER BY Rid, Task_Start_Date
+            ORDER BY Rid, TargetDate
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -90,7 +107,7 @@ public class v_ReportTaskListRepository(string connectionString, ILoggerFactory 
         const string sql = """
             SELECT * FROM v_ReportTaskListDB
             WHERE Task_Status = @taskStatus
-            ORDER BY Pid DESC, Task_Start_Date
+            ORDER BY Pid DESC, TargetDate
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -124,7 +141,7 @@ public class v_ReportTaskListRepository(string connectionString, ILoggerFactory 
         const string sql = """
             SELECT * FROM v_ReportTaskListDB
             WHERE SAid = @subAgreementId
-            ORDER BY Task_Start_Date
+            ORDER BY TargetDate
             """;
 
         using var connection = new SqlConnection(dbContext);

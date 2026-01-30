@@ -1,14 +1,14 @@
 # 이슈 인덱스
 
-**최종 업데이트**: 2026-01-29
+**최종 업데이트**: 2026-01-30
 
 ---
 
 ## 이슈 현황 통계
 
-- **총 이슈**: 11개 (참조 이슈 2개 포함)
-- **프로젝트 이슈**: 9개 (#003부터 시작)
-- **완료**: 9개
+- **총 이슈**: 14개 (참조 이슈 2개 포함)
+- **프로젝트 이슈**: 12개 (#003부터 시작)
+- **완료**: 12개
 - **진행 중**: 2개
 - **보류**: 0개
 
@@ -27,18 +27,18 @@
 
 | 번호 | 제목 | 완료일 | 관련 작업지시서 |
 |------|------|--------|----------------|
+| [#014](issues/014_site_js_not_loaded_app_razor.md) | site.js 파일이 App.razor에 로드되지 않음 | 2026-01-30 | - |
+| [#013](issues/013_v_reporttasklistdb_entity_db_mismatch.md) | v_ReportTaskListDB Entity와 DB View 구조 불일치 | 2026-01-30 | 20260130_02 |
+| [#012](issues/012_v_processtrllistdb_view_column_mismatch.md) | v_ProcessTRListDB View 컬럼 불일치 오류 | 2026-01-30 | 20260130_01 |
 | [#010](issues/010_login_password_hash_order_mismatch.md) | 로그인 비밀번호 검증 실패 - 해시 순서 및 인코딩 불일치 | 2026-01-22 | 20260121_01 |
 | [#008](issues/008_phase2_model_development.md) | Phase 2 - Model 개발 (Dapper) | 2026-01-20 | 20260119_01~04 (4개) |
-| [#007](issues/007_remove_memberdb_optimize_structure.md) | MemberDb 제거 및 부서 목표 권한 관리 최적화 | 2026-01-16 | 20260114_02 |
-| [#006](issues/006_enhance_password_security.md) | UserDb 비밀번호 보안 강화 | 2026-01-14 | 20260114_01 |
-| [#005](issues/005_phase1_progress_summary.md) | Phase 1 작업 완료 보고서 | 2025-12-16 | 20251216_03 |
 
 ---
 
 ## 전체 이슈 목록
 
 <details>
-<summary>전체 이슈 보기 (11개)</summary>
+<summary>전체 이슈 보기 (12개)</summary>
 
 ### 참조 이슈 (다른 프로젝트)
 - [#001](issues/001_checkup_mode_alimtalk_fix.md) - 알림톡 발송 시 검진 모드 시간 반영 (참조, 2025-11-10)
@@ -60,6 +60,9 @@
 - [#009](issues/009_phase3_webapp_development.md) - Phase 3 Blazor Server WebApp 개발 (진행중, 2026-01-20~)
 - [#010](issues/010_login_password_hash_order_mismatch.md) - 로그인 비밀번호 검증 실패 - 해시 순서 및 인코딩 불일치 (완료, 2026-01-22)
 - [#011](issues/011_phase3_3_admin_pages_build_errors.md) - Phase 3-3 관리자 페이지 빌드 오류 및 재작업 (진행중, 2026-01-22~)
+- [#012](issues/012_v_processtrllistdb_view_column_mismatch.md) - v_ProcessTRListDB View 컬럼 불일치 오류 (완료, 2026-01-30)
+- [#013](issues/013_v_reporttasklistdb_entity_db_mismatch.md) - v_ReportTaskListDB Entity와 DB View 구조 불일치 (완료, 2026-01-30)
+- [#014](issues/014_site_js_not_loaded_app_razor.md) - site.js 파일이 App.razor에 로드되지 않음 (완료, 2026-01-30)
 
 </details>
 
@@ -215,12 +218,15 @@ works/
 | 20260128_01_implement_missing_components.md | 완료 ✅ (3개 컴포넌트 구현) | [#011](issues/011_phase3_3_admin_pages_build_errors.md) |
 | 20260129_01_create_v_evaluation_users_list_view.md | 완료 ✅ (DB 뷰 생성) | [#011](issues/011_phase3_3_admin_pages_build_errors.md) |
 | 20260129_02_implement_v_evaluation_users_list_models.md | 완료 ✅ (Model/Repository/Page) | [#011](issues/011_phase3_3_admin_pages_build_errors.md) |
+| 20260129_06_phase3_3_totalreport_step4_14.md | 완료 ✅ (빌드 성공, 런타임 오류) | [#011](issues/011_phase3_3_admin_pages_build_errors.md) / [#012](issues/012_v_processtrllistdb_view_column_mismatch.md) |
+| 20260130_01_fix_v_processtrllistdb_column_mismatch.md | 완료 ✅ | [#012](issues/012_v_processtrllistdb_view_column_mismatch.md) |
+| 20260130_02_fix_v_reporttasklistdb_entity_mismatch.md | 완료 ✅ (코드 수정, 빌드 성공) | [#013](issues/013_v_reporttasklistdb_entity_db_mismatch.md) |
 
 ---
 
 ## 다음 이슈 번호
 
-**다음 생성할 이슈**: #012
+**다음 생성할 이슈**: #015
 
 ---
 

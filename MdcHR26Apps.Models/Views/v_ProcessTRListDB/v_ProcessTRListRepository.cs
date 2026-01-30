@@ -22,7 +22,7 @@ public class v_ProcessTRListRepository(string connectionString, ILoggerFactory l
     {
         const string sql = """
             SELECT * FROM v_ProcessTRListDB
-            ORDER BY Process_Year DESC, Start_Date DESC
+            ORDER BY Pid DESC
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -39,7 +39,7 @@ public class v_ProcessTRListRepository(string connectionString, ILoggerFactory l
         const string sql = """
             SELECT * FROM v_ProcessTRListDB
             WHERE Pid = @processId
-            ORDER BY Final_Score DESC
+            ORDER BY Total_Score DESC
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -56,7 +56,7 @@ public class v_ProcessTRListRepository(string connectionString, ILoggerFactory l
         const string sql = """
             SELECT * FROM v_ProcessTRListDB
             WHERE Uid = @uid
-            ORDER BY Process_Year DESC, Start_Date DESC
+            ORDER BY Pid DESC
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -64,58 +64,7 @@ public class v_ProcessTRListRepository(string connectionString, ILoggerFactory l
     }
     #endregion
 
-    #region + [4] 연도별 조회: GetByYearAsync
-    /// <summary>
-    /// 연도별 평가 결과 조회
-    /// </summary>
-    public async Task<IEnumerable<v_ProcessTRListDB>> GetByYearAsync(int year)
-    {
-        const string sql = """
-            SELECT * FROM v_ProcessTRListDB
-            WHERE Process_Year = @year
-            ORDER BY Final_Score DESC
-            """;
-
-        using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<v_ProcessTRListDB>(sql, new { year });
-    }
-    #endregion
-
-    #region + [5] 등급별 조회: GetByGradeAsync
-    /// <summary>
-    /// 등급별 평가 결과 조회
-    /// </summary>
-    public async Task<IEnumerable<v_ProcessTRListDB>> GetByGradeAsync(string grade)
-    {
-        const string sql = """
-            SELECT * FROM v_ProcessTRListDB
-            WHERE Final_Grade = @grade
-            ORDER BY Process_Year DESC, Final_Score DESC
-            """;
-
-        using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<v_ProcessTRListDB>(sql, new { grade });
-    }
-    #endregion
-
-    #region + [6] 프로세스 상태별 조회: GetByProcessStatusAsync
-    /// <summary>
-    /// 프로세스 상태별 조회
-    /// </summary>
-    public async Task<IEnumerable<v_ProcessTRListDB>> GetByProcessStatusAsync(int status)
-    {
-        const string sql = """
-            SELECT * FROM v_ProcessTRListDB
-            WHERE Process_Status = @status
-            ORDER BY Process_Year DESC, Start_Date DESC
-            """;
-
-        using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<v_ProcessTRListDB>(sql, new { status });
-    }
-    #endregion
-
-    #region + [7] 프로세스+사용자 조회: GetByProcessAndUserAsync
+    #region + [4] 프로세스+사용자 조회: GetByProcessAndUserAsync
     /// <summary>
     /// 특정 프로세스의 특정 사용자 결과 조회
     /// </summary>
@@ -128,6 +77,39 @@ public class v_ProcessTRListRepository(string connectionString, ILoggerFactory l
 
         using var connection = new SqlConnection(dbContext);
         return await connection.QueryFirstOrDefaultAsync<v_ProcessTRListDB>(sql, new { processId, uid });
+    }
+    #endregion
+
+    #region + [8] GetAllAsync (List 반환)
+    /// <summary>
+    /// 전체 평가 프로세스-결과 목록 조회 (List 반환)
+    /// </summary>
+    public async Task<List<v_ProcessTRListDB>> GetAllAsync()
+    {
+        const string sql = """
+            SELECT * FROM v_ProcessTRListDB
+            ORDER BY Pid DESC
+            """;
+
+        using var connection = new SqlConnection(dbContext);
+        var result = await connection.QueryAsync<v_ProcessTRListDB>(sql);
+        return result.AsList();
+    }
+    #endregion
+
+    #region + [9] GetByPidAsync
+    /// <summary>
+    /// Pid로 특정 평가 프로세스-결과 조회
+    /// </summary>
+    public async Task<v_ProcessTRListDB?> GetByPidAsync(long pid)
+    {
+        const string sql = """
+            SELECT * FROM v_ProcessTRListDB
+            WHERE Pid = @Pid
+            """;
+
+        using var connection = new SqlConnection(dbContext);
+        return await connection.QueryFirstOrDefaultAsync<v_ProcessTRListDB>(sql, new { Pid = pid });
     }
     #endregion
 
