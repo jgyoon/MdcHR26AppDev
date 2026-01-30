@@ -58,4 +58,14 @@ public interface ISubAgreementRepository : IDisposable
     /// 상위 협의서의 세부 항목 비율 합계
     /// </summary>
     Task<int> GetTotalProportionAsync(Int64 agreementNumber);
+
+    /// <summary>
+    /// 사용자별 세부 협의서 개수 조회
+    /// </summary>
+    Task<int> GetCountByUidAsync(long uid);
+
+    /// <summary>
+    /// 사용자별 세부 협의서 전체 삭제
+    /// </summary>
+    Task<bool> DeleteAllByUidAsync(long uid);
 }

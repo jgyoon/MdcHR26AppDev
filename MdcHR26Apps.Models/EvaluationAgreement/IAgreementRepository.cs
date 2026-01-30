@@ -53,4 +53,14 @@ public interface IAgreementRepository : IDisposable
     /// 부서 목표별 협의서 조회
     /// </summary>
     Task<IEnumerable<AgreementDb>> GetByDeptObjectiveAsync(Int64 deptObjectiveId);
+
+    /// <summary>
+    /// 사용자별 협의서 개수 조회
+    /// </summary>
+    Task<int> GetCountByUidAsync(long uid);
+
+    /// <summary>
+    /// 사용자별 협의서 전체 삭제
+    /// </summary>
+    Task<bool> DeleteAllByUidAsync(long uid);
 }

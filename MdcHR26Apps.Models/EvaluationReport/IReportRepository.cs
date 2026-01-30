@@ -36,4 +36,14 @@ public interface IReportRepository : IDisposable
     /// 사용자별 보고서 목록 조회
     /// </summary>
     Task<IEnumerable<ReportDb>> GetByUidAllAsync(Int64 uid);
+
+    /// <summary>
+    /// 사용자별 보고서 개수 조회
+    /// </summary>
+    Task<int> GetCountByUidAsync(long uid);
+
+    /// <summary>
+    /// 사용자별 보고서 전체 삭제
+    /// </summary>
+    Task<bool> DeleteAllByUidAsync(long uid);
 }

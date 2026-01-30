@@ -1,89 +1,137 @@
-@using MdcHR26Apps.Models.EvaluationProcess
 @using MdcHR26Apps.Models.Views.v_ProcessTRListDB
+@using MdcHR26Apps.Models.EvaluationProcess
 @using MdcHR26Apps.BlazorServer.Utils
-@inject UrlActions urlActions
-@inject ScoreUtils scoreUtils
 
-@if (processTRLists == null || !processTRLists.Any())
-{
-    <p><em>평가 정보가 없습니다.</em></p>
-}
-else
-{
-    <!-- 데스크톱 테이블 -->
-    <div class="d-none d-md-block">
-        <table class="table table-hover table-responsive-md">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>ID</th>
-                    <th>이름</th>
-                    <th>상태</th>
-                    <th>최종등급</th>
-                    <th>비고</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int sortNo = 1;
-                }
-                @foreach (var item in processTRLists)
-                {
-                    <tr>
-                        <td>@sortNo</td>
-                        <td>@item.UserId</td>
-                        <td>@item.UserName</td>
-                        <td>@GetDisplayStatus(item)</td>
-                        <td>@scoreUtils.GetTotalScore(item.Total_Score)</td>
-                        <td>
-                            <button type="button" class="btn btn-sm btn-info"
-                                @onclick="() => urlActions.MoveTotalReportAdminDetailsPage(item.Pid)">
-                                상세
-                            </button>
-                        </td>
-                    </tr>
-                    sortNo++;
-                }
-            </tbody>
-        </table>
-    </div>
-
-    <!-- 모바일 카드 -->
-    <div class="d-block d-md-none">
+<table class="table table-hover table-responsive-md">
+    <thead>
+        <tr>
+            <th class="table-header">
+                <div class="row align-items-center">
+                    <div class="col-12 col-md-2">#</div>
+                    <div class="col-12 col-md-5">이름</div>
+                    <div class="col-12 col-md-5">평가자<br />점수</div>
+                </div>
+            </th>
+            <th class="table-header">
+                <div class="row align-items-center">
+                    <div class="col-12 col-md-6">부서장 이름</div>
+                    <div class="col-12 col-md-6">부서장<br />점수</div>
+                </div>
+            </th>
+            <th class="table-header">
+                <div class="row align-items-center">
+                    <div class="col-12 col-md-6">임원 이름</div>
+                    <div class="col-12 col-md-6">최종<br />점수</div>
+                </div>
+            </th>
+            <th class="table-header">
+                <div class="row align-items-center">
+                    <div class="col-12 col-md-6">최종 등급</div>
+                    <div class="col-12 col-md-6">비고</div>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
         @foreach (var item in processTRLists)
         {
-            <div class="card mb-2">
-                <div class="card-body">
-                    <h6 class="card-title">@item.UserName (@item.UserId)</h6>
-                    <p class="card-text">
-                        <strong>상태:</strong> @GetDisplayStatus(item)<br />
-                        <strong>최종등급:</strong> @scoreUtils.GetTotalScore(item.Total_Score)
-                    </p>
-                    <button type="button" class="btn btn-sm btn-info"
-                        @onclick="() => urlActions.MoveTotalReportAdminDetailsPage(item.Pid)">
-                        상세
-                    </button>
-                </div>
-            </div>
+            <tr>
+                <td class="table-cell">
+                    <div class="row">
+                        <div class="col-12 col-md-2">@sortNoAdd3(sortNo)</div>
+                        <div class="col-12 col-md-5">@item.UserName</div>
+                        <div class="col-12 col-md-5" style=@text_style_1>@IsReportSubmissionStatus(item.Is_User_Submission, item.User_Evaluation_1, item.User_Evaluation_2, item.User_Evaluation_3)</div>
+                    </div>
+                </td>
+                <td class="table-cell">
+                    <div class="row">
+                        <div class="col-12 col-md-6">@item.TeamLeader_Name</div>
+                        <div class="col-12 col-md-6" style=@text_style_2>@IsTeamleaderSubmissionStatus(item.Is_Teamleader_Submission, item.TeamLeader_Evaluation_1, item.TeamLeader_Evaluation_2, item.TeamLeader_Evaluation_3)</div>
+                    </div>
+                </td>
+                <td class="table-cell">
+                    <div class="row">
+                        <div class="col-12 col-md-6">@item.Director_Name</div>
+                        <div class="col-12 col-md-6" style=@text_style_3>@GetDirectorScore(item.Is_Director_Submission, item.Director_Score)</div>
+                    </div>
+                </td>
+                <td class="table-cell">
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-6">@_scoreUtils.GetTotalScore(@item.Total_Score)</div>
+                        <div class="col-12 col-md-6">
+                            <button id="DetailButton" class="btn btn-info" @onclick="(() => _urlActions.MoveTotalReportAdminDetailsPage(item.Pid))">상세</button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
         }
-    </div>
-}
+    </tbody>
+</table>
 
 @code {
     [Parameter]
-    public List<v_ProcessTRListDB>? processTRLists { get; set; }
+    public List<v_ProcessTRListDB> processTRLists { get; set; } = new List<v_ProcessTRListDB>();
 
-    private string GetDisplayStatus(v_ProcessTRListDB item)
+    [Inject]
+    public UrlActions _urlActions { get; set; } = null!;
+
+    [Inject]
+    public ScoreUtils _scoreUtils { get; set; } = null!;
+
+    // Text CSS Style
+    public string text_style_1 = "white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; vertical-align: middle; color: black; font-style: italic;";
+    public string text_style_2 = "white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; vertical-align: middle; color: blue; font-style: italic;";
+    public string text_style_3 = "white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; vertical-align: middle; color: red; font-weight: bold;";
+
+    public int sortNo = 1;
+
+    private int sortNoAdd3(int sort)
     {
-        if (item.Is_Director_Submission) return "임원평가완료";
-        if (item.Is_Teamleader_Submission) return "팀장평가완료";
-        if (item.Is_User_Submission) return "본인평가완료";
-        if (item.Is_SubAgreement) return "세부합의완료";
-        if (item.Is_Agreement) return "직무합의완료";
-        if (item.Is_SubRequest) return "세부합의요청";
-        if (item.Is_Request) return "직무합의요청";
-        return "대기중";
+        if (processTRLists.Count == sortNo)
+        {
+            sortNo = 1;
+            return sort;
+        }
+        sortNo = sort + 1;
+        return sort;
     }
 
+    #region + 평가제출여부 Is_User_Submission
+    private string IsReportSubmissionStatus(bool status, double score_1, double score_2, double score_3)
+    {
+        if (status)
+        {
+            double score = score_1 + score_2 + score_3;
+            score = _scoreUtils.TotalScroreTo100thpercentile(score);
+            return score.ToString();
+        }
+        else
+        {
+            return "제출(X)";
+        }
+    }
+    #endregion
 
+    #region + 팀장평가제출여부 Is_Teamleader_Submission (2026년: 3개 점수 합산)
+    private string IsTeamleaderSubmissionStatus(bool status, double score_1, double score_2, double score_3)
+    {
+        if (status)
+        {
+            double score = score_1 + score_2 + score_3;
+            score = _scoreUtils.TotalScroreTo100thpercentile(score);
+            return score.ToString();
+        }
+        else
+        {
+            return "평가(X)";
+        }
+    }
+    #endregion
+
+    #region + 최종점수표기
+    private string GetDirectorScore(bool status, double score)
+    {
+        return status ? score.ToString() : "평가(X)";
+    }
+    #endregion
 }

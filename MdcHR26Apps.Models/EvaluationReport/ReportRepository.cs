@@ -139,6 +139,33 @@ public class ReportRepository(string connectionString, ILoggerFactory loggerFact
     }
     #endregion
 
+    #region + [7] 사용자별 개수 조회: GetCountByUidAsync
+    /// <summary>
+    /// 사용자별 보고서 개수 조회
+    /// </summary>
+    public async Task<int> GetCountByUidAsync(long uid)
+    {
+        const string sql = "SELECT COUNT(*) FROM ReportDb WHERE Uid = @Uid";
+
+        using var connection = new SqlConnection(dbContext);
+        return await connection.ExecuteScalarAsync<int>(sql, new { Uid = uid });
+    }
+    #endregion
+
+    #region + [8] 사용자별 전체 삭제: DeleteAllByUidAsync
+    /// <summary>
+    /// 사용자별 보고서 전체 삭제
+    /// </summary>
+    public async Task<bool> DeleteAllByUidAsync(long uid)
+    {
+        const string sql = "DELETE FROM ReportDb WHERE Uid = @Uid";
+
+        using var connection = new SqlConnection(dbContext);
+        var result = await connection.ExecuteAsync(sql, new { Uid = uid });
+        return result > 0;
+    }
+    #endregion
+
     #region + [#] Dispose
     /// <summary>
     /// 리소스 해제

@@ -40,6 +40,7 @@ builder.Services.AddTransient<UrlActions>();
 // ========================================
 builder.Services.AddScoped<UserUtils>();
 builder.Services.AddTransient<ScoreUtils>();
+builder.Services.AddTransient<ExcelManage>();
 
 // ========================================
 // 3. Model 계층 DI 등록 (Phase 2 연동)

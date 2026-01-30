@@ -184,6 +184,33 @@ public class SubAgreementRepository(string connectionString, ILoggerFactory logg
     }
     #endregion
 
+    #region + [11] 사용자별 개수 조회: GetCountByUidAsync
+    /// <summary>
+    /// 사용자별 세부 협의서 개수 조회
+    /// </summary>
+    public async Task<int> GetCountByUidAsync(long uid)
+    {
+        const string sql = "SELECT COUNT(*) FROM SubAgreementDb WHERE Uid = @Uid";
+
+        using var connection = new SqlConnection(dbContext);
+        return await connection.ExecuteScalarAsync<int>(sql, new { Uid = uid });
+    }
+    #endregion
+
+    #region + [12] 사용자별 전체 삭제: DeleteAllByUidAsync
+    /// <summary>
+    /// 사용자별 세부 협의서 전체 삭제
+    /// </summary>
+    public async Task<bool> DeleteAllByUidAsync(long uid)
+    {
+        const string sql = "DELETE FROM SubAgreementDb WHERE Uid = @Uid";
+
+        using var connection = new SqlConnection(dbContext);
+        var result = await connection.ExecuteAsync(sql, new { Uid = uid });
+        return result > 0;
+    }
+    #endregion
+
     #region + [#] Dispose
     /// <summary>
     /// 리소스 해제

@@ -1,0 +1,62 @@
+@page "/Admin/TotalReport/Details/{Id:long}"
+@rendermode InteractiveServer
+
+<PageTitle>최종 결과 상세</PageTitle>
+
+<h3>최종 결과 상세</h3>
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <label for="UserId">ID : </label>
+                    @model.UserId
+                </li>
+                <li class="list-group-item">
+                    <label for="UserName">이름 : </label>
+                    @model.UserName
+                </li>
+                <li class="list-group-item">
+                    <label for="Status">상태 : </label>
+                    @GetDisplayStatus()
+                </li>
+                <li class="list-group-item">
+                    <label for="TotalScore">최종결과 : </label>
+                    @scoreUtils.GetTotalScore(model.Total_Score)
+                </li>
+                <li class="list-group-item">
+                    <label for="TotalReportStatus">종합레포트 : </label>
+                    @isTotalReport
+                </li>
+                <li class="list-group-item">
+                    <label for="ReportStatus">평가레포트 개수 : </label>
+                    @reportCount 개
+                </li>
+                <li class="list-group-item">
+                    <label for="TasksStatus">세부업무개수 : </label>
+                    @taskListCount 개
+                </li>
+                <li class="list-group-item">
+                    <label for="SubAgreementStatus">세부직무합의 개수 : </label>
+                    @subAgreementCount 개
+                </li>
+                <li class="list-group-item">
+                    <label for="AgreementStatus">직무합의 개수 : </label>
+                    @agreementCount 개
+                </li>
+            </ul>
+        </div>
+        <hr />
+        <div class="col-md-12">
+            <button type="button" class="btn btn-outline-primary" @onclick="urlActions.MoveTotalReportAdminIndexPage">목록</button>
+            <button type="button" class="btn btn-outline-secondary" @onclick="() => urlActions.MoveTotalReportAdminEditPage(model.Pid)">수정</button>
+            <button type="button" class="btn btn-outline-danger" @onclick="() => urlActions.MoveTotalReportAdminInitPage(model.Pid)">초기화</button>
+        </div>
+    </div>
+}

@@ -11,6 +11,11 @@ public interface Iv_ReportTaskListRepository : IDisposable
     Task<IEnumerable<v_ReportTaskListDB>> GetByAllAsync();
 
     /// <summary>
+    /// 전체 평가 보고서-업무 목록 조회 (List 반환)
+    /// </summary>
+    Task<List<v_ReportTaskListDB>> GetAllAsync();
+
+    /// <summary>
     /// 특정 보고서의 업무 목록 조회
     /// </summary>
     Task<IEnumerable<v_ReportTaskListDB>> GetByReportIdAsync(Int64 reportId);

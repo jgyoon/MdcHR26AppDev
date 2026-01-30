@@ -132,6 +132,24 @@ public class TotalReportRepository(string connectionString, ILoggerFactory logge
     }
     #endregion
 
+    #region + [7] Pid로 조회: GetByPidAsync
+    /// <summary>
+    /// Pid로 종합 평가 조회
+    /// </summary>
+    public async Task<TotalReportDb?> GetByPidAsync(long pid)
+    {
+        const string sql = """
+            SELECT T.*
+            FROM TotalReportDb T
+            INNER JOIN ProcessDb P ON T.Uid = P.Uid
+            WHERE P.Pid = @Pid
+            """;
+
+        using var connection = new SqlConnection(dbContext);
+        return await connection.QueryFirstOrDefaultAsync<TotalReportDb>(sql, new { Pid = pid });
+    }
+    #endregion
+
     #region + [#] Dispose
     /// <summary>
     /// 리소스 해제

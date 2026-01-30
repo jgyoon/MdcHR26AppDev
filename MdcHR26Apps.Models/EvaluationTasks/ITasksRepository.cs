@@ -48,4 +48,14 @@ public interface ITasksRepository : IDisposable
     /// 미완료 업무 조회
     /// </summary>
     Task<IEnumerable<TasksDb>> GetIncompleteTasksAsync(Int64 uid);
+
+    /// <summary>
+    /// 사용자별 업무 개수 조회
+    /// </summary>
+    Task<int> GetCountByUserAsync(long uid);
+
+    /// <summary>
+    /// 사용자별 업무 전체 삭제
+    /// </summary>
+    Task<bool> DeleteAllByUserAsync(long uid);
 }

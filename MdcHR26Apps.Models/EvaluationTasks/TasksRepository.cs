@@ -149,6 +149,43 @@ public class TasksRepository(string connectionString, ILoggerFactory loggerFacto
     }
     #endregion
 
+    #region + [9] 사용자별 개수 조회: GetCountByUserAsync
+    /// <summary>
+    /// 사용자별 업무 개수 조회
+    /// </summary>
+    public async Task<int> GetCountByUserAsync(long uid)
+    {
+        const string sql = """
+            SELECT COUNT(*)
+            FROM TasksDb T
+            INNER JOIN ReportDb R ON T.TaksListNumber = R.Task_Number
+            WHERE R.Uid = @Uid
+            """;
+
+        using var connection = new SqlConnection(dbContext);
+        return await connection.ExecuteScalarAsync<int>(sql, new { Uid = uid });
+    }
+    #endregion
+
+    #region + [10] 사용자별 전체 삭제: DeleteAllByUserAsync
+    /// <summary>
+    /// 사용자별 업무 전체 삭제
+    /// </summary>
+    public async Task<bool> DeleteAllByUserAsync(long uid)
+    {
+        const string sql = """
+            DELETE FROM TasksDb
+            WHERE TaksListNumber IN (
+                SELECT Task_Number FROM ReportDb WHERE Uid = @Uid
+            )
+            """;
+
+        using var connection = new SqlConnection(dbContext);
+        var result = await connection.ExecuteAsync(sql, new { Uid = uid });
+        return result > 0;
+    }
+    #endregion
+
     #region + [#] Dispose
     /// <summary>
     /// 리소스 해제

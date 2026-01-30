@@ -36,4 +36,9 @@ public interface ITotalReportRepository : IDisposable
     /// 사용자별 종합 평가 조회
     /// </summary>
     Task<TotalReportDb?> GetByUidAsync(Int64 uid);
+
+    /// <summary>
+    /// Pid로 종합 평가 조회
+    /// </summary>
+    Task<TotalReportDb?> GetByPidAsync(long pid);
 }

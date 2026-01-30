@@ -219,6 +219,22 @@ using MdcHR26Apps.Models.Report;
 - Step 7: AdminTaskViewExcel.razor + .cs
 - Step 8: site.js에 downloadURI 함수 추가
 
+**중요 변경 사항**:
+
+Step 6, 7에서 엑셀 파일 URL 설정 시 **NavigationManager.BaseUri 사용**:
+
+```csharp
+// ✅ 2026년 방식 (자동으로 현재 환경 URL 감지)
+string fileUrl = $"{navigationManager.BaseUri}files/tasks/{fileName}";
+
+// ❌ 하드코딩 금지
+// string fileUrl = $"https://localhost:5001/files/tasks/{fileName}";
+```
+
+**이유**:
+- 개발/스테이징/운영 환경에서 자동으로 올바른 URL 사용
+- 2025년 코드에서는 하드코딩되어 있을 수 있으므로 이 부분만 수정
+
 ---
 
 ### Step 9-12: TotalReport/Admin 페이지 4개 작성 (2025년 복사)

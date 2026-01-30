@@ -71,6 +71,11 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin
         }
         #endregion
 
-        // [6] MoveTotalReportAdminMainPage는 향후 Phase에서 추가 예정
+        #region + [6] MoveTotalReportAdminMainPage는 향후 Phase에서 추가 예정
+        protected void MoveTotalReportAdminIndexPage()
+        {
+            urlActions.MoveTotalReportAdminIndexPage();
+        }
+        #endregion
     }
 }
