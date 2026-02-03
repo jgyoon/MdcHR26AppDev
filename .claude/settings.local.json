@@ -44,7 +44,8 @@
       "Bash(timeout /t 3 /nobreak)",
       "Bash(tree:*)",
       "Bash(test:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(exit)"
     ]
   }
 }

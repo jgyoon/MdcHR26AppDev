@@ -1,6 +1,6 @@
 # 이슈 인덱스
 
-**최종 업데이트**: 2026-01-30
+**최종 업데이트**: 2026-02-03
 
 ---
 
@@ -8,8 +8,8 @@
 
 - **총 이슈**: 14개 (참조 이슈 2개 포함)
 - **프로젝트 이슈**: 12개 (#003부터 시작)
-- **완료**: 12개
-- **진행 중**: 2개
+- **완료**: 13개
+- **진행 중**: 1개
 - **보류**: 0개
 
 ---
@@ -18,8 +18,7 @@
 
 | 번호 | 제목 | 시작일 | 진행률 | 현재 단계 |
 |------|------|--------|--------|----------|
-| [#009](issues/009_phase3_webapp_development.md) | Phase 3 - Blazor Server WebApp 개발 | 2026-01-20 | 40% (Phase 3-3 진행 중) | Admin 페이지 기본 컴포넌트 완성, CRUD 기능 구현 대기 |
-| [#011](issues/011_phase3_3_admin_pages_build_errors.md) | Phase 3-3 관리자 페이지 빌드 오류 및 재작업 | 2026-01-22 | 90% (기본 컴포넌트 완성) | v_EvaluationUsersList 뷰 구현 완료, CRUD 기능 구현 대기 |
+| [#009](issues/009_phase3_webapp_development.md) | Phase 3 - Blazor Server WebApp 개발 | 2026-01-20 | 65% (Phase 3-4 준비 완료) | Phase 3-1/2/3 완료, 전체 View 검증 완료 (2026-02-03) |
 
 ---
 
@@ -27,11 +26,11 @@
 
 | 번호 | 제목 | 완료일 | 관련 작업지시서 |
 |------|------|--------|----------------|
+| [#011](issues/011_phase3_3_admin_pages_build_errors.md) | Phase 3-3 관리자 페이지 빌드 오류 및 재작업 | 2026-01-30 | 20260126_01~20260129_06 (6개) |
 | [#014](issues/014_site_js_not_loaded_app_razor.md) | site.js 파일이 App.razor에 로드되지 않음 | 2026-01-30 | - |
 | [#013](issues/013_v_reporttasklistdb_entity_db_mismatch.md) | v_ReportTaskListDB Entity와 DB View 구조 불일치 | 2026-01-30 | 20260130_02 |
 | [#012](issues/012_v_processtrllistdb_view_column_mismatch.md) | v_ProcessTRListDB View 컬럼 불일치 오류 | 2026-01-30 | 20260130_01 |
 | [#010](issues/010_login_password_hash_order_mismatch.md) | 로그인 비밀번호 검증 실패 - 해시 순서 및 인코딩 불일치 | 2026-01-22 | 20260121_01 |
-| [#008](issues/008_phase2_model_development.md) | Phase 2 - Model 개발 (Dapper) | 2026-01-20 | 20260119_01~04 (4개) |
 
 ---
 
@@ -59,7 +58,7 @@
 ### WebApp 개발
 - [#009](issues/009_phase3_webapp_development.md) - Phase 3 Blazor Server WebApp 개발 (진행중, 2026-01-20~)
 - [#010](issues/010_login_password_hash_order_mismatch.md) - 로그인 비밀번호 검증 실패 - 해시 순서 및 인코딩 불일치 (완료, 2026-01-22)
-- [#011](issues/011_phase3_3_admin_pages_build_errors.md) - Phase 3-3 관리자 페이지 빌드 오류 및 재작업 (진행중, 2026-01-22~)
+- [#011](issues/011_phase3_3_admin_pages_build_errors.md) - Phase 3-3 관리자 페이지 빌드 오류 및 재작업 (완료, 2026-01-30)
 - [#012](issues/012_v_processtrllistdb_view_column_mismatch.md) - v_ProcessTRListDB View 컬럼 불일치 오류 (완료, 2026-01-30)
 - [#013](issues/013_v_reporttasklistdb_entity_db_mismatch.md) - v_ReportTaskListDB Entity와 DB View 구조 불일치 (완료, 2026-01-30)
 - [#014](issues/014_site_js_not_loaded_app_razor.md) - site.js 파일이 App.razor에 로드되지 않음 (완료, 2026-01-30)
@@ -98,19 +97,45 @@
     │   ├─ Playwright 테스트 환경
     │   └─ test-runner Agent
     ├─ Phase 3-2: 로그인 및 인증 (완료 ✅)
-    │   ├─ 로그인 페이지 UI (2025년 스타일)
-    │   ├─ 로그인 인증 로직
-    │   ├─ 로그아웃 기능
+    │   ├─ 로그인 페이지 UI (Login.razor)
+    │   ├─ 로그아웃 기능 (Logout.razor)
+    │   ├─ 비밀번호 변경 (Manage.razor)
+    │   ├─ SHA-256 + Salt 로그인 연동
     │   └─ LoginStatusService (상태 관리)
-    ├─ Phase 3-3: 관리자 페이지 (진행중 🔄)
-    │   ├─ [#011] 작업지시서 3개 완료 (진행중 🔄)
-    │   │   ├─ ✅ 빌드 경고 14개 수정
-    │   │   ├─ ✅ 프로젝트 구조 재정리 (.NET 10 스타일)
-    │   │   └─ ⏳ 미구현 컴포넌트 3개 (DisplayResultText, EUserListTable, MemberListTable)
-    │   └─ Admin 페이지 기본 구조 완성 (2026-01-28)
-    ├─ Phase 3-4: 평가 프로세스 (예정 ⏳)
-    ├─ Phase 3-5: 공통 컴포넌트 (예정 ⏳)
-    └─ Phase 3-6: 엑셀 및 유틸리티 (예정 ⏳)
+    ├─ Phase 3-3: 관리자 페이지 (완료 ✅) - [#011]
+    │   ├─ ✅ Users 관리 (Create, Edit, Delete, Details)
+    │   ├─ ✅ Settings/Depts 관리 (Create, Edit, Delete, Details)
+    │   ├─ ✅ Settings/Ranks 관리 (Create, Edit, Delete, Details)
+    │   ├─ ✅ EvaluationUsers 관리 (Edit, Details)
+    │   ├─ ✅ TotalReport (Index, Details, Edit, ReportInit)
+    │   ├─ ✅ 공용 컴포넌트 8개
+    │   ├─ ✅ 엑셀 다운로드 (AdminViewExcel, AdminTaskViewExcel)
+    │   └─ ✅ DB View 동기화 (v_ProcessTRListDB, v_TotalReportListDB 등)
+    ├─ 🔍 Phase 3-4 시작 전 검증 (완료 ✅ - 2026-02-03)
+    │   ├─ ✅ 전체 6개 View 구조 검증 (Entity vs DB View)
+    │   ├─ ✅ v_DeptObjectiveListDb (6개 필드)
+    │   ├─ ✅ v_MemberListDB (11개 필드)
+    │   ├─ ✅ v_TotalReportListDB (25개 필드)
+    │   ├─ ✅ v_EvaluationUsersList (14개 필드)
+    │   ├─ ✅ v_ProcessTRListDB (38개 필드) - 20260130_01
+    │   └─ ✅ v_ReportTaskListDB (29개 필드) - 20260130_02
+    ├─ Phase 3-4: 평가 프로세스 (준비 완료 ⏳)
+    │   ├─ 직무평가 협의 (Agreement, SubAgreement)
+    │   ├─ 본인평가 (1st_HR_Report)
+    │   ├─ 부서장평가 (2nd_HR_Report)
+    │   ├─ 임원평가 (3rd_HR_Report)
+    │   └─ 부서 목표 관리 (DeptObjective)
+    ├─ Phase 3-5: 공통 컴포넌트 (완료 ✅)
+    │   ├─ SearchbarComponent
+    │   ├─ Modal 컴포넌트 (UserDeleteModal, ReportInitModal)
+    │   ├─ Table 컴포넌트 (UserListTable, EUserListTable, MemberListTable, AdminReportListView)
+    │   └─ DisplayResultText
+    └─ Phase 3-6: 엑셀 및 유틸리티 (완료 ✅)
+        ├─ ExcelManage
+        ├─ AdminViewExcel, AdminTaskViewExcel
+        ├─ UserUtils
+        ├─ ScoreUtils
+        └─ TotalScoreRankModel
     ↓
 [#010] 로그인 비밀번호 검증 실패 (완료 ✅)
     ├─ 해시 순서 불일치 (Password+Salt 순서로 수정)
@@ -123,31 +148,41 @@
         ├─ sync-validator Agent
         └─ CLAUDE.md 동기화 가이드
     ↓
-[#011] Phase 3-3 관리자 페이지 빌드 오류 (진행중 🔄 - 90%)
+[#011] Phase 3-3 관리자 페이지 빌드 오류 및 재작업 (완료 ✅ - 2026-01-30)
     ├─ 롤백 후 재작업 진행 (2026-01-26)
-    ├─ ✅ 작업지시서 6개 작성 완료
+    ├─ ✅ 작업지시서 6개 작성 및 완료
     │   ├─ 20260126_01_phase3_3_admin_pages_rebuild.md (재작업 계획)
     │   ├─ 20260126_02_restructure_blazor_project.md (구조 재정리)
     │   ├─ 20260126_03_missing_components_checklist.md (미구현 목록)
     │   ├─ 20260128_01_implement_missing_components.md (3개 컴포넌트 구현)
     │   ├─ 20260129_01_create_v_evaluation_users_list_view.md (DB 뷰 생성)
     │   └─ 20260129_02_implement_v_evaluation_users_list_models.md (Model/Repository/Page)
+    │   └─ 20260129_06_phase3_3_totalreport_step4_14.md (TotalReport 페이지)
     ├─ ✅ 빌드 경고 14개 수정 완료
     ├─ ✅ 프로젝트 구조 재정리 (.NET 10 스타일)
     │   ├─ Pages/ → Components/Pages/ 통합
     │   ├─ 공용 컴포넌트 재정리 (Common/Modal/Table)
     │   ├─ 폴더명 복수형 적용 (Depts, Ranks)
     │   └─ 네임스페이스 및 경로 업데이트
-    ├─ ✅ 미구현 컴포넌트 3개 구현 완료 (2026-01-28)
+    ├─ ✅ 미구현 컴포넌트 3개 구현 완료
     │   ├─ DisplayResultText (결과 메시지 표시)
     │   ├─ EUserListTable (평가대상자 목록)
     │   └─ MemberListTable (부서/직급별 사용자 목록)
-    ├─ ✅ v_EvaluationUsersList 뷰 구현 완료 (2026-01-29)
+    ├─ ✅ v_EvaluationUsersList 뷰 구현 완료
     │   ├─ DB 뷰 생성 (EvaluationUsers + UserDb 조인)
     │   ├─ Model/Repository/Page 연동
-    │   ├─ 사용자 이름 표시 문제 해결 ("미지정" → 실제 이름)
+    │   ├─ 사용자 이름 표시 문제 해결
     │   └─ 검색 기능 활성화 (NVARCHAR 지원)
-    └─ ⏳ Admin CRUD 기능 구현 (다음 작업)
+    ├─ ✅ DB View 동기화 완료
+    │   ├─ v_ProcessTRListDB (15개 → 38개 필드)
+    │   ├─ v_TotalReportListDB (17개 → 25개 필드)
+    │   └─ v_DeptObjectiveListDb (6개 필드)
+    └─ ✅ Admin 전체 페이지 구현 완료
+        ├─ Users/ (Create, Edit, Delete, Details)
+        ├─ Settings/Depts/ (Create, Edit, Delete, Details)
+        ├─ Settings/Ranks/ (Create, Edit, Delete, Details)
+        ├─ EvaluationUsers/ (Edit, Details)
+        └─ TotalReport/ (Index, Details, Edit, ReportInit)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   참조 이슈 (다른 프로젝트)

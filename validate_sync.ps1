@@ -1,10 +1,15 @@
-# 프로젝트 동기화 검증 스크립트
+# Project Synchronization Validation Script
+param(
+    [string]$ChecklistFile = "works/sync-checklists/20260130_1345_sync_checklist.md"
+)
 
-$currentPath = "C:\Codes\00_Develop_Cursor\10_MdcHR26Apps"
-$targetPath = "C:\Codes\41_MdcHR26\MdcHR26App"
+$ErrorActionPreference = "Continue"
 
-# 검증할 파일 목록 (생성 파일)
-$createdFiles = @(
+$src = "C:\Codes\00_Develop_Cursor\10_MdcHR26Apps"
+$dst = "C:\Codes\41_MdcHR26\MdcHR26App"
+
+# Created files
+$created = @(
     "MdcHR26Apps.BlazorServer/Components/Pages/Admin/TotalReport/Details.razor",
     "MdcHR26Apps.BlazorServer/Components/Pages/Admin/TotalReport/Details.razor.cs",
     "MdcHR26Apps.BlazorServer/Components/Pages/Admin/TotalReport/Edit.razor",
@@ -26,8 +31,8 @@ $createdFiles = @(
     "MdcHR26Apps.BlazorServer/wwwroot/js/site.js"
 )
 
-# 검증할 파일 목록 (수정 파일)
-$modifiedFiles = @(
+# Modified files
+$modified = @(
     "MdcHR26Apps.BlazorServer/Components/App.razor",
     "MdcHR26Apps.BlazorServer/Components/Pages/Admin/EvaluationUsers/Details.razor.cs",
     "MdcHR26Apps.BlazorServer/Components/Pages/Admin/EvaluationUsers/Edit.razor.cs",
@@ -57,106 +62,88 @@ $modifiedFiles = @(
     "MdcHR26Apps.Models/MdcHR26AppsAddDbContext.cs"
 )
 
-$allFiles = $createdFiles + $modifiedFiles
+$all = $created + $modified
 
 $passed = @()
 $different = @()
 $missing = @()
 
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "프로젝트 동기화 검증 시작" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "========================================"
+Write-Host "Validation Start"
+Write-Host "========================================"
+Write-Host ""
+Write-Host "Total files: $($all.Count)"
 Write-Host ""
 
-$total = $allFiles.Count
-$current = 0
+$i = 0
+foreach ($file in $all) {
+    $i++
+    Write-Progress -Activity "Validating" -Status "$i / $($all.Count)" -PercentComplete (($i / $all.Count) * 100)
 
-foreach ($file in $allFiles) {
-    $current++
-    Write-Progress -Activity "파일 검증 중" -Status "$current/$total" -PercentComplete (($current / $total) * 100)
+    $srcPath = Join-Path $src $file
+    $dstPath = Join-Path $dst $file
 
-    $currentFile = Join-Path $currentPath $file
-    $targetFile = Join-Path $targetPath $file
+    $srcExists = Test-Path $srcPath
+    $dstExists = Test-Path $dstPath
 
-    $currentExists = Test-Path $currentFile
-    $targetExists = Test-Path $targetFile
-
-    if (-not $currentExists) {
-        Write-Host "[ERROR] 현재 프로젝트에 파일 없음: $file" -ForegroundColor Red
+    if (-not $srcExists) {
+        Write-Host "[ERROR] Source file missing: $file" -ForegroundColor Red
         continue
     }
 
-    if (-not $targetExists) {
-        $missing += [PSCustomObject]@{
-            File = $file
-            Reason = "실제 프로젝트에 파일 없음"
-        }
+    if (-not $dstExists) {
+        $missing += $file
         continue
     }
 
-    # 파일 해시 비교
-    $currentHash = (Get-FileHash -Path $currentFile -Algorithm MD5).Hash
-    $targetHash = (Get-FileHash -Path $targetFile -Algorithm MD5).Hash
+    $srcHash = (Get-FileHash -Path $srcPath -Algorithm MD5).Hash
+    $dstHash = (Get-FileHash -Path $dstPath -Algorithm MD5).Hash
 
-    if ($currentHash -eq $targetHash) {
+    if ($srcHash -eq $dstHash) {
         $passed += $file
     } else {
-        $different += [PSCustomObject]@{
-            File = $file
-            CurrentHash = $currentHash
-            TargetHash = $targetHash
-        }
+        $different += $file
     }
 }
 
-Write-Progress -Activity "파일 검증 중" -Completed
+Write-Progress -Activity "Validating" -Completed
 
 Write-Host ""
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "검증 결과" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "========================================"
+Write-Host "Validation Results"
+Write-Host "========================================"
 Write-Host ""
 
-Write-Host "총 파일: $total" -ForegroundColor White
-Write-Host "통과: $($passed.Count) ($([math]::Round(($passed.Count / $total) * 100, 1))%)" -ForegroundColor Green
-Write-Host "차이: $($different.Count) ($([math]::Round(($different.Count / $total) * 100, 1))%)" -ForegroundColor Yellow
-Write-Host "누락: $($missing.Count) ($([math]::Round(($missing.Count / $total) * 100, 1))%)" -ForegroundColor Red
-Write-Host ""
+$passedPercent = [math]::Round($passed.Count / $all.Count * 100, 1)
+$differentPercent = [math]::Round($different.Count / $all.Count * 100, 1)
+$missingPercent = [math]::Round($missing.Count / $all.Count * 100, 1)
 
-if ($passed.Count -gt 0) {
-    Write-Host "========================================" -ForegroundColor Green
-    Write-Host "통과한 파일 ($($passed.Count)개)" -ForegroundColor Green
-    Write-Host "========================================" -ForegroundColor Green
-    foreach ($file in $passed) {
-        Write-Host "  $file" -ForegroundColor Green
-    }
-    Write-Host ""
-}
+Write-Host "Passed: $($passed.Count) ($passedPercent%)" -ForegroundColor Green
+Write-Host "Different: $($different.Count) ($differentPercent%)" -ForegroundColor Yellow
+Write-Host "Missing: $($missing.Count) ($missingPercent%)" -ForegroundColor Red
+Write-Host ""
 
 if ($different.Count -gt 0) {
-    Write-Host "========================================" -ForegroundColor Yellow
-    Write-Host "차이가 있는 파일 ($($different.Count)개)" -ForegroundColor Yellow
-    Write-Host "========================================" -ForegroundColor Yellow
-    foreach ($item in $different) {
-        Write-Host "  $($item.File)" -ForegroundColor Yellow
+    Write-Host "Files with differences:" -ForegroundColor Yellow
+    foreach ($f in $different) {
+        Write-Host "  - $f" -ForegroundColor Yellow
     }
     Write-Host ""
 }
 
 if ($missing.Count -gt 0) {
-    Write-Host "========================================" -ForegroundColor Red
-    Write-Host "누락된 파일 ($($missing.Count)개)" -ForegroundColor Red
-    Write-Host "========================================" -ForegroundColor Red
-    foreach ($item in $missing) {
-        Write-Host "  $($item.File)" -ForegroundColor Red
-        Write-Host "    사유: $($item.Reason)" -ForegroundColor Red
+    Write-Host "Missing files:" -ForegroundColor Red
+    foreach ($f in $missing) {
+        Write-Host "  - $f" -ForegroundColor Red
     }
     Write-Host ""
 }
 
-# 결과를 JSON으로 출력
+# Save JSON result
 $result = @{
-    Total = $total
+    ChecklistFile = $ChecklistFile
+    Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    Total = $all.Count
     Passed = $passed.Count
     Different = $different.Count
     Missing = $missing.Count
@@ -165,6 +152,7 @@ $result = @{
     MissingFiles = $missing
 }
 
-$result | ConvertTo-Json -Depth 10 | Out-File -FilePath "validation_result.json" -Encoding UTF8
+$jsonPath = Join-Path $src "validation_result.json"
+$result | ConvertTo-Json -Depth 10 | Out-File -FilePath $jsonPath -Encoding UTF8
 
-Write-Host "상세 결과가 validation_result.json에 저장되었습니다." -ForegroundColor Cyan
+Write-Host "Detailed result saved to: $jsonPath" -ForegroundColor Cyan
