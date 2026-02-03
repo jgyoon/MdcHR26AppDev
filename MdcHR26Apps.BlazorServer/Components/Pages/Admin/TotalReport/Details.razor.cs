@@ -54,8 +54,13 @@ public partial class Details(
             isTotalReport = model.TRid > 0 ? "있음" : "없음";
             reportCount = await reportRepository.GetCountByUidAsync(model.Uid);
             taskListCount = await tasksRepository.GetCountByUserAsync(model.Uid);
-            subAgreementCount = await subAgreementRepository.GetCountByUidAsync(model.Uid);
-            agreementCount = await agreementRepository.GetCountByUidAsync(model.Uid);
+
+            // 25년 메서드 사용: GetByUserIdAllAsync
+            var subAgreements = await subAgreementRepository.GetByUserIdAllAsync(model.Uid);
+            subAgreementCount = subAgreements.Count;
+
+            var agreements = await agreementRepository.GetByUserIdAllAsync(model.Uid);
+            agreementCount = agreements.Count;
         }
     }
 

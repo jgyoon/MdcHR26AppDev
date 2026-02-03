@@ -3,63 +3,48 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MdcHR26Apps.Models.EvaluationTasks;
 
-/// <summary>
-/// 업무/과업 관리 Entity
-/// </summary>
 [Table("TasksDb")]
 public class TasksDb
 {
-    /// <summary>
-    /// Task ID (PK, IDENTITY)
-    /// </summary>
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Int64 Tid { get; set; }
 
-    /// <summary>
-    /// 평가 대상자 ID (FK → UserDb.Uid)
-    /// </summary>
     [Required]
-    public Int64 Uid { get; set; }
+    [StringLength(100)]
+    public string TaskName { get; set; } = string.Empty;
 
-    /// <summary>
-    /// 세부 협의서 번호 (FK → SubAgreementDb.SAid)
-    /// </summary>
     [Required]
-    public Int64 SubAgreement_Number { get; set; }
+    public Int64 TaksListNumber { get; set; }
 
-    /// <summary>
-    /// 업무명
-    /// </summary>
     [Required]
-    [StringLength(255)]
-    public string Task_Name { get; set; } = string.Empty;
+    public int TaskStatus { get; set; }
 
-    /// <summary>
-    /// 업무 내용
-    /// </summary>
-    public string? Task_Content { get; set; }
-
-    /// <summary>
-    /// 목표 달성 기준
-    /// </summary>
-    public string? Task_Criteria { get; set; }
-
-    /// <summary>
-    /// 예상 소요 시간 (시간 단위)
-    /// </summary>
-    public int? Estimated_Hours { get; set; }
-
-    /// <summary>
-    /// 완료 여부
-    /// </summary>
     [Required]
-    public bool Is_Completed { get; set; } = false;
+    public string TaskObjective { get; set; } = string.Empty;
 
-    // Navigation Properties
-    [ForeignKey("Uid")]
-    public User.UserDb? User { get; set; }
+    [Required]
+    public int TargetProportion { get; set; }
 
-    [ForeignKey("SubAgreement_Number")]
-    public EvaluationSubAgreement.SubAgreementDb? SubAgreement { get; set; }
+    [Required]
+    public int ResultProportion { get; set; }
+
+    [Required]
+    public DateTime TargetDate { get; set; }
+
+    [Required]
+    public DateTime ResultDate { get; set; }
+
+    [Required]
+    public double Task_Evaluation_1 { get; set; }
+
+    [Required]
+    public double Task_Evaluation_2 { get; set; }
+
+    [Required]
+    public double TaskLevel { get; set; }
+
+    [Required]
+    [StringLength(50)]
+    public string TaskComments { get; set; } = string.Empty;
 }

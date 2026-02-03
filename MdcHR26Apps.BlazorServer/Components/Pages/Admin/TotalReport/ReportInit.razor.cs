@@ -58,8 +58,13 @@ public partial class ReportInit(
             isTotalReport = model.TRid > 0 ? "있음" : "없음";
             reportCount = await reportRepository.GetCountByUidAsync(model.Uid);
             taskListCount = await tasksRepository.GetCountByUserAsync(model.Uid);
-            subAgreementCount = await subAgreementRepository.GetCountByUidAsync(model.Uid);
-            agreementCount = await agreementRepository.GetCountByUidAsync(model.Uid);
+
+            // 25년 메서드 사용: GetByUserIdAllAsync
+            var subAgreements = await subAgreementRepository.GetByUserIdAllAsync(model.Uid);
+            subAgreementCount = subAgreements.Count;
+
+            var agreements = await agreementRepository.GetByUserIdAllAsync(model.Uid);
+            agreementCount = agreements.Count;
         }
     }
 
@@ -98,11 +103,19 @@ public partial class ReportInit(
         // 3. TasksDb 전체 삭제
         await tasksRepository.DeleteAllByUserAsync(model.Uid);
 
-        // 4. SubAgreementDb 전체 삭제
-        await subAgreementRepository.DeleteAllByUidAsync(model.Uid);
+        // 4. SubAgreementDb 전체 삭제 (25년 메서드 사용: foreach로 개별 삭제)
+        var subAgreements = await subAgreementRepository.GetByUserIdAllAsync(model.Uid);
+        foreach (var subAgreement in subAgreements)
+        {
+            await subAgreementRepository.DeleteAsync(subAgreement.Sid);
+        }
 
-        // 5. AgreementDb 전체 삭제
-        await agreementRepository.DeleteAllByUidAsync(model.Uid);
+        // 5. AgreementDb 전체 삭제 (25년 메서드 사용: foreach로 개별 삭제)
+        var agreements = await agreementRepository.GetByUserIdAllAsync(model.Uid);
+        foreach (var agreement in agreements)
+        {
+            await agreementRepository.DeleteAsync(agreement.Aid);
+        }
 
         // 6. ProcessDb 상태 초기화
         var process = await processRepository.GetByUidAsync(model.Uid);

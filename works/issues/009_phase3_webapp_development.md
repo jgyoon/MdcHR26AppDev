@@ -253,6 +253,10 @@ builder.Services.AddRazorComponents()
 **작업지시서**:
 - [20260120_01_phase3_blazor_webapp.md](../tasks/20260120_01_phase3_blazor_webapp.md) - Phase 3 전체 계획
 - [20260120_02_phase3_1_project_setup.md](../tasks/20260120_02_phase3_1_project_setup.md) - Phase 3-1 프로젝트 생성 ✅
+- [20260203_05_components_agreement.md](../tasks/20260203_05_components_agreement.md) - Agreement 컴포넌트 (6개) 📝
+- [20260203_06_components_subagreement.md](../tasks/20260203_06_components_subagreement.md) - SubAgreement 컴포넌트 (8개) 📝
+- [20260203_07_components_report.md](../tasks/20260203_07_components_report.md) - Report 컴포넌트 (17개) 📝
+- [20260203_08_components_common_form.md](../tasks/20260203_08_components_common_form.md) - Common/Form 컴포넌트 (9개) 📝
 
 **선행 이슈**:
 - [#008: Phase 2 Model 개발](008_phase2_model_development.md)
@@ -314,8 +318,55 @@ builder.Services.AddRazorComponents()
   6. ✅ v_ReportTaskListDB (29개 필드) - 수정 완료 (20260130_02)
 - **결론**: Phase 3-4 진행 안전성 확보
 
+**Phase 3-4 컴포넌트 구현 계획**: 2026-02-03
+- **접근 방식 변경**: 2025년 프로젝트의 모든 컴포넌트를 먼저 구현한 후 Phase 3-4 페이지 작업 진행
+- **2025년 컴포넌트 분석**:
+  - 전체: 51개 컴포넌트
+  - 이미 구현: 11개 (SearchbarComponent, DisplayResultText, UserListTable 등)
+  - 신규 구현 필요: 40개 컴포넌트
+- **작업지시서 작성 완료** (기능별 분할):
+  1. [20260203_05_components_agreement.md](../tasks/20260203_05_components_agreement.md) - 6개 Agreement 컴포넌트
+  2. [20260203_06_components_subagreement.md](../tasks/20260203_06_components_subagreement.md) - 8개 SubAgreement 컴포넌트
+  3. [20260203_07_components_report.md](../tasks/20260203_07_components_report.md) - 17개 Report 컴포넌트
+  4. [20260203_08_components_common_form.md](../tasks/20260203_08_components_common_form.md) - 9개 Common/Form 컴포넌트
+- **2026 DB 구조 적응**: AgreementDb 필드명 변경사항 반영 (Item_Number, Item_Title, Item_Contents, Item_Proportion)
+
+**DB/Entity 필드명 동기화**: 2026-02-03 ✅
+- ✅ **5개 Entity 필드명 수정 완료** (DB 테이블 기준)
+  1. ✅ AgreementDb.cs - Agreement_Item_* → Report_Item_* 변경, DB에 없는 필드 4개 삭제
+  2. ✅ SubAgreementDb.cs - PK SAid→Sid 변경, Report_Item_*, Report_SubItem_*, Task_Number 추가
+  3. ✅ DeptObjectiveDb.cs - PK DOid→DeptObjectiveDbId 변경, 감사 필드(CreatedBy/At, UpdatedBy/At) 추가
+  4. ✅ EvaluationLists.cs - PK ELid→Eid 변경, Evaluation_Department/Index/Task 필드 구조 변경
+  5. ✅ TasksDb.cs - 전체 재구조화 (TaskName, TaksListNumber, TaskStatus, TaskObjective 등)
+- ✅ **빌드 검증 완료** (MdcHR26Apps.Models) - 경고 0개, 오류 0개
+- **작업지시서**: [20260203_11_fix_entity_db_field_names.md](../tasks/20260203_11_fix_entity_db_field_names.md)
+
+**Repository 수정 (25년 메서드 기준, 26년 Entity 구조 적용)**: 2026-02-03 ✅
+- ✅ **5개 Repository + 5개 Interface 작성 완료**
+  1. ✅ AgreementRepository.cs (11→7개 메서드) - GetCountByUidAsync 등 26년 전용 메서드 5개 제거
+  2. ✅ SubAgreementRepository.cs (12→7개 메서드) - GetCountByUidAsync 등 26년 전용 메서드 5개 제거
+  3. ✅ DeptObjectiveRepository.cs (5개 메서드) - 25년에 없음, 26년 신규 테이블, 기본 CRUD만 구현
+  4. ✅ EvaluationListsRepository.cs (8→9개 메서드) - SelectListModel 반환 메서드 포함
+  5. ✅ TasksRepository.cs (10→7개 메서드 + 26년 요구 2개) - 25년 기본 7개 + GetCountByUserAsync, DeleteAllByUserAsync (26년 BlazorServer에서 사용)
+- ✅ **2개 Blazor 페이지 수정 완료**
+  - ReportInit.razor.cs: GetCountByUidAsync → GetByUserIdAllAsync().Count, DeleteAllByUidAsync → foreach DeleteAsync
+  - Details.razor.cs: 동일한 방식으로 수정
+- ✅ **빌드 검증 완료**
+  - MdcHR26Apps.Models: 경고 0개, 오류 0개
+  - MdcHR26Apps.BlazorServer: 경고 3개, 오류 0개
+- **작업지시서**: [20260203_12_fix_repository_based_on_2025.md](../tasks/20260203_12_fix_repository_based_on_2025.md)
+- **핵심 변경 사항**:
+  - 25년 Repository 메서드 기준 (개수, 이름, 시그니처)
+  - 26년 Entity 필드명에 맞춰 SQL 쿼리 수정 (Uid, Report_Item_*)
+  - SelectListModel 속성 변경 (SelectListNumber/Name → Value/Text)
+
 **다음 단계**:
-1. Phase 3-4: 평가 프로세스 구현
+1. Phase 3-4 컴포넌트 구현 (40개)
+   - Agreement 관련 (6개): AgreementDbListTable, AgreementDetailsTable, AgreementListTable, AgreementDbListView, AgreementDeleteModal, AgreementComment
+   - SubAgreement 관련 (8개): SubAgreementDbListTable, SubAgreementDetailsTable, SubAgreementListTable, SubAgreementResetList, SubAgreementDbListView, SubAgreementDeleteModal, AgreeItemLists, ReportTaskListCommonView
+   - Report 관련 (17개): ReportListTable, TeamLeaderReportDetailsTable, DirectorReportDetailsTable, 각종 ViewPage 컴포넌트, Modal, Excel 다운로드
+   - Common/Form (9개): CheckboxComponent, FormAgreeTask, FormAgreeTaskCreate, FormGroup, FormSelectList, FormSelectNumber, FormTaskItem, ObjectiveListTable, EDeptListTable
+2. 컴포넌트 구현 완료 후 Phase 3-4 페이지 작업 재작성
    - 직무평가 협의 (Agreement, SubAgreement)
    - 본인평가 (1st_HR_Report)
    - 부서장평가 (2nd_HR_Report)

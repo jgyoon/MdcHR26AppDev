@@ -2,160 +2,240 @@ using Dapper;
 using MdcHR26Apps.Models.Common;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using System.Data;
 
 namespace MdcHR26Apps.Models.EvaluationLists;
 
-/// <summary>
-/// EvaluationLists Repository 구현 (Dapper)
-/// Primary Constructor 사용 (C# 13)
-/// </summary>
-public class EvaluationListsRepository(string connectionString, ILoggerFactory loggerFactory) : IEvaluationListsRepository
+public class EvaluationListsRepository(string connectionString, ILoggerFactory loggerFactory) : IEvaluationListsRepository, IDisposable
 {
     private readonly SqlConnection db = new(connectionString);
-    private readonly ILogger _logger = loggerFactory.CreateLogger<EvaluationListsRepository>();
+    private readonly ILogger _logger = loggerFactory.CreateLogger(nameof(EvaluationListsRepository));
     private readonly string dbContext = connectionString;
 
     #region + [1] 입력: AddAsync
-    /// <summary>
-    /// 평가 항목 추가
-    /// </summary>
-    public async Task<Int64> AddAsync(EvaluationLists model)
+    public async Task<EvaluationLists> AddAsync(EvaluationLists model)
     {
-        const string sql = """
-            INSERT INTO EvaluationLists(
-                Evaluation_Number, Evaluation_Item, Evaluation_Description, Score, IsActive)
-            VALUES(
-                @Evaluation_Number, @Evaluation_Item, @Evaluation_Description, @Score, @IsActive);
-            SELECT CAST(SCOPE_IDENTITY() AS BIGINT);
-            """;
+        try
+        {
+            const string query =
+                "INSERT INTO EvaluationLists(" +
+                    "Evaluation_Department_Number, Evaluation_Department_Name, Evaluation_Index_Number, " +
+                    "Evaluation_Index_Name, Evaluation_Task_Number, Evaluation_Task_Name, Evaluation_Lists_Remark) " +
+                "VALUES(" +
+                    "@Evaluation_Department_Number, @Evaluation_Department_Name, @Evaluation_Index_Number, " +
+                    "@Evaluation_Index_Name, @Evaluation_Task_Number, @Evaluation_Task_Name, @Evaluation_Lists_Remark);" +
+                "Select Cast(SCOPE_IDENTITY() As Int);";
 
-        using var connection = new SqlConnection(dbContext);
-        return await connection.ExecuteScalarAsync<Int64>(sql, model);
+            using (var connection = new SqlConnection(dbContext))
+            {
+                int id = await connection.ExecuteScalarAsync<int>(query, model);
+                model.Eid = id;
+            }
+        }
+        catch (Exception e)
+        {
+            _logger?.LogError($"ERROR({nameof(AddAsync)}): {e.Message}");
+        }
+
+        return model;
     }
     #endregion
 
     #region + [2] 출력: GetByAllAsync
-    /// <summary>
-    /// 전체 평가 항목 조회
-    /// </summary>
-    public async Task<IEnumerable<EvaluationLists>> GetByAllAsync()
+    public async Task<List<EvaluationLists>> GetByAllAsync()
     {
-        const string sql = "SELECT * FROM EvaluationLists ORDER BY Evaluation_Number";
+        const string query = "Select * From EvaluationLists Order By Eid";
 
-        using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<EvaluationLists>(sql);
+        using (var connection = new SqlConnection(dbContext))
+        {
+            var result = await connection.QueryAsync<EvaluationLists>(query, commandType: CommandType.Text);
+            return result.ToList();
+        }
     }
     #endregion
 
     #region + [3] 상세: GetByIdAsync
-    /// <summary>
-    /// ID로 평가 항목 조회
-    /// </summary>
-    public async Task<EvaluationLists?> GetByIdAsync(Int64 id)
+    public async Task<EvaluationLists> GetByIdAsync(long id)
     {
-        const string sql = "SELECT * FROM EvaluationLists WHERE ELid = @id";
+        const string query = "Select * From EvaluationLists Where Eid = @id";
 
-        using var connection = new SqlConnection(dbContext);
-        return await connection.QueryFirstOrDefaultAsync<EvaluationLists>(sql, new { id });
+        using (var connection = new SqlConnection(dbContext))
+        {
+            var result = await connection.QueryFirstOrDefaultAsync<EvaluationLists>(query, new { id }, commandType: CommandType.Text);
+            return result ?? new EvaluationLists();
+        }
     }
     #endregion
 
     #region + [4] 수정: UpdateAsync
-    /// <summary>
-    /// 평가 항목 수정
-    /// </summary>
-    public async Task<int> UpdateAsync(EvaluationLists model)
+    public async Task<bool> UpdateAsync(EvaluationLists model)
     {
-        const string sql = """
-            UPDATE EvaluationLists
-            SET
-                Evaluation_Number = @Evaluation_Number,
-                Evaluation_Item = @Evaluation_Item,
-                Evaluation_Description = @Evaluation_Description,
-                Score = @Score,
-                IsActive = @IsActive
-            WHERE ELid = @ELid
-            """;
+        const string query = @"
+            Update EvaluationLists
+            Set
+                Evaluation_Department_Number = @Evaluation_Department_Number,
+                Evaluation_Department_Name = @Evaluation_Department_Name,
+                Evaluation_Index_Number = @Evaluation_Index_Number,
+                Evaluation_Index_Name = @Evaluation_Index_Name,
+                Evaluation_Task_Number = @Evaluation_Task_Number,
+                Evaluation_Task_Name = @Evaluation_Task_Name,
+                Evaluation_Lists_Remark = @Evaluation_Lists_Remark
+            Where Eid = @Eid";
+        try
+        {
+            using (var connection = new SqlConnection(dbContext))
+            {
+                return await connection.ExecuteAsync(query, model) > 0;
+            }
+        }
+        catch (Exception e)
+        {
+            _logger?.LogError($"ERROR({nameof(UpdateAsync)}): {e.Message}");
+        }
 
-        using var connection = new SqlConnection(dbContext);
-        return await connection.ExecuteAsync(sql, model);
+        return false;
     }
     #endregion
 
     #region + [5] 삭제: DeleteAsync
-    /// <summary>
-    /// 평가 항목 삭제
-    /// </summary>
-    public async Task<int> DeleteAsync(Int64 id)
+    public async Task<bool> DeleteAsync(long id)
     {
-        const string sql = "DELETE FROM EvaluationLists WHERE ELid = @id";
+        const string query = "Delete EvaluationLists Where Eid = @id";
 
-        using var connection = new SqlConnection(dbContext);
-        return await connection.ExecuteAsync(sql, new { id });
+        try
+        {
+            using (var connection = new SqlConnection(dbContext))
+            {
+                return await connection.ExecuteAsync(query, new { id }, commandType: CommandType.Text) > 0;
+            }
+        }
+        catch (Exception er)
+        {
+            _logger?.LogError($"ERROR({nameof(DeleteAsync)}): {er.Message}");
+        }
+
+        return false;
     }
     #endregion
 
-    #region + [6] 활성화된 항목: GetActiveAsync
-    /// <summary>
-    /// 활성화된 평가 항목 조회
-    /// </summary>
-    public async Task<IEnumerable<EvaluationLists>> GetActiveAsync()
+    #region + [6] 지표구분 출력: GetByDeptAllAsync
+    public async Task<List<SelectListModel>> GetByDeptAllAsync()
     {
-        const string sql = """
-            SELECT * FROM EvaluationLists
-            WHERE IsActive = 1
-            ORDER BY Evaluation_Number
-            """;
+        const string query = @"
+            Select DISTINCT Evaluation_Department_Number, Evaluation_Department_Name
+            From EvaluationLists
+            Order By Evaluation_Department_Number";
 
-        using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<EvaluationLists>(sql);
+        List<SelectListModel> resultList = new();
+
+        using (var connection = new SqlConnection(dbContext))
+        {
+            var result = await connection.QueryAsync<EvaluationLists>(query, commandType: CommandType.Text);
+
+            foreach (var item in result)
+            {
+                resultList.Add(new SelectListModel
+                {
+                    Value = item.Evaluation_Department_Number.ToString(),
+                    Text = !string.IsNullOrEmpty(item.Evaluation_Department_Name) ?
+                        item.Evaluation_Department_Name : string.Empty
+                });
+            }
+
+            return resultList;
+        }
     }
     #endregion
 
-    #region + [7] 평가 번호로 조회: GetByNumberAsync
-    /// <summary>
-    /// 평가 번호로 조회
-    /// </summary>
-    public async Task<EvaluationLists?> GetByNumberAsync(int evaluationNumber)
+    #region + [7] 지표구분번호 출력: GetByDeptNumberAsync
+    public async Task<int> GetByDeptNumberAsync(string deptName)
     {
-        const string sql = """
-            SELECT * FROM EvaluationLists
-            WHERE Evaluation_Number = @evaluationNumber
-            """;
+        const string query = "Select DISTINCT Evaluation_Department_Number From EvaluationLists Where Evaluation_Department_Name = @deptName";
 
-        using var connection = new SqlConnection(dbContext);
-        return await connection.QueryFirstOrDefaultAsync<EvaluationLists>(sql, new { evaluationNumber });
+        using (var connection = new SqlConnection(dbContext))
+        {
+            var result = await connection.ExecuteScalarAsync<int>(query, new { deptName }, commandType: CommandType.Text);
+            return result;
+        }
     }
     #endregion
 
-    #region + [8] 드롭다운 목록: GetSelectListAsync
-    /// <summary>
-    /// 드롭다운용 평가 항목 목록
-    /// </summary>
-    public async Task<IEnumerable<SelectListModel>> GetSelectListAsync()
+    #region + [8] 직무구분 출력: GetByIndexAllAsync
+    public async Task<List<SelectListModel>> GetByIndexAllAsync(int deptNo)
     {
-        const string sql = """
-            SELECT
-                CAST(ELid AS NVARCHAR) AS Value,
-                Evaluation_Item + ' (' + CAST(Score AS NVARCHAR) + '점)' AS Text
-            FROM EvaluationLists
-            WHERE IsActive = 1
-            ORDER BY Evaluation_Number
-            """;
+        const string query = @"
+            Select DISTINCT Evaluation_Index_Number, Evaluation_Index_Name
+            From EvaluationLists
+            Where Evaluation_Department_Number = @deptNo
+            Order By Evaluation_Index_Number";
 
-        using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<SelectListModel>(sql);
+        List<SelectListModel> resultList = new();
+
+        using (var connection = new SqlConnection(dbContext))
+        {
+            var result = await connection.QueryAsync<EvaluationLists>(query, new { deptNo }, commandType: CommandType.Text);
+
+            foreach (var item in result)
+            {
+                resultList.Add(new SelectListModel
+                {
+                    Value = item.Evaluation_Index_Number.ToString(),
+                    Text = !string.IsNullOrEmpty(item.Evaluation_Index_Name) ?
+                        item.Evaluation_Index_Name : string.Empty
+                });
+            }
+
+            return resultList;
+        }
     }
     #endregion
 
-    #region + [#] Dispose
-    /// <summary>
-    /// 리소스 해제
-    /// </summary>
+    #region + [9] 평가지표 출력: GetByTasksAsync
+    public async Task<List<SelectListModel>> GetByTasksAsync(string deptName, string indexName)
+    {
+        const string query = @"
+            Select Evaluation_Task_Number, Evaluation_Task_Name
+            From EvaluationLists
+            Where Evaluation_Department_Name = @deptName And Evaluation_Index_Name = @indexName
+            Order By Evaluation_Task_Number";
+
+        List<SelectListModel> resultList = new();
+
+        using (var connection = new SqlConnection(dbContext))
+        {
+            var result = await connection.QueryAsync<EvaluationLists>(query, new { deptName, indexName }, commandType: CommandType.Text);
+
+            foreach (var item in result)
+            {
+                resultList.Add(new SelectListModel
+                {
+                    Value = item.Evaluation_Task_Number.ToString(),
+                    Text = !string.IsNullOrEmpty(item.Evaluation_Task_Name) ?
+                        item.Evaluation_Task_Name : string.Empty
+                });
+            }
+
+            return resultList;
+        }
+    }
+    #endregion
+
+    #region + Dispose
     public void Dispose()
     {
-        db?.Dispose();
+        Dispose(true);
         GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            if (db != null)
+            {
+                db.Dispose();
+            }
+        }
     }
     #endregion
 }
