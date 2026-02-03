@@ -272,6 +272,8 @@ works/
 | 20260203_06_components_subagreement.md | 작성 완료 📝 (8개 컴포넌트) | [#009](issues/009_phase3_webapp_development.md) |
 | 20260203_07_components_report.md | 작성 완료 📝 (17개 컴포넌트) | [#009](issues/009_phase3_webapp_development.md) |
 | 20260203_08_components_common_form.md | 작성 완료 📝 (9개 컴포넌트) | [#009](issues/009_phase3_webapp_development.md) |
+| 20260203_11_fix_entity_db_field_names.md | 완료 ✅ (5개 Entity 필드명 수정) | [#009](issues/009_phase3_webapp_development.md) |
+| 20260203_12_fix_repository_based_on_2025.md | 완료 ✅ (5개 Repository + 5개 Interface) | [#009](issues/009_phase3_webapp_development.md) |
 
 ---
 

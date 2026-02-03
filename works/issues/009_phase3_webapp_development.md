@@ -359,6 +359,35 @@ builder.Services.AddRazorComponents()
   - 25년 Repository 메서드 기준 (개수, 이름, 시그니처)
   - 26년 Entity 필드명에 맞춰 SQL 쿼리 수정 (Uid, Report_Item_*)
   - SelectListModel 속성 변경 (SelectListNumber/Name → Value/Text)
+- **Git Commit**: `5e784db` - 21개 파일 변경, +3,029/-1,552줄
+
+**Repository 메서드 변경 사항 요약**:
+| Repository | 25년 메서드 | 26년 메서드 (수정 전) | 최종 메서드 | 비고 |
+|-----------|------------|-------------------|-----------|------|
+| AgreementRepository | 7개 | 11개 | 7개 | GetCountByUidAsync 등 4개 제거 |
+| SubAgreementRepository | 7개 | 12개 | 7개 | GetCountByUidAsync 등 5개 제거 |
+| DeptObjectiveRepository | - | 10개 | 5개 | 26년 신규, 기본 CRUD만 유지 |
+| EvaluationListsRepository | 9개 | 8개 | 9개 | SelectListModel 메서드 추가 |
+| TasksRepository | 7개 | 10개 | 9개 | 25년 7개 + 26년 요구 2개 유지 |
+
+**추후 작업시 주의사항**:
+1. **Repository 메서드 호출 시**:
+   - `GetCountByUidAsync()` → `GetByUserIdAllAsync().Count` 사용
+   - `DeleteAllByUidAsync()` → `foreach` + `DeleteAsync()` 사용
+   - 파라미터 타입: `string userId` → `long uid` 변경됨
+
+2. **SelectListModel 사용 시**:
+   - 속성명 변경: `SelectListNumber` → `Value`, `SelectListName` → `Text`
+   - Value는 string 타입이므로 `.ToString()` 필요
+
+3. **SQL 쿼리 작성 시**:
+   - `UserId` (string) → `Uid` (long) 사용
+   - `Agreement_Item_*` → `Report_Item_*` 사용
+   - `SAid` → `Sid`, `DOid` → `DeptObjectiveDbId`, `ELid` → `Eid`
+
+4. **25년 참조 프로젝트**:
+   - 경로: `C:\Codes\29_MdcHR25\MdcHR25Apps\MdcHR25Apps.Models\`
+   - 메서드 구조 확인 시 참조 가능
 
 **다음 단계**:
 1. Phase 3-4 컴포넌트 구현 (40개)
