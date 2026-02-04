@@ -12,6 +12,7 @@ public partial class AgreementDbListView
 
     #region Parameters
     [Parameter] public long Uid { get; set; }
+    [Parameter] public bool IsAgreementCompleted { get; set; } = true;
     #endregion
 
     #region Variables
@@ -33,7 +34,7 @@ public partial class AgreementDbListView
 
     private void HandleDetailsClick(long aid)
     {
-        NavigationManager.NavigateTo($"/agreement/details/{aid}");
+        NavigationManager.NavigateTo($"/Agreement/User/Details/{aid}");
     }
     #endregion
 }

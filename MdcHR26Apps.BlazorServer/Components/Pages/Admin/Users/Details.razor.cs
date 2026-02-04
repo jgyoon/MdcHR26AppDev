@@ -47,15 +47,35 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin.Users
         }
 
         #region + Helper Methods : 상태 문자열 변환
+
+        #region + [1] 재직여부
         private string EStatusString(bool status)
         {
             return status ? "재직" : "퇴직";
         }
+        #endregion
 
+        #region + [2] 관리자여부
         private string IsAdminString(bool isAdmin)
         {
             return isAdmin ? "관리자" : "일반사용자";
         }
+        #endregion
+
+        #region + [3] 2차 평가자여부 체크
+        public string isTeamLeader(bool isTeamLeader)
+        {
+            return isTeamLeader ? "부서장(2차 평가자)" : "해당없음";
+        }
+        #endregion        
+
+        #region + [4] 3차 평가자여부 체크
+        public string isDirector(bool isDirector)
+        {
+            return isDirector ? "임원(3차 평가자)" : "해당없음";
+        }
+        #endregion 
+
         #endregion
 
         #region + [0] MoveMainPage : 메인페이지 이동

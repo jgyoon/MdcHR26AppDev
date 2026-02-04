@@ -1,23 +1,47 @@
 @namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Form
 @rendermode InteractiveServer
 
-<div class="input-group mb-3">
-    <span class="input-group-text">@Label</span>
-    <InputSelect class="form-select" @bind-Value="SelectedValue">
-        <option value="">선택하세요</option>
-        @for (int i = Min; i <= Max; i += Step)
-        {
-            <option value="@i">@i @Unit</option>
-        }
-    </InputSelect>
+<div class="mb-3">
+    <label class="form-label">@Label</label>
+    <div class="input-group mb-2">
+        <span class="input-group-text">설정가능한 비중 : @Max %</span>
+        <InputNumber class="form-control"
+                     step="@Step"
+                     min="@Min"
+                     max="@Max"
+                     @bind-Value="SelectedValue"
+                     @oninput="OnPeroportionChanged" />
+        <span class="input-group-text">@Unit</span>
+    </div>
+    <input type="range"
+           class="form-range"
+           step="@Step"
+           min="@Min"
+           max="@Max"
+           @bind="SelectedValue"
+           @oninput="OnPeroportionChanged" />
 </div>
 
 @code {
-    [Parameter] public string Label { get; set; } = "숫자";
-    [Parameter] public int Min { get; set; } = 1;
-    [Parameter] public int Max { get; set; } = 10;
+    [Parameter] public string Label { get; set; } = "평가비중";
+    [Parameter] public int Min { get; set; } = 0;
+    [Parameter] public int Max { get; set; } = 100;
     [Parameter] public int Step { get; set; } = 1;
-    [Parameter] public string Unit { get; set; } = "";
+    [Parameter] public string Unit { get; set; } = "%";
     [Parameter] public int SelectedValue { get; set; }
-    [Parameter] public EventCallback<int> OnChange { get; set; }
+    [Parameter] public EventCallback<int> SelectedValueChanged { get; set; }
+
+    private async Task OnPeroportionChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int value))
+        {
+            SelectedValue = value;
+
+            // SelectedValueChanged 이벤트 발생 (양방향 바인딩)
+            if (SelectedValueChanged.HasDelegate)
+            {
+                await SelectedValueChanged.InvokeAsync(value);
+            }
+        }
+    }
 }

@@ -44,6 +44,8 @@ public class v_ReportTaskListDB
     // UserDb 필드
     public string UserId { get; set; } = string.Empty;
     public string UserName { get; set; } = string.Empty;
+    public string EDepartmentName { get; set; } = string.Empty;
+    public string ERankName { get; set; } = string.Empty;
 
     // TasksDb 필드
     public Int64 Tid { get; set; }

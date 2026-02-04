@@ -1,0 +1,19 @@
+@page "/Agreement/User/Details/{Id:long}"
+@using MdcHR26Apps.BlazorServer.Components.Pages.Components.Agreement
+
+<PageTitle>직무평가 협의 상세</PageTitle>
+
+<h3>직무평가 협의 상세</h3>
+<hr />
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <AgreementDetailsTable agreement="@model"
+                          OnEdit="@HandleEdit"
+                          OnDelete="@HandleDelete"
+                          OnBack="@HandleBack" />
+}

@@ -16,7 +16,7 @@ else
         <label for="@Id" class="form-label">@Label 선택</label>
         <div class="input-group mb-3">
             <span class="input-group-text w-20">@Label</span>
-            <InputSelect id="@Id" class="form-select" @bind-Value="BindValue">
+            <select id="@Id" class="form-select" value="@BindValue" @onchange="HandleValueChanged">
                 @if (string.IsNullOrEmpty(BindValue))
                 {
                     <option value="" selected disabled>@Label 를 선택하세요</option>
@@ -25,7 +25,7 @@ else
                 {
                     <option value="@item.Text">@item.Text</option>
                 }
-            </InputSelect>
+            </select>
         </div>
     }
 }
@@ -34,7 +34,26 @@ else
     [Parameter] public string? Id { get; set; }
     [Parameter] public string? Label { get; set; }
     [Parameter] public string? BindValue { get; set; }
+    [Parameter] public EventCallback<string> BindValueChanged { get; set; }
     [Parameter] public List<SelectListModel> list { get; set; } = new();
     [Parameter] public bool IsDisabled { get; set; } = false;
     [Parameter] public EventCallback<string> OnValueChanged { get; set; }
+
+    private async Task HandleValueChanged(ChangeEventArgs e)
+    {
+        var value = e.Value?.ToString() ?? string.Empty;
+        BindValue = value;
+
+        // BindValueChanged 이벤트 발생 (양방향 바인딩)
+        if (BindValueChanged.HasDelegate)
+        {
+            await BindValueChanged.InvokeAsync(value);
+        }
+
+        // OnValueChanged 이벤트 발생 (추가 이벤트)
+        if (OnValueChanged.HasDelegate)
+        {
+            await OnValueChanged.InvokeAsync(value);
+        }
+    }
 }

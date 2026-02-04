@@ -58,6 +58,14 @@ else
                     <InputText id="UserENumber" class="form-control" placeholder="사원번호"
                                @bind-Value="@model.ENumber"></InputText>
                 </div>
+                <label for="TeamLeader" class="form-label mb-1">부서장(2차)</label>
+                <div class="input-group mb-1">
+                    <InputCheckbox @bind-Value="@model.IsTeamLeader"></InputCheckbox>
+                </div>
+                <label for="Director" class="form-label mb-1">임원(3차)</label>
+                <div class="input-group mb-1">
+                    <InputCheckbox @bind-Value="@model.IsDirector"></InputCheckbox>
+                </div>
                 <label for="Admin" class="form-label mb-1">관리자</label>
                 <div class="input-group mb-1">
                     <InputCheckbox @bind-Value="@model.IsAdministrator"></InputCheckbox>

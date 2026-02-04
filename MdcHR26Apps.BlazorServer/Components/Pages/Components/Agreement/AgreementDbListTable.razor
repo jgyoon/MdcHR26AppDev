@@ -28,7 +28,14 @@
                     </div>
                 </td>
                 <td class="table-cell">
-                    <button type="button" id="DetailButton" class="btn btn-info" @onclick="@(() => OnDetailsClick.InvokeAsync(item.Aid))">상세</button>
+                    @if (!IsAgreementCompleted)
+                    {
+                        <button type="button" id="DetailButton" class="btn btn-info" @onclick="@(() => OnDetailsClick.InvokeAsync(item.Aid))">상세</button>
+                    }
+                    else
+                    {
+                        <span class="text-muted">완료</span>
+                    }
                 </td>
             </tr>
             sortNo++;

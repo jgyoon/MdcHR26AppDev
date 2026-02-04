@@ -48,4 +48,15 @@ public class UrlActions(NavigationManager navigationManager)
     public void MoveTotalReportAdminDetailsPage(long pid) => _navigationManager.NavigateTo($"/Admin/TotalReport/Details/{pid}");
     public void MoveTotalReportAdminEditPage(long pid) => _navigationManager.NavigateTo($"/Admin/TotalReport/Edit/{pid}");
     public void MoveTotalReportAdminInitPage(long pid) => _navigationManager.NavigateTo($"/Admin/TotalReport/ReportInit/{pid}");
+
+    // === [7] 직무평가 협의 (Agreement/User) ===
+    public void MoveAgreementUserIndexPage() => _navigationManager.NavigateTo("/Agreement/User/Index");
+    public void MoveAgreementUserCreatePage() => _navigationManager.NavigateTo("/Agreement/User/Create");
+    public void MoveAgreementUserEditPage(long id) => _navigationManager.NavigateTo($"/Agreement/User/Edit/{id}");
+    public void MoveAgreementUserDeletePage(long id) => _navigationManager.NavigateTo($"/Agreement/User/Delete/{id}");
+    public void MoveAgreementUserDetailsPage(long id) => _navigationManager.NavigateTo($"/Agreement/User/Details/{id}");
+
+    // === [8] 직무평가 협의 (Agreement/TeamLeader) ===
+    public void MoveAgreementTeamLeaderIndexPage() => _navigationManager.NavigateTo("/Agreement/TeamLeader/Index");
+    public void MoveAgreementTeamLeaderDetailsPage(long id) => _navigationManager.NavigateTo($"/Agreement/TeamLeader/Details/{id}");
 }

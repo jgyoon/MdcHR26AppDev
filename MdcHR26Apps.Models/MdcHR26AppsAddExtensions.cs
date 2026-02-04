@@ -20,6 +20,8 @@ using MdcHR26Apps.Models.Views.v_DeptObjectiveListDb;
 using MdcHR26Apps.Models.Views.v_ProcessTRListDB;
 using MdcHR26Apps.Models.Views.v_ReportTaskListDB;
 using MdcHR26Apps.Models.Views.v_TotalReportListDB;
+using MdcHR26Apps.Models.Views.v_AgreementDB;
+using MdcHR26Apps.Models.Views.v_SubAgreementDB;
 
 namespace MdcHR26Apps.Models;
 
@@ -153,6 +155,18 @@ public static class MdcHR26AppsAddExtensions
         {
             var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
             return new v_EvaluationUsersListRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<Iv_AgreementRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new v_AgreementRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<Iv_SubAgreementRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new v_SubAgreementRepository(connectionString, loggerFactory);
         });
 
         return services;

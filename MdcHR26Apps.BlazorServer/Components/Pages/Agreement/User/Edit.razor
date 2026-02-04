@@ -1,0 +1,42 @@
+@page "/Agreement/User/Edit/{Id:long}"
+@using MdcHR26Apps.BlazorServer.Components.Pages.Components.Form
+
+<PageTitle>직무평가 협의 수정</PageTitle>
+
+<h3>직무평가 협의 수정</h3>
+<hr />
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+
+        <FormAgreeTask agreement="@model" />
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger mt-3">
+                @errorMessage
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div class="alert alert-success mt-3">
+                @successMessage
+            </div>
+        }
+
+        <hr />
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">저장</button>
+                <button type="button" class="btn btn-outline-secondary" @onclick="Cancel">취소</button>
+            </div>
+        </div>
+    </EditForm>
+}

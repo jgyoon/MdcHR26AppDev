@@ -30,6 +30,8 @@ AS SELECT
     -- UserDb 필드
     U.UserId,
     U.UserName,
+    ISNULL(ED.EDepartmentName, '') AS EDepartmentName,
+    ISNULL(ER.ERankName, '') AS ERankName,
 
     -- TasksDb 필드 (명시적 선택, B.* 제거)
     B.Tid,
@@ -48,5 +50,7 @@ AS SELECT
 FROM
     [dbo].[ReportDb] A
     INNER JOIN [dbo].[UserDb] U ON A.Uid = U.Uid
-    INNER JOIN [dbo].[ProcessDb] P ON A.Uid = P.Uid    -- 추가
+    LEFT JOIN [dbo].[EDepartmentDb] ED ON U.EDepartId = ED.EDepartId
+    LEFT JOIN [dbo].[ERankDb] ER ON U.ERankId = ER.ERankId
+    INNER JOIN [dbo].[ProcessDb] P ON A.Uid = P.Uid
     INNER JOIN [dbo].[TasksDb] B ON A.Task_Number = B.TaksListNumber

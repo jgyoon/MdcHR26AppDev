@@ -1,0 +1,24 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Agreement
+@rendermode InteractiveServer
+
+<table class="table table-hover table-responsive-md">
+    <thead>
+        <tr>
+            <th class="table-header">순번</th>
+            <th class="table-header">평가지표</th>
+            <th class="table-header">평가직무</th>
+            <th class="table-header">직무비중</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in agreements)
+        {
+            <tr>
+                <td class="table-cell">@sortNoAdd2(sortNo)</td>
+                <td class="table-cell">@item.Report_Item_Name_1</td>
+                <td class="table-text">@item.Report_Item_Name_2</td>
+                <td class="table-cell">@item.Report_Item_Proportion.ToString() %</td>
+            </tr>
+        }
+    </tbody>
+</table>

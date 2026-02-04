@@ -106,4 +106,5 @@ public class ProcessDb
 
     [ForeignKey("DirectorId")]
     public User.UserDb? Director { get; set; }
+    public long UserId { get; set; }
 }

@@ -18,6 +18,8 @@ public class v_TotalReportListDB
     // UserDb 필드 (B)
     public string UserId { get; set; } = string.Empty;
     public string UserName { get; set; } = string.Empty;
+    public string EDepartmentName { get; set; } = string.Empty;
+    public string ERankName { get; set; } = string.Empty;
 
     // [1] 평가대상자 평가 (User_Evaluation)
     public double User_Evaluation_1 { get; set; }

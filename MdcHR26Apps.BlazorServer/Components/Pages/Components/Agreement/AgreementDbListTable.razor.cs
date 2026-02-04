@@ -8,6 +8,7 @@ public partial class AgreementDbListTable
     #region Parameters
     [Parameter] public List<AgreementDb> agreementDbs { get; set; } = new();
     [Parameter] public EventCallback<long> OnDetailsClick { get; set; }
+    [Parameter] public bool IsAgreementCompleted { get; set; } = false;
     #endregion
 
     #region Variables

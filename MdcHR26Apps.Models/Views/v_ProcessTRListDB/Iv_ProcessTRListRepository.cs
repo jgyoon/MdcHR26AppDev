@@ -34,4 +34,9 @@ public interface Iv_ProcessTRListRepository : IDisposable
     /// 특정 프로세스의 특정 사용자 결과 조회
     /// </summary>
     Task<v_ProcessTRListDB?> GetByProcessAndUserAsync(Int64 processId, Int64 uid);
+
+    /// <summary>
+    /// 부서장 관할 팀원 목록 조회
+    /// </summary>
+    Task<List<v_ProcessTRListDB>> GetByTeamLeaderIdAsync(Int64 teamLeaderId);
 }

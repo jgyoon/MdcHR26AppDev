@@ -17,6 +17,7 @@ public class v_ProcessTRListDB
     // UserDb 필드 (U)
     public string UserId { get; set; } = string.Empty;
     public string UserName { get; set; } = string.Empty;
+    public string EDepartmentName { get; set; } = string.Empty;
 
     // TeamLeader 정보 (TL)
     public string TeamLeader_Id { get; set; } = string.Empty;

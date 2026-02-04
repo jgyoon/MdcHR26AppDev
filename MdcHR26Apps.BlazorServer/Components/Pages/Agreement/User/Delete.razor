@@ -1,0 +1,60 @@
+@page "/Agreement/User/Delete/{Id:long}"
+@using MdcHR26Apps.BlazorServer.Components.Pages.Components.Agreement
+@using MdcHR26Apps.BlazorServer.Components.Pages.Components.Agreement.Modal
+
+<PageTitle>직무평가 협의 삭제</PageTitle>
+
+<h3>직무평가 협의 삭제</h3>
+<hr />
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger">
+            @errorMessage
+        </div>
+    }
+
+    <div class="alert alert-warning">
+        <strong>경고!</strong> 아래 직무평가 협의를 삭제하시겠습니까?
+    </div>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>평가지표</th>
+                <td>@model.Report_Item_Name_1</td>
+            </tr>
+            <tr>
+                <th>평가직무</th>
+                <td>@model.Report_Item_Name_2</td>
+            </tr>
+            <tr>
+                <th>직무비중</th>
+                <td>@model.Report_Item_Proportion %</td>
+            </tr>
+            <tr>
+                <th>항목번호</th>
+                <td>@model.Report_Item_Number</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-danger" @onclick="OpenDeleteModal">삭제</button>
+            <button type="button" class="btn btn-outline-secondary" @onclick="Cancel">취소</button>
+        </div>
+    </div>
+
+    <AgreementDeleteModal @ref="deleteModal"
+                         model="@model"
+                         OnDeleteSuccess="@HandleDeleteSuccess"
+                         OnClose="@CloseModal" />
+}

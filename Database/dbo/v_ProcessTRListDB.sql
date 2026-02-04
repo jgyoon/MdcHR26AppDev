@@ -3,6 +3,7 @@ AS SELECT
 	A.Pid,
 	U.UserId,
 	U.UserName,
+	ISNULL(ED.EDepartmentName, '') AS EDepartmentName,
 	ISNULL(TL.UserId, '') AS TeamLeader_Id,
 	ISNULL(TL.UserName, '') AS TeamLeader_Name,
 	ISNULL(D.UserId, '') AS Director_Id,
@@ -39,6 +40,7 @@ AS SELECT
 FROM
 	[dbo].[ProcessDb] A
 	INNER JOIN [dbo].[UserDb] U ON A.Uid = U.Uid
+	LEFT JOIN [dbo].[EDepartmentDb] ED ON U.EDepartId = ED.EDepartId
 	LEFT JOIN [dbo].[UserDb] TL ON A.TeamLeaderId = TL.Uid
 	LEFT JOIN [dbo].[UserDb] D ON A.DirectorId = D.Uid
 	LEFT JOIN [dbo].[TotalReportDb] C ON A.Uid = C.Uid

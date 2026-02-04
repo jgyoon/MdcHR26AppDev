@@ -1,14 +1,14 @@
 # 이슈 인덱스
 
-**최종 업데이트**: 2026-02-03
+**최종 업데이트**: 2026-02-04
 
 ---
 
 ## 이슈 현황 통계
 
-- **총 이슈**: 14개 (참조 이슈 2개 포함)
-- **프로젝트 이슈**: 12개 (#003부터 시작)
-- **완료**: 13개
+- **총 이슈**: 15개 (참조 이슈 2개 포함)
+- **프로젝트 이슈**: 13개 (#003부터 시작)
+- **완료**: 14개
 - **진행 중**: 1개
 - **보류**: 0개
 
@@ -18,7 +18,7 @@
 
 | 번호 | 제목 | 시작일 | 진행률 | 현재 단계 |
 |------|------|--------|--------|----------|
-| [#009](issues/009_phase3_webapp_development.md) | Phase 3 - Blazor Server WebApp 개발 | 2026-01-20 | 90% (Phase 3-4 컴포넌트 38개 완료) | Phase 3-1/2/3 완료, Phase 3-4 컴포넌트 38개 구현 완료, 페이지 작업지시서 작성 완료 (2026-02-04) |
+| [#009](issues/009_phase3_webapp_development.md) | Phase 3 - Blazor Server WebApp 개발 | 2026-01-20 | 92% (Agreement 페이지 완료) | Phase 3-1/2/3 완료, Phase 3-4 컴포넌트 38개 완료, Agreement/TeamLeader 페이지 완료 (2026-02-04) |
 
 ---
 
@@ -26,11 +26,11 @@
 
 | 번호 | 제목 | 완료일 | 관련 작업지시서 |
 |------|------|--------|----------------|
+| [#015](issues/015_agreement_teamleader_arbitrary_code_generation.md) | Agreement TeamLeader 페이지 - 임의 코드 작성으로 인한 디버깅 어려움 | 2026-02-04 | 20260204_11 |
 | [#011](issues/011_phase3_3_admin_pages_build_errors.md) | Phase 3-3 관리자 페이지 빌드 오류 및 재작업 | 2026-01-30 | 20260126_01~20260129_06 (6개) |
 | [#014](issues/014_site_js_not_loaded_app_razor.md) | site.js 파일이 App.razor에 로드되지 않음 | 2026-01-30 | - |
 | [#013](issues/013_v_reporttasklistdb_entity_db_mismatch.md) | v_ReportTaskListDB Entity와 DB View 구조 불일치 | 2026-01-30 | 20260130_02 |
 | [#012](issues/012_v_processtrllistdb_view_column_mismatch.md) | v_ProcessTRListDB View 컬럼 불일치 오류 | 2026-01-30 | 20260130_01 |
-| [#010](issues/010_login_password_hash_order_mismatch.md) | 로그인 비밀번호 검증 실패 - 해시 순서 및 인코딩 불일치 | 2026-01-22 | 20260121_01 |
 
 ---
 

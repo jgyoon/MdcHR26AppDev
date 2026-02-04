@@ -1,7 +1,7 @@
 @namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Agreement.ViewPage
 @rendermode InteractiveServer
 
-<h3>직무?��? 목록</h3>
+<h3>직무 목록</h3>
 
 @if (agreements == null)
 {
@@ -9,5 +9,5 @@
 }
 else
 {
-    <AgreementDbListTable agreementDbs="agreements" OnDetailsClick="HandleDetailsClick" />
+    <AgreementDbListTable agreementDbs="agreements" OnDetailsClick="HandleDetailsClick" IsAgreementCompleted="@IsAgreementCompleted" />
 }

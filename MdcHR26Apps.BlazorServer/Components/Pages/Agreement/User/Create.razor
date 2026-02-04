@@ -1,0 +1,61 @@
+@page "/Agreement/User/Create"
+@using MdcHR26Apps.BlazorServer.Components.Pages.Components.Form
+@using MdcHR26Apps.BlazorServer.Components.Pages.Components.Common
+
+<PageTitle>직무평가 협의 추가</PageTitle>
+
+<h3>직무평가 협의 추가</h3>
+<hr />
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <EditForm Model="model">
+                <FormSelectList Label="평가지표"
+                               @bind-BindValue="selectedName1"
+                               list="@list1" />
+
+                @if (list2 != null && list2.Count > 0)
+                {
+                    <hr />
+                    <FormSelectList Label="평가직무"
+                                   @bind-BindValue="selectedName2"
+                                   list="@list2" />
+                    <hr />
+                    <FormSelectNumber Label="평가비중"
+                                     Min="1"
+                                     Max="@maxperoportion"
+                                     Step="1"
+                                     Unit="%"
+                                     @bind-SelectedValue="peroportion" />
+
+                    @if (maxperoportion == 0)
+                    {
+                        <div class="alert alert-warning mt-3">
+                            <p><strong>설정 가능한 평가비중이 없습니다.</strong></p>
+                            <p>다른 평가의 평가비중을 조정해 주세요.</p>
+                            <button type="button" class="btn btn-outline-primary" @onclick="Cancel">목록</button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-primary" @onclick="CreateAgreement">생성</button>
+                            <button type="button" class="btn btn-outline-secondary" @onclick="Cancel">취소</button>
+                        </div>
+                    }
+                }
+            </EditForm>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(resultText))
+    {
+        <DisplayResultText Comment="@resultText" />
+    }
+}

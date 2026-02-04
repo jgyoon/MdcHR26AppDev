@@ -39,6 +39,14 @@ else
                     @EStatusString(model.ActivateStatus)
                 </li>
                 <li class="list-group-item">
+                    <label for="IsAdmin">부서장(2차)여부 : </label>
+                    @isTeamLeader(model.IsTeamLeader)
+                </li>
+                <li class="list-group-item">
+                    <label for="IsAdmin">임원(3차)여부 : </label>
+                    @isDirector(model.IsDirector)
+                </li>
+                <li class="list-group-item">
                     <label for="IsAdmin">관리자여부 : </label>
                     @IsAdminString(model.IsAdministrator)
                 </li>
