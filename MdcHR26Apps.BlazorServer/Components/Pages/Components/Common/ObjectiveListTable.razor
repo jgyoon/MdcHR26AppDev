@@ -1,0 +1,33 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Common
+@rendermode InteractiveServer
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>번호</th>
+            <th>부서</th>
+            <th>목표 제목</th>
+            <th>목표 내용</th>
+            <th>작성일</th>
+            <th>수정일</th>
+            <th>관리</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in objectives)
+        {
+            <tr>
+                <td>@item.DeptObjectiveDbId</td>
+                <td>@item.EDepartment?.EDepartmentName</td>
+                <td>@item.ObjectiveTitle</td>
+                <td>@item.ObjectiveContents</td>
+                <td>@item.CreatedAt.ToString("yyyy-MM-dd")</td>
+                <td>@(item.UpdatedAt?.ToString("yyyy-MM-dd") ?? "-")</td>
+                <td>
+                    <button class="btn btn-sm btn-primary" @onclick="@(() => OnEdit.InvokeAsync(item.DeptObjectiveDbId))">편집</button>
+                    <button class="btn btn-sm btn-danger" @onclick="@(() => OnDelete.InvokeAsync(item.DeptObjectiveDbId))">삭제</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

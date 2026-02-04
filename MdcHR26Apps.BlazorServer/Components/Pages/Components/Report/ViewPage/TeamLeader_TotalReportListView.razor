@@ -1,0 +1,13 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Report.ViewPage
+@rendermode InteractiveServer
+
+<h3>팀장 전체 리포트</h3>
+
+@if (reports == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <TeamLeader_TotalReportList reports="reports" />
+}

@@ -1,0 +1,13 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Report.ViewPage
+@rendermode InteractiveServer
+
+<h3>평가 업무 목록</h3>
+
+@if (reports == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <ReportListTable reports="reports" OnEdit="HandleEdit" />
+}
