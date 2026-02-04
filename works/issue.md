@@ -268,12 +268,17 @@ works/
 | 20260129_06_phase3_3_totalreport_step4_14.md | 완료 ✅ (빌드 성공, 런타임 오류) | [#011](issues/011_phase3_3_admin_pages_build_errors.md) / [#012](issues/012_v_processtrllistdb_view_column_mismatch.md) |
 | 20260130_01_fix_v_processtrllistdb_column_mismatch.md | 완료 ✅ | [#012](issues/012_v_processtrllistdb_view_column_mismatch.md) |
 | 20260130_02_fix_v_reporttasklistdb_entity_mismatch.md | 완료 ✅ (코드 수정, 빌드 성공) | [#013](issues/013_v_reporttasklistdb_entity_db_mismatch.md) |
-| 20260203_05_components_agreement.md | 작성 완료 📝 (6개 컴포넌트) | [#009](issues/009_phase3_webapp_development.md) |
-| 20260203_06_components_subagreement.md | 작성 완료 📝 (8개 컴포넌트) | [#009](issues/009_phase3_webapp_development.md) |
-| 20260203_07_components_report.md | 작성 완료 📝 (17개 컴포넌트) | [#009](issues/009_phase3_webapp_development.md) |
-| 20260203_08_components_common_form.md | 작성 완료 📝 (9개 컴포넌트) | [#009](issues/009_phase3_webapp_development.md) |
+| 20260203_05_components_agreement.md | ❌ 폐기 (Entity 변경 전 작성) | [#009](issues/009_phase3_webapp_development.md) |
+| 20260203_06_components_subagreement.md | ❌ 폐기 (Entity 변경 전 작성) | [#009](issues/009_phase3_webapp_development.md) |
+| 20260203_07_components_report.md | ❌ 폐기 (Entity 변경 전 작성) | [#009](issues/009_phase3_webapp_development.md) |
+| 20260203_08_components_common_form.md | ❌ 폐기 (Entity 변경 전 작성) | [#009](issues/009_phase3_webapp_development.md) |
 | 20260203_11_fix_entity_db_field_names.md | 완료 ✅ (5개 Entity 필드명 수정) | [#009](issues/009_phase3_webapp_development.md) |
 | 20260203_12_fix_repository_based_on_2025.md | 완료 ✅ (5개 Repository + 5개 Interface) | [#009](issues/009_phase3_webapp_development.md) |
+| 20260203_13_REWRITE_GUIDE.md | 가이드 📖 (작업지시서 재작성 가이드) | [#009](issues/009_phase3_webapp_development.md) |
+| 20260203_13_components_agreement_v2.md | 재작성 필요 🔄 (6개 컴포넌트) | [#009](issues/009_phase3_webapp_development.md) |
+| 20260203_14_components_subagreement_v2.md | 재작성 필요 🔄 (8개 컴포넌트) | [#009](issues/009_phase3_webapp_development.md) |
+| 20260203_15_components_report_v2.md | 재작성 필요 🔄 (17개 컴포넌트) | [#009](issues/009_phase3_webapp_development.md) |
+| 20260203_16_components_common_form_v2.md | 재작성 필요 🔄 (9개 컴포넌트) | [#009](issues/009_phase3_webapp_development.md) |
 
 ---
 

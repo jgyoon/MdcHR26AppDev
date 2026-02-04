@@ -390,12 +390,17 @@ builder.Services.AddRazorComponents()
    - 메서드 구조 확인 시 참조 가능
 
 **다음 단계**:
-1. Phase 3-4 컴포넌트 구현 (40개)
+1. ⚠️ **작업지시서 재작성 필요** (Entity/Repository 변경으로 기존 05-08 폐기)
+   - 재작성 가이드: [20260203_13_REWRITE_GUIDE.md](../tasks/20260203_13_REWRITE_GUIDE.md)
+   - 신규 작업지시서: 13 (Agreement), 14 (SubAgreement), 15 (Report), 16 (Common/Form)
+
+2. Phase 3-4 컴포넌트 구현 (40개)
    - Agreement 관련 (6개): AgreementDbListTable, AgreementDetailsTable, AgreementListTable, AgreementDbListView, AgreementDeleteModal, AgreementComment
    - SubAgreement 관련 (8개): SubAgreementDbListTable, SubAgreementDetailsTable, SubAgreementListTable, SubAgreementResetList, SubAgreementDbListView, SubAgreementDeleteModal, AgreeItemLists, ReportTaskListCommonView
    - Report 관련 (17개): ReportListTable, TeamLeaderReportDetailsTable, DirectorReportDetailsTable, 각종 ViewPage 컴포넌트, Modal, Excel 다운로드
    - Common/Form (9개): CheckboxComponent, FormAgreeTask, FormAgreeTaskCreate, FormGroup, FormSelectList, FormSelectNumber, FormTaskItem, ObjectiveListTable, EDeptListTable
-2. 컴포넌트 구현 완료 후 Phase 3-4 페이지 작업 재작성
+
+3. 컴포넌트 구현 완료 후 Phase 3-4 페이지 작업 재작성
    - 직무평가 협의 (Agreement, SubAgreement)
    - 본인평가 (1st_HR_Report)
    - 부서장평가 (2nd_HR_Report)

@@ -1,0 +1,47 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.SubAgreement.CommonView
+@rendermode InteractiveServer
+
+@if (items == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (items.Count == 0)
+{
+    <p><em>?©Ïùò??ÏßÅÎ¨¥?¥Ïö©???ÜÏäµ?àÎã§.</em></p>
+}
+else
+{
+    <div class="row mb-3">
+        <div class="col-12">
+            <h5>
+                ?©Ïùò??ÏßÅÎ¨¥ ??: @itemCount Í∞?
+                <span @onclick="Toggle" class="@IconClass" style="cursor: pointer;"></span>
+            </h5>
+        </div>
+    </div>
+
+    @if (Collapsed)
+    {
+        <hr />
+        <div class="row">
+            <div class="col-12">
+                <ul class="list-group">
+                    @foreach (var item in items)
+                    {
+                        <li class="list-group-item">
+                            <label>
+                                @if (item.ItemCompleteStatus)
+                                {
+                                    @CheckedCode
+                                }
+                                @item.ItemName ( @item.ItemPeroportion % ) :
+                            </label>
+                            @item.ItemSubPeroportion %
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <hr />
+    }
+}

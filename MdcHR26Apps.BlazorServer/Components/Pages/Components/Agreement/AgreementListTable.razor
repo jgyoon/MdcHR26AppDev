@@ -1,0 +1,28 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Agreement
+@rendermode InteractiveServer
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>번호</th>
+            <th>평가지표</th>
+            <th>평가직무</th>
+            <th>비중</th>
+            <th>편집</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in agreements)
+        {
+            <tr>
+                <td>@item.Report_Item_Number</td>
+                <td>@item.Report_Item_Name_1</td>
+                <td>@item.Report_Item_Name_2</td>
+                <td>@item.Report_Item_Proportion %</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-outline-primary" @onclick="@(() => OnEdit.InvokeAsync(item.Aid))">편집</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,45 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.SubAgreement.CommonView
+@rendermode InteractiveServer
+
+@if (tasks == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (tasks.Count == 0)
+{
+    <p><em>등록된 업무가 없습니다.</em></p>
+}
+else
+{
+    <div class="row mb-3">
+        <div class="col-12">
+            <h5>업무 목록 (@tasks.Count 건)</h5>
+        </div>
+    </div>
+
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>업무명</th>
+                <th>업무목표</th>
+                <th>목표비중</th>
+                <th>선택</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in tasks)
+            {
+                <tr>
+                    <td>@task.TaksListNumber</td>
+                    <td>@task.TaskName</td>
+                    <td>@task.TaskObjective</td>
+                    <td>@task.TargetProportion %</td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-primary" @onclick="@(() => OnSelectTask.InvokeAsync(task.Tid))">선택</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
