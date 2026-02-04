@@ -134,12 +134,14 @@ builder.Services.AddRazorComponents()
 - [x] 최종결과 관리 (TotalReport) - TotalReport/
 
 ### Phase 3-4: 평가 프로세스
-- [ ] 직무평가 협의
-- [ ] 세부직무평가
-- [ ] 본인평가 (1차)
-- [ ] 부서장평가 (2차)
-- [ ] 임원평가 (3차)
-- [ ] 최종 결과 리포트
+- [ ] 직무평가 협의 (Agreement 페이지)
+- [ ] 세부직무평가 (SubAgreement 페이지)
+- [ ] 본인평가 (1st_HR_Report 페이지)
+- [ ] 부서장평가 (2nd_HR_Report 페이지)
+- [ ] 임원평가 (3rd_HR_Report 페이지)
+- [ ] 부서 목표 관리 (DeptObjective 페이지)
+- [x] Report 컴포넌트 구현 (15개, 30 files) - 2026-02-04 ✅
+- [x] Common/Form 컴포넌트 구현 (9개, 17 files) - 2026-02-04 ✅
 
 ### Phase 3-5: 공통 컴포넌트 ✅
 - [x] SearchbarComponent
@@ -253,10 +255,15 @@ builder.Services.AddRazorComponents()
 **작업지시서**:
 - [20260120_01_phase3_blazor_webapp.md](../tasks/20260120_01_phase3_blazor_webapp.md) - Phase 3 전체 계획
 - [20260120_02_phase3_1_project_setup.md](../tasks/20260120_02_phase3_1_project_setup.md) - Phase 3-1 프로젝트 생성 ✅
-- [20260203_05_components_agreement.md](../tasks/20260203_05_components_agreement.md) - Agreement 컴포넌트 (6개) 📝
-- [20260203_06_components_subagreement.md](../tasks/20260203_06_components_subagreement.md) - SubAgreement 컴포넌트 (8개) 📝
-- [20260203_07_components_report.md](../tasks/20260203_07_components_report.md) - Report 컴포넌트 (17개) 📝
-- [20260203_08_components_common_form.md](../tasks/20260203_08_components_common_form.md) - Common/Form 컴포넌트 (9개) 📝
+- [20260203_05_components_agreement.md](../tasks/20260203_05_components_agreement.md) - Agreement 컴포넌트 (6개) ❌ 폐기
+- [20260203_06_components_subagreement.md](../tasks/20260203_06_components_subagreement.md) - SubAgreement 컴포넌트 (8개) ❌ 폐기
+- [20260203_07_components_report.md](../tasks/20260203_07_components_report.md) - Report 컴포넌트 (17개) ❌ 폐기
+- [20260203_08_components_common_form.md](../tasks/20260203_08_components_common_form.md) - Common/Form 컴포넌트 (9개) ❌ 폐기
+- [20260203_13_components_agreement_v2.md](../tasks/20260203_13_components_agreement_v2.md) - Agreement 컴포넌트 v2 (6개, 12 files) ✅ 2026-02-04
+- [20260203_14_components_subagreement_v2.md](../tasks/20260203_14_components_subagreement_v2.md) - SubAgreement 컴포넌트 v2 (8개, 16 files) ✅ 2026-02-04
+- [20260203_15_components_report_v2.md](../tasks/20260203_15_components_report_v2.md) - Report 컴포넌트 v2 (15개, 30 files) ✅ 2026-02-04
+- [20260203_16_components_common_form_v2.md](../tasks/20260203_16_components_common_form_v2.md) - Common/Form 컴포넌트 v2 (9개, 17 files) ✅ 2026-02-04
+- [20260204_01_phase3_4_pages_all.md](../tasks/20260204_01_phase3_4_pages_all.md) - Phase 3-4 전체 페이지 (40개, 80 files) ⏸️ 작업지시서 작성 완료
 
 **선행 이슈**:
 - [#008: Phase 2 Model 개발](008_phase2_model_development.md)
@@ -323,13 +330,47 @@ builder.Services.AddRazorComponents()
 - **2025년 컴포넌트 분석**:
   - 전체: 51개 컴포넌트
   - 이미 구현: 11개 (SearchbarComponent, DisplayResultText, UserListTable 등)
-  - 신규 구현 필요: 40개 컴포넌트
+  - 신규 구현 필요: 38개 컴포넌트
 - **작업지시서 작성 완료** (기능별 분할):
-  1. [20260203_05_components_agreement.md](../tasks/20260203_05_components_agreement.md) - 6개 Agreement 컴포넌트
-  2. [20260203_06_components_subagreement.md](../tasks/20260203_06_components_subagreement.md) - 8개 SubAgreement 컴포넌트
-  3. [20260203_07_components_report.md](../tasks/20260203_07_components_report.md) - 17개 Report 컴포넌트
-  4. [20260203_08_components_common_form.md](../tasks/20260203_08_components_common_form.md) - 9개 Common/Form 컴포넌트
-- **2026 DB 구조 적응**: AgreementDb 필드명 변경사항 반영 (Item_Number, Item_Title, Item_Contents, Item_Proportion)
+  1. [20260203_05_components_agreement.md](../tasks/20260203_05_components_agreement.md) - 6개 Agreement 컴포넌트 ❌ 폐기
+  2. [20260203_06_components_subagreement.md](../tasks/20260203_06_components_subagreement.md) - 8개 SubAgreement 컴포넌트 ❌ 폐기
+  3. [20260203_07_components_report.md](../tasks/20260203_07_components_report.md) - 17개 Report 컴포넌트 ❌ 폐기
+  4. [20260203_08_components_common_form.md](../tasks/20260203_08_components_common_form.md) - 9개 Common/Form 컴포넌트 ❌ 폐기
+- **v2 작업지시서 재작성 완료** (Entity 변경 반영):
+  1. [20260203_13_components_agreement_v2.md](../tasks/20260203_13_components_agreement_v2.md) - 6개 Agreement 컴포넌트 ✅ 2026-02-04
+  2. [20260203_14_components_subagreement_v2.md](../tasks/20260203_14_components_subagreement_v2.md) - 8개 SubAgreement 컴포넌트 ✅ 2026-02-04
+  3. [20260203_15_components_report_v2.md](../tasks/20260203_15_components_report_v2.md) - 15개 Report 컴포넌트 ✅ 2026-02-04
+  4. [20260203_16_components_common_form_v2.md](../tasks/20260203_16_components_common_form_v2.md) - 9개 Common/Form 컴포넌트 ✅ 2026-02-04
+- **2026 DB 구조 적응**: AgreementDb 필드명 변경사항 반영 (Report_Item_Name_1/2, Report_Item_Proportion)
+
+**Phase 3-4 컴포넌트 구현 완료**: 2026-02-04 ✅
+- ✅ **Agreement 컴포넌트 6개 (12 files) 구현 완료**
+  - AgreementListTable, AgreementDetailsTable, TeamLeaderAgreementListTable
+  - TeamLeaderAgreementDetailsTable, AgreementDeleteModal, FormAgreeTask
+- ✅ **SubAgreement 컴포넌트 8개 (16 files) 구현 완료**
+  - SubAgreementListTable, SubAgreementDetailsTable, TeamLeaderSubAgreementListTable
+  - TeamLeaderSubAgreementDetailsTable, SubAgreementDeleteModal, SubAgreementModal
+  - CompleteSubAgreementModal, ResetSubAgreementModal
+- ✅ **Report 컴포넌트 15개 (30 files) 구현 완료**
+  - Table 그룹 (9개): ReportListTable, TeamLeaderReportDetailsTable 등
+  - Modal 그룹 (3개): ReportDeleteModal, SubReportDeleteModal 등
+  - ViewPage 그룹 (3개): ReportViewPage, Report2ViewPage 등
+- ✅ **Common/Form 컴포넌트 9개 (17 files) 구현 완료**
+  - Common: CheckboxComponent, ObjectiveListTable, EDeptListTable
+  - Form: FormAgreeTask, FormAgreeTaskCreate, FormGroup, FormSelectList, FormSelectNumber, FormTaskItem
+- ✅ **총 38개 컴포넌트 (75 files) 완료**
+- ✅ **Git Commit**: 20250a4 (2026-02-04)
+
+**Phase 3-4 페이지 작업지시서 작성**: 2026-02-04 ✅
+- ✅ **작업지시서 작성 완료**: [20260204_01_phase3_4_pages_all.md](../tasks/20260204_01_phase3_4_pages_all.md)
+- ✅ **40개 페이지 (80 files) 계획**:
+  1. Agreement 페이지 (7개): User 5개, TeamLeader 2개
+  2. SubAgreement 페이지 (10개): User 5개, TeamLeader 5개
+  3. 1st/2nd/3rd HR_Report 페이지 (13개)
+  4. DeptObjective 페이지 (10개)
+- ✅ **실제 Repository 메서드 검증 완료**
+- ✅ **Admin/Users/Details.razor 패턴 참조**
+- ✅ **잘못된 작업지시서 4개 삭제**
 
 **DB/Entity 필드명 동기화**: 2026-02-03 ✅
 - ✅ **5개 Entity 필드명 수정 완료** (DB 테이블 기준)
@@ -389,20 +430,27 @@ builder.Services.AddRazorComponents()
    - 경로: `C:\Codes\29_MdcHR25\MdcHR25Apps\MdcHR25Apps.Models\`
    - 메서드 구조 확인 시 참조 가능
 
+**Phase 3-4 컴포넌트 구현 완료**: 2026-02-04 ✅
+- ✅ **Report 컴포넌트 (15개, 30 files)** - 2026-02-04
+  - Table 그룹 (9개): ReportListTable, TeamLeaderReportDetailsTable, DirectorReportDetailsTable, ReportDbListTable, ReportDetailsTable, Report2ListTable, Report2DbListTable, Report2DetailsTable, Report3DetailsTable
+  - Modal 그룹 (3개): ReportDeleteModal, SubReportDeleteModal, Report2DeleteModal
+  - ViewPage 그룹 (3개): ReportViewPage, Report2ViewPage, Report3ViewPage
+- ✅ **Common/Form 컴포넌트 (9개, 17 files)** - 2026-02-04
+  - Common 그룹 (3개, 5 files): CheckboxComponent.razor, ObjectiveListTable.razor/.cs, EDeptListTable.razor/.cs
+  - Form 그룹 (6개, 12 files): FormAgreeTask.razor/.cs, FormAgreeTaskCreate.razor/.cs, FormGroup.razor, FormSelectList.razor, FormSelectNumber.razor, FormTaskItem.razor/.cs
+- **Git Commit**: `20250a4` - Phase 3-4 Report/Common/Form 컴포넌트 완료 (45 files, +1640 insertions)
+
 **다음 단계**:
-1. ⚠️ **작업지시서 재작성 필요** (Entity/Repository 변경으로 기존 05-08 폐기)
-   - 재작성 가이드: [20260203_13_REWRITE_GUIDE.md](../tasks/20260203_13_REWRITE_GUIDE.md)
-   - 신규 작업지시서: 13 (Agreement), 14 (SubAgreement), 15 (Report), 16 (Common/Form)
+1. ⏸️ **Agreement 컴포넌트 구현 (6개)** - 대기
+   - AgreementDbListTable, AgreementDetailsTable, AgreementListTable, AgreementDbListView, AgreementDeleteModal, AgreementComment
 
-2. Phase 3-4 컴포넌트 구현 (40개)
-   - Agreement 관련 (6개): AgreementDbListTable, AgreementDetailsTable, AgreementListTable, AgreementDbListView, AgreementDeleteModal, AgreementComment
-   - SubAgreement 관련 (8개): SubAgreementDbListTable, SubAgreementDetailsTable, SubAgreementListTable, SubAgreementResetList, SubAgreementDbListView, SubAgreementDeleteModal, AgreeItemLists, ReportTaskListCommonView
-   - Report 관련 (17개): ReportListTable, TeamLeaderReportDetailsTable, DirectorReportDetailsTable, 각종 ViewPage 컴포넌트, Modal, Excel 다운로드
-   - Common/Form (9개): CheckboxComponent, FormAgreeTask, FormAgreeTaskCreate, FormGroup, FormSelectList, FormSelectNumber, FormTaskItem, ObjectiveListTable, EDeptListTable
+2. ⏸️ **SubAgreement 컴포넌트 구현 (8개)** - 대기
+   - SubAgreementDbListTable, SubAgreementDetailsTable, SubAgreementListTable, SubAgreementResetList, SubAgreementDbListView, SubAgreementDeleteModal, AgreeItemLists, ReportTaskListCommonView
 
-3. 컴포넌트 구현 완료 후 Phase 3-4 페이지 작업 재작성
-   - 직무평가 협의 (Agreement, SubAgreement)
-   - 본인평가 (1st_HR_Report)
-   - 부서장평가 (2nd_HR_Report)
-   - 임원평가 (3rd_HR_Report)
-   - 부서 목표 관리 (DeptObjective)
+3. 📝 **Phase 3-4 페이지 구현 작업**
+   - 직무평가 협의 (Agreement 페이지)
+   - 세부직무평가 (SubAgreement 페이지)
+   - 본인평가 (1st_HR_Report 페이지)
+   - 부서장평가 (2nd_HR_Report 페이지)
+   - 임원평가 (3rd_HR_Report 페이지)
+   - 부서 목표 관리 (DeptObjective 페이지)
