@@ -18,5 +18,5 @@ public interface Iv_SubAgreementRepository : IDisposable
     /// <summary>
     /// 사용자별 세부협의 목록 조회
     /// </summary>
-    Task<List<v_SubAgreementDB>> GetByUserIdAsync(Int64 uid);
+    Task<List<v_SubAgreementDB>> GetByUidAsync(Int64 uid);
 }

@@ -6,20 +6,14 @@ public partial class AgreeItemLists
 {
     #region Parameters
     [Parameter] public List<AgreeItemModel> items { get; set; } = new();
+    [Parameter] public bool Collapsed { get; set; } = false;
+    [Parameter] public EventCallback Toggle { get; set; }
+    [Parameter] public int itemCount { get; set; } = 0;
     #endregion
 
     #region Variables
-    private bool Collapsed = false;
     private string IconClass => Collapsed ? "oi oi-minus" : "oi oi-plus";
-    private int itemCount => items?.Count ?? 0;
-    private string CheckedCode = "??";
-    #endregion
-
-    #region Methods
-    private void Toggle()
-    {
-        Collapsed = !Collapsed;
-    }
+    private string CheckedCode = "\u2713" + " ";
     #endregion
 
     #region Model

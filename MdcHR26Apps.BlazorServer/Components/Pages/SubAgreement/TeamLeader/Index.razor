@@ -1,0 +1,15 @@
+﻿@page "/SubAgreement/TeamLeader"
+@page "/SubAgreement/TeamLeader/Index"
+
+<PageTitle>세부 직무 합의</PageTitle>
+
+<h3>세부 직무 합의</h3>
+
+@if (processDbList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <SubAgreementListTable processDbList="processDbList"></SubAgreementListTable>
+}

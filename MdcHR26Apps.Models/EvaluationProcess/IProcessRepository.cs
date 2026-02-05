@@ -15,7 +15,7 @@ public interface IProcessRepository : IDisposable
     /// <summary>
     /// 전체 프로세스 목록 조회
     /// </summary>
-    Task<IEnumerable<ProcessDb>> GetByAllAsync();
+    Task<List<ProcessDb>> GetByAllAsync();
 
     /// <summary>
     /// ID로 프로세스 조회
@@ -62,25 +62,25 @@ public interface IProcessRepository : IDisposable
     /// <summary>
     /// 부서장 관할 팀원 목록 조회
     /// </summary>
-    Task<IEnumerable<ProcessDb>> GetByTeamLeaderIdAsync(Int64 teamLeaderId);
+    Task<List<ProcessDb>> GetByTeamLeaderIdAsync(Int64 teamLeaderId);
 
     /// <summary>
     /// 부서장 관할 중 사용자 제출 완료 목록
     /// </summary>
-    Task<IEnumerable<ProcessDb>> GetByTeamLeaderIdWithUserSubmissionAsync(Int64 teamLeaderId);
+    Task<List<ProcessDb>> GetByTeamLeaderIdWithUserSubmissionAsync(Int64 teamLeaderId);
 
     /// <summary>
     /// 임원 관할 팀원 목록 조회
     /// </summary>
-    Task<IEnumerable<ProcessDb>> GetByDirectorIdAsync(Int64 directorId);
+    Task<List<ProcessDb>> GetByDirectorIdAsync(Int64 directorId);
 
     /// <summary>
     /// 임원 관할 중 부서장 제출 완료 목록
     /// </summary>
-    Task<IEnumerable<ProcessDb>> GetByDirectorIdWithTeamleaderSubmissionAsync(Int64 directorId);
+    Task<List<ProcessDb>> GetByDirectorIdWithTeamleaderSubmissionAsync(Int64 directorId);
 
     /// <summary>
     /// 부서장 평가 제출 완료 목록
     /// </summary>
-    Task<IEnumerable<ProcessDb>> GetByTeamLeaderIdWithTeamLeaderSubmissionAsync(Int64 teamLeaderId);
+    Task<List<ProcessDb>> GetByTeamLeaderIdWithTeamLeaderSubmissionAsync(Int64 teamLeaderId);
 }

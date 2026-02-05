@@ -12,6 +12,7 @@ public partial class SubAgreementDbListView
 
     #region Parameters
     [Parameter] public long Uid { get; set; }
+    [Parameter] public List<SubAgreementDb>? subAgreementDbs { get; set; }
     #endregion
 
     #region Variables
@@ -28,12 +29,21 @@ public partial class SubAgreementDbListView
     #region Methods
     private async Task LoadData()
     {
-        subAgreements = await subAgreementRepository.GetByUserIdAllAsync(Uid);
+        if (subAgreementDbs != null)
+        {
+            subAgreements = subAgreementDbs;
+            return;
+        }
+
+        if (Uid != 0)
+        {
+            subAgreements = await subAgreementRepository.GetByUidAllAsync(Uid);
+        }
     }
 
     private void HandleDetailsClick(long sid)
     {
-        NavigationManager.NavigateTo($"/subagreement/details/{sid}");
+        NavigationManager.NavigateTo($"/SubAgreement/User/Details/{sid}");
     }
     #endregion
 }

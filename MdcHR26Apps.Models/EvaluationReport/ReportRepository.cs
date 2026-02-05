@@ -49,12 +49,13 @@ public class ReportRepository(string connectionString, ILoggerFactory loggerFact
     /// <summary>
     /// 전체 보고서 목록 조회
     /// </summary>
-    public async Task<IEnumerable<ReportDb>> GetByAllAsync()
+    public async Task<List<ReportDb>> GetByAllAsync()
     {
         const string sql = "SELECT * FROM ReportDb ORDER BY Rid";
 
         using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<ReportDb>(sql);
+        var result = await connection.QueryAsync<ReportDb>(sql);
+        return result.ToList();
     }
     #endregion
 
@@ -126,7 +127,7 @@ public class ReportRepository(string connectionString, ILoggerFactory loggerFact
     /// <summary>
     /// 사용자별 보고서 목록 조회
     /// </summary>
-    public async Task<IEnumerable<ReportDb>> GetByUidAllAsync(Int64 uid)
+    public async Task<List<ReportDb>> GetByUidAllAsync(Int64 uid)
     {
         const string sql = """
             SELECT * FROM ReportDb
@@ -135,7 +136,8 @@ public class ReportRepository(string connectionString, ILoggerFactory loggerFact
             """;
 
         using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<ReportDb>(sql, new { uid });
+        var result = await connection.QueryAsync<ReportDb>(sql, new { uid });
+        return result.ToList();
     }
     #endregion
 

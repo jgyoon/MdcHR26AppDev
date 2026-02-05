@@ -23,7 +23,12 @@ public interface Iv_ReportTaskListRepository : IDisposable
     /// <summary>
     /// 특정 사용자의 보고서-업무 조회
     /// </summary>
-    Task<IEnumerable<v_ReportTaskListDB>> GetByUserIdAsync(Int64 uid);
+    Task<List<v_ReportTaskListDB>> GetByUidAsync(Int64 uid);
+
+    /// <summary>
+    /// 특정 사용자의 모든 보고서-업무 조회 (Alias)
+    /// </summary>
+    Task<List<v_ReportTaskListDB>> GetByUidAllAsync(Int64 uid);
 
     /// <summary>
     /// 프로세스별 보고서-업무 조회

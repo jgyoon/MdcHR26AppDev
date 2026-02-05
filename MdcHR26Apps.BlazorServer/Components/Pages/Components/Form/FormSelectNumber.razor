@@ -1,47 +1,29 @@
 @namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Form
 @rendermode InteractiveServer
 
-<div class="mb-3">
-    <label class="form-label">@Label</label>
-    <div class="input-group mb-2">
-        <span class="input-group-text">설정가능한 비중 : @Max %</span>
-        <InputNumber class="form-control"
-                     step="@Step"
-                     min="@Min"
-                     max="@Max"
-                     @bind-Value="SelectedValue"
-                     @oninput="OnPeroportionChanged" />
-        <span class="input-group-text">@Unit</span>
+@if (IsDisabled)
+{
+    <div class="input-group mb-1">
+        <span class="input-group-text mb-1 w-20">@Label</span>
+        <InputNumber id="@Id" class="form-control mb-1" style="background-color: white;" @bind-Value="BindValue" disabled>@BindValue</InputNumber>
+        <span class="input-group-text mb-1">%</span>
     </div>
-    <input type="range"
-           class="form-range"
-           step="@Step"
-           min="@Min"
-           max="@Max"
-           @bind="SelectedValue"
-           @oninput="OnPeroportionChanged" />
-</div>
-
-@code {
-    [Parameter] public string Label { get; set; } = "평가비중";
-    [Parameter] public int Min { get; set; } = 0;
-    [Parameter] public int Max { get; set; } = 100;
-    [Parameter] public int Step { get; set; } = 1;
-    [Parameter] public string Unit { get; set; } = "%";
-    [Parameter] public int SelectedValue { get; set; }
-    [Parameter] public EventCallback<int> SelectedValueChanged { get; set; }
-
-    private async Task OnPeroportionChanged(ChangeEventArgs e)
+}
+else
+{
+    @if (!string.IsNullOrWhiteSpace(Label))
     {
-        if (int.TryParse(e.Value?.ToString(), out int value))
+        if (!IsEdit)
         {
-            SelectedValue = value;
-
-            // SelectedValueChanged 이벤트 발생 (양방향 바인딩)
-            if (SelectedValueChanged.HasDelegate)
-            {
-                await SelectedValueChanged.InvokeAsync(value);
-            }
+            <label for="@Id" class="form-label mb-1">@Label (@Label 을 설정하여 주세요 / 설정가능한 비중 : @maxperoportion %)</label>
         }
+        <div class="input-group mb-1">
+            <span class="input-group-text mb-1 w-20">@Label</span>
+            <InputNumber class="form-control mb-1" id="@Id" step="1" min="0" max="@maxperoportion" @bind-Value=@peroportion @oninput="OnPeroportionChanged"></InputNumber>
+            <span class="input-group-text mb-1">%</span>
+        </div>
+        <div class="input-group mb-1">
+            <input id="@Id" type="range" class="form-control-range input-group mb-1" step="1" min="0" max="@maxperoportion" @bind-value=@peroportion @oninput="OnPeroportionChanged">
+        </div>
     }
 }

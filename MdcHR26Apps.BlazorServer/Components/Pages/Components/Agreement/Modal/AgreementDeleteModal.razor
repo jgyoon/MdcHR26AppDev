@@ -7,14 +7,14 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">직무 ??��</h5>
+                    <h5 class="modal-title">직무 삭제</h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" @onclick="() => Close()">
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>??직무�???��?�시겠습?�까?</p>
-                    <p>?��?지?? @model.Report_Item_Name_1</p>
-                    <p>?��?직무: @model.Report_Item_Name_2</p>
+                    <p>직무를 삭제하시겠습니까?</p>
+                    <p>평가지표 : @model.Report_Item_Name_1</p>
+                    <p>평가직무 : @model.Report_Item_Name_2</p>
 
                     @if (!string.IsNullOrEmpty(resultText))
                     {
@@ -22,8 +22,8 @@
                     }
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" @onclick="DeleteUserAgreement">??Yes)</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => Close()">?�니??No)</button>
+                    <button type="button" class="btn btn-danger" @onclick="DeleteUserAgreement">예(Yes)</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => Close()">아니요(No)</button>
                 </div>
             </div>
         </div>

@@ -114,13 +114,13 @@ public class AgreementRepository(string connectionString, ILoggerFactory loggerF
     #endregion
 
     #region + [6] 사용자별 출력: GetByUserIdAllAsync
-    public async Task<List<AgreementDb>> GetByUserIdAllAsync(long userId)
+    public async Task<List<AgreementDb>> GetByUidAllAsync(long uid)
     {
-        const string query = "Select * From AgreementDb Where Uid = @userId Order By Aid";
+        const string query = "Select * From AgreementDb Where Uid = @uid Order By Aid";
 
         using (var connection = new SqlConnection(dbContext))
         {
-            var result = await connection.QueryAsync<AgreementDb>(query, new { userId }, commandType: CommandType.Text);
+            var result = await connection.QueryAsync<AgreementDb>(query, new { uid }, commandType: CommandType.Text);
             return result.ToList();
         }
     }
@@ -132,14 +132,14 @@ public class AgreementRepository(string connectionString, ILoggerFactory loggerF
         const string query = @"
             Select Top(1) *
             From AgreementDb
-            Where Uid = @userId
+            Where Uid = @uid
                 And Report_Item_Name_1 = @deptName
                 And Report_Item_Name_2 = @indexName
             Order By Aid";
 
         using (var connection = new SqlConnection(dbContext))
         {
-            var result = await connection.QueryAsync<AgreementDb>(query, new { userId, deptName, indexName }, commandType: CommandType.Text);
+            var result = await connection.QueryAsync<AgreementDb>(query, new { uid = userId, deptName, indexName }, commandType: CommandType.Text);
             return result.ToList();
         }
     }

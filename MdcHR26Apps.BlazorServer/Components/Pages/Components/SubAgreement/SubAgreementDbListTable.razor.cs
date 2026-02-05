@@ -13,4 +13,12 @@ public partial class SubAgreementDbListTable
     #region Variables
     private int sortNo = 1;
     #endregion
+
+    #region Methods
+    protected override void OnParametersSet()
+    {
+        sortNo = 1; // 파라미터가 변경될 때마다 sortNo 리셋
+        base.OnParametersSet();
+    }
+    #endregion
 }

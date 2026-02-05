@@ -7,12 +7,12 @@
         <div class="col-12">
             <h5 class="form-label">
                 합의 내역
-                <span @onclick="Toggle" class="@IconClass" style="cursor: pointer;"></span>
+                <span @onclick="HandleToggle" class="@IconClass" style="cursor: pointer;"></span>
             </h5>
         </div>
     </div>
 
-    @if (Collapsed)
+    @if (EffectiveCollapsed)
     {
         <hr />
         <div class="mb-3">

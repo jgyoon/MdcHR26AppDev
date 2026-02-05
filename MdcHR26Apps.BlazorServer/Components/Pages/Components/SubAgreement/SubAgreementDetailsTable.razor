@@ -1,40 +1,48 @@
 @namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.SubAgreement
 @rendermode InteractiveServer
 
-@if (subAgreement != null)
-{
-    <table class="table">
-        <tbody>
+<table class="table table-hover table-responsive-md">
+    <thead>
+        <tr>
+            <th class="table-header">#</th>
+            <th class="table-header">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-5">평가지표</div>
+                    <div class="col-12 col-sm-12 col-md-5">평가직무</div>
+                    <div class="col-12 col-sm-12 col-md-2">직무비중</div>
+                </div>
+            </th>
+            <th class="table-header">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-6">세부평가직무</div>
+                    <div class="col-12 col-sm-12 col-md-6">세부직무비중</div>
+                </div>
+            </th>
+            <th class="table-header">비고</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in subAgreements)
+        {
             <tr>
-                <th>평가지표</th>
-                <td>@subAgreement.Report_Item_Name_1</td>
+                <td class="table-cell">@sortNoAdd2(sortNo)</td>
+                <td class="table-cell">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-5">@item.Report_Item_Name_1</div>
+                        <div class="col-12 col-sm-12 col-md-5 table-text">@item.Report_Item_Name_2</div>
+                        <div class="col-12 col-sm-12 col-md-2">@item.Report_Item_Proportion %</div>
+                    </div>
+                </td>
+                <th class="table-cell">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-6 table-text">@item.Report_SubItem_Name</div>
+                        <div class="col-12 col-sm-12 col-md-6">@item.Report_SubItem_Proportion %</div>
+                    </div>
+                </th>
+                <td class="table-cell">
+                    <button type="button" id="DetailButton" class="btn btn-info" @onclick="@(() => TeamLeaderAgreementSubDetailsAction(item.Sid))">상세</button>
+                </td>
             </tr>
-            <tr>
-                <th>평가직무</th>
-                <td>@subAgreement.Report_Item_Name_2</td>
-            </tr>
-            <tr>
-                <th>직무비중</th>
-                <td>@subAgreement.Report_Item_Proportion %</td>
-            </tr>
-            <tr>
-                <th>세부평가직무</th>
-                <td>@subAgreement.Report_SubItem_Name</td>
-            </tr>
-            <tr>
-                <th>세부직무비중</th>
-                <td>@subAgreement.Report_SubItem_Proportion %</td>
-            </tr>
-            <tr>
-                <th>업무번호</th>
-                <td>@subAgreement.Task_Number</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="mt-3">
-        <button type="button" class="btn btn-primary" @onclick="OnEdit">?�집</button>
-        <button type="button" class="btn btn-danger" @onclick="OnDelete">??��</button>
-        <button type="button" class="btn btn-secondary" @onclick="OnBack">목록</button>
-    </div>
-}
+        }
+    </tbody>
+</table>

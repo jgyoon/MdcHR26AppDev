@@ -59,4 +59,22 @@ public class UrlActions(NavigationManager navigationManager)
     // === [8] 직무평가 협의 (Agreement/TeamLeader) ===
     public void MoveAgreementTeamLeaderIndexPage() => _navigationManager.NavigateTo("/Agreement/TeamLeader/Index");
     public void MoveAgreementTeamLeaderDetailsPage(long id) => _navigationManager.NavigateTo($"/Agreement/TeamLeader/Details/{id}");
+
+    // === [9] 세부직무평가 협의 (SubAgreement/User) ===
+    public void MoveUserSubAgreementMainPage() => _navigationManager.NavigateTo("/SubAgreement/User/Index");
+    public void MoveUserSubAgreementCreatePage() => _navigationManager.NavigateTo("/SubAgreement/User/Create");
+    public void MoveUserSubAgreementEditPage(long sid) => _navigationManager.NavigateTo($"/SubAgreement/User/Edit/{sid}");
+    public void MoveUserSubAgreementDeletePage(long sid) => _navigationManager.NavigateTo($"/SubAgreement/User/Delete/{sid}");
+    public void MoveUserSubAgreementDetailsPage(long sid) => _navigationManager.NavigateTo($"/SubAgreement/User/Details/{sid}");
+
+    // === [10] 세부직무평가 협의 (SubAgreement/TeamLeader) ===
+    public void MoveTeamLeaderSubAgreementIndexPage() => _navigationManager.NavigateTo("/SubAgreement/TeamLeader/Index");
+    public void MoveTeamLeaderSubAgreementMainPage() => _navigationManager.NavigateTo("/SubAgreement/TeamLeader/Index");
+    public void MoveTeamLeaderSubAgreementDetailsPage(long pid) => _navigationManager.NavigateTo($"/SubAgreement/TeamLeader/Details/{pid}");
+    public void MoveTeamLeaderSubAgreementSubDetailsPage(long sid) => _navigationManager.NavigateTo($"/SubAgreement/TeamLeader/SubDetails/{sid}");
+    public void MoveTeamLeaderResetSubAgreementPage(long pid) => _navigationManager.NavigateTo($"/SubAgreement/TeamLeader/ResetSubAgreement/{pid}");
+    public void MoveTeamLeaderCompleteSubAgreement(long pid) => _navigationManager.NavigateTo($"/SubAgreement/TeamLeader/CompleteSubAgreement/{pid}");
+
+    // === [11] 평가 보고서 (Report) ===
+    public void MoveReportMainPage() => _navigationManager.NavigateTo("/Report/User/Index");
 }

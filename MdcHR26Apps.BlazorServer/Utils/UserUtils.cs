@@ -74,4 +74,13 @@ public class UserUtils(
     {
         return !string.IsNullOrEmpty(remarks) ? remarks : string.Empty;
     }
+
+    /// <summary>
+    /// 무제한 Task 허용 부서 확인
+    /// 특정 부서("인증본부")는 Task 제한 없음
+    /// </summary>
+    public bool GetIsUnLimitedTask(string? loginUserEDepartment)
+    {
+        return !string.IsNullOrEmpty(loginUserEDepartment) && loginUserEDepartment == "인증본부";
+    }
 }

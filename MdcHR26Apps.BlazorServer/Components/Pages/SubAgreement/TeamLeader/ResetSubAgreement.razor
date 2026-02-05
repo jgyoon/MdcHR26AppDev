@@ -1,0 +1,37 @@
+﻿@page "/SubAgreement/TeamLeader/ResetSubAgreement/{Id:long}"
+
+<PageTitle>세부 직무 합의 초기화</PageTitle>
+
+<h3>세부 직무 합의 초기화</h3>
+<hr />
+@if (!String.IsNullOrEmpty(resultText))
+{
+    <p><em>@resultText</em></p>
+}
+
+@if (processDb == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="input-group mb-1">
+        <button id="resetbutton" class="btn btn-danger" @onclick="ResetSubAgreementAction">합의초기화</button>
+        <button id="cencelbutton" class="btn btn-light" @onclick="ResetSubAgreementCencelAction">취소</button>
+    </div>
+}
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (model.Count == 0)
+{
+    <p><em>No DATA</em></p>
+}
+else
+{
+    <hr />
+    <p><em>@userName 님 업무비중</em></p>
+    <SubAgreementResetList reportDbList="model"></SubAgreementResetList>
+}

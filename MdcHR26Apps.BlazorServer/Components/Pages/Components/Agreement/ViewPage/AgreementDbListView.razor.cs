@@ -29,7 +29,7 @@ public partial class AgreementDbListView
     #region Methods
     private async Task LoadData()
     {
-        agreements = await agreementRepository.GetByUserIdAllAsync(Uid);
+        agreements = await agreementRepository.GetByUidAllAsync(Uid);
     }
 
     private void HandleDetailsClick(long aid)

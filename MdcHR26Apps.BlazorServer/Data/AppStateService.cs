@@ -35,4 +35,20 @@ public class AppStateService(IConfiguration configuration)
         return IsProduction;
     }
     #endregion
+
+    #region + 모달 관련
+    public bool IsDeleteModalShow { get; set; } = false;
+
+    public void SetDeleteAction()
+    {
+        IsDeleteModalShow = true;
+        AppStateChanged();
+    }
+
+    public void AppStateInital()
+    {
+        IsDeleteModalShow = false;
+        AppStateChanged();
+    }
+    #endregion
 }

@@ -29,4 +29,14 @@ public class SelectListModel
     /// 그룹명 (선택사항)
     /// </summary>
     public string? Group { get; set; }
+
+    /// <summary>
+    /// 번호 (25년도 호환)
+    /// </summary>
+    public int SelectListNumber { get; set; }
+
+    /// <summary>
+    /// 이름 (25년도 호환)
+    /// </summary>
+    public string SelectListName { get; set; } = null!;
 }

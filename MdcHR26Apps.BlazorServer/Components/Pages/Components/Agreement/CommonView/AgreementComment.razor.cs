@@ -6,22 +6,32 @@ public partial class AgreementComment
 {
     #region Parameters
     [Parameter] public string Comment { get; set; } = string.Empty;
+    [Parameter] public bool Collapsed { get; set; } = false;
+    [Parameter] public EventCallback Toggle { get; set; }
     #endregion
 
     #region Variables
-    private bool Collapsed = false;
-    private string IconClass => Collapsed ? "oi oi-minus" : "oi oi-plus";
+    private bool _internalCollapsed = false;
+    private bool EffectiveCollapsed => Toggle.HasDelegate ? Collapsed : _internalCollapsed;
+    private string IconClass => EffectiveCollapsed ? "oi oi-minus" : "oi oi-plus";
     #endregion
 
     #region Methods
-    private void Toggle()
+    private async Task HandleToggle()
     {
-        Collapsed = !Collapsed;
+        if (Toggle.HasDelegate)
+        {
+            await Toggle.InvokeAsync();
+        }
+        else
+        {
+            _internalCollapsed = !_internalCollapsed;
+        }
     }
 
     private string FormatComment(string comment)
     {
-        // 줄바꿈을 <br> ?�그�?변??
+        // 줄바꿈을 <br> 변경
         return comment.Replace("\n", "<br />");
     }
     #endregion

@@ -93,7 +93,7 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Agreement.User
 
             // 기존 협의 리스트 로드
             var loginUser = loginStatusService.LoginStatus;
-            agreementDbList = await agreementRepository.GetByUserIdAllAsync(loginUser.LoginUid);
+            agreementDbList = await agreementRepository.GetByUidAllAsync(loginUser.LoginUid);
 
             // 항목 번호 계산
             itemNumber = GetItemNumber(agreementDbList);

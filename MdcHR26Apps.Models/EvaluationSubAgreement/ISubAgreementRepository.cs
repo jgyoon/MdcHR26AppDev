@@ -7,6 +7,7 @@ public interface ISubAgreementRepository : IDisposable
     Task<SubAgreementDb> GetByIdAsync(long id);
     Task<bool> UpdateAsync(SubAgreementDb model);
     Task<bool> DeleteAsync(long id);
-    Task<List<SubAgreementDb>> GetByUserIdAllAsync(long userId);
-    Task<List<SubAgreementDb>> GetByTasksPeroportionAsync(long userId, string deptName, string indexName);
+    Task<List<SubAgreementDb>> GetByUidAllAsync(long uid);
+    Task<List<SubAgreementDb>> GetByTasksPeroportionAsync(long uid, string deptName, string indexName);
+    Task<SubAgreementDb> GetByUidAndItemNamesAllAsync(long uid, string item1, string item2);
 }

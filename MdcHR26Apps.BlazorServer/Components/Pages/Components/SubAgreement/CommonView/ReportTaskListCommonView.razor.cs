@@ -1,36 +1,18 @@
-using MdcHR26Apps.Models.EvaluationTasks;
+﻿using MdcHR26Apps.Models.Views.v_ReportTaskListDB;
 using Microsoft.AspNetCore.Components;
 
 namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.SubAgreement.CommonView;
 
 public partial class ReportTaskListCommonView
 {
-    #region Inject
-    [Inject] private ITasksRepository tasksRepository { get; set; } = null!;
-    #endregion
-
     #region Parameters
-    [Parameter] public long SubAgreementId { get; set; }
+    [Parameter] public bool Collapsed { get; set; } = false;
+    [Parameter] public EventCallback Toggle { get; set; }
+    [Parameter] public List<v_ReportTaskListDB> ReportTaskListDB { get; set; } = new();
     [Parameter] public EventCallback<long> OnSelectTask { get; set; }
     #endregion
 
     #region Variables
-    private List<TasksDb> tasks = new();
-    #endregion
-
-    #region Lifecycle
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadTasks();
-    }
-    #endregion
-
-    #region Methods
-    private async Task LoadTasks()
-    {
-        // SubAgreement?� ?�결???�무 목록 로드
-        // ?�제 구현 ???�터�?로직 추�?
-        tasks = new List<TasksDb>();
-    }
+    private string IconClass => Collapsed ? "oi oi-minus" : "oi oi-plus";
     #endregion
 }

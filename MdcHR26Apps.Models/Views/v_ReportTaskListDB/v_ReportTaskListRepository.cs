@@ -64,11 +64,11 @@ public class v_ReportTaskListRepository(string connectionString, ILoggerFactory 
     }
     #endregion
 
-    #region + [3] 사용자별 조회: GetByUserIdAsync
+    #region + [3] 사용자별 조회: GetByUidAsync
     /// <summary>
     /// 특정 사용자의 보고서-업무 조회
     /// </summary>
-    public async Task<IEnumerable<v_ReportTaskListDB>> GetByUserIdAsync(Int64 uid)
+    public async Task<List<v_ReportTaskListDB>> GetByUidAsync(Int64 uid)
     {
         const string sql = """
             SELECT * FROM v_ReportTaskListDB
@@ -77,7 +77,18 @@ public class v_ReportTaskListRepository(string connectionString, ILoggerFactory 
             """;
 
         using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<v_ReportTaskListDB>(sql, new { uid });
+        var result = await connection.QueryAsync<v_ReportTaskListDB>(sql, new { uid });
+        return result.AsList();
+    }
+    #endregion
+
+    #region + [3-1] 사용자별 조회: GetByUidAllAsync (Alias)
+    /// <summary>
+    /// 특정 사용자의 모든 보고서-업무 조회
+    /// </summary>
+    public async Task<List<v_ReportTaskListDB>> GetByUidAllAsync(Int64 uid)
+    {
+        return await GetByUidAsync(uid);
     }
     #endregion
 

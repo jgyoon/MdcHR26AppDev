@@ -1,17 +1,47 @@
 @namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Form
 @rendermode InteractiveServer
 
-<div class="mb-3">
-    <label class="form-label">평가지표</label>
-    <InputText class="form-control" @bind-Value="agreement.Report_Item_Name_1" />
-</div>
-
-<div class="mb-3">
-    <label class="form-label">평가직무</label>
-    <InputText class="form-control" @bind-Value="agreement.Report_Item_Name_2" />
-</div>
-
-<div class="mb-3">
-    <label class="form-label">직무비중 (%)</label>
-    <InputNumber class="form-control" @bind-Value="agreement.Report_Item_Proportion" />
-</div>
+@if (tasks.Any())
+{
+    @foreach (var task in tasks)
+    {
+        <div class="card col-12">
+            <div class="card-header">
+                <h5>업무명 : @task.TaskName</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <h5>업무목표 : </h5>
+                        @((MarkupString)replaceString(task.TaskObjective))
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="input-group mb-0">
+                            <span class="input-group-text mb-0 form-width">계획달성도</span>
+                            <div class="input-group-text mb-0 form-backgroud">@task.TargetProportion.ToString()</div>
+                            <span class="input-group-text mb-0">%</span>
+                        </div>
+                        <div class="progress mt-0 mb-1">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: @task.TargetProportion%;" aria-valuenow=@task.TargetProportion aria-valuemin="0" aria-valuemax="100">@task.TargetProportion %</div>
+                        </div>
+                        <div class="input-group mb-1">
+                            <span class="input-group-text mb-1 form-width">계획일자</span>
+                            <div class="input-group-text mb-1 form-backgroud">@task.TargetDate.ToString("yyyy-MM-dd")</div>
+                        </div>
+                        <div class="input-group mb-1">
+                            <span class="input-group-text mb-1 form-width">업무난이도</span>
+                            <div class="input-group-text mb-1 form-backgroud">@GetTaskLevel(task.TaskLevel)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-danger btn-sm float-end" @onclick="@(() => DeleteTask(task.Tid))">삭제</button>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p><em>세부 업무가 없습니다.</em></p>
+}

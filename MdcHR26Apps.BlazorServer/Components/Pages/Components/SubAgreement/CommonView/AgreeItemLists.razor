@@ -7,15 +7,15 @@
 }
 else if (items.Count == 0)
 {
-    <p><em>?�의??직무?�용???�습?�다.</em></p>
+    <p><em>합의된 직무가 없습니다.</em></p>
 }
 else
 {
     <div class="row mb-3">
         <div class="col-12">
             <h5>
-                ?�의??직무 ??: @itemCount �?
-                <span @onclick="Toggle" class="@IconClass" style="cursor: pointer;"></span>
+                합의된 직무 수: @itemCount 개
+                <span @onclick="() => Toggle.InvokeAsync()" class="@IconClass" style="cursor: pointer;"></span>
             </h5>
         </div>
     </div>

@@ -55,11 +55,11 @@ public partial class Details(
             reportCount = await reportRepository.GetCountByUidAsync(model.Uid);
             taskListCount = await tasksRepository.GetCountByUserAsync(model.Uid);
 
-            // 25년 메서드 사용: GetByUserIdAllAsync
-            var subAgreements = await subAgreementRepository.GetByUserIdAllAsync(model.Uid);
+            // 25년 메서드 사용: GetByUidAllAsync
+            var subAgreements = await subAgreementRepository.GetByUidAllAsync(model.Uid);
             subAgreementCount = subAgreements.Count;
 
-            var agreements = await agreementRepository.GetByUserIdAllAsync(model.Uid);
+            var agreements = await agreementRepository.GetByUidAllAsync(model.Uid);
             agreementCount = agreements.Count;
         }
     }

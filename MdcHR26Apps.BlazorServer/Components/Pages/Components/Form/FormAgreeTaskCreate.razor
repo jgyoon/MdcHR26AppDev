@@ -1,27 +1,50 @@
 @namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Form
 @rendermode InteractiveServer
 
-<EditForm Model="@newAgreement" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div class="mb-3">
-        <label class="form-label">평가지표</label>
-        <InputText class="form-control" @bind-Value="newAgreement.Report_Item_Name_1" />
-        <ValidationMessage For="@(() => newAgreement.Report_Item_Name_1)" />
+<EditForm Model="@task" OnValidSubmit="@HandleValidSubmit">
+    <div class="input-group mb-1">
+        <span class="input-group-text mb-1" style="width: 6.5em;">업무명</span>
+        <InputTextArea id="Task_Name" class="form-control mb-1" rows="1" maxlength="100" @bind-Value="@task.TaskName" @oninput="@UpdateTaskNameLength">
+        </InputTextArea>
+        @if (String.IsNullOrEmpty(task.TaskName))
+        {
+            <span class="input-group-text mb-1">0 / 100</span>
+        }
+        else if (task.TaskName.Length > 100)
+        {
+            <span class="input-group-text mb-1" style="color:red;">@taskNameLength / 100</span>
+        }
+        else
+        {
+            <span class="input-group-text mb-1">@taskNameLength / 100</span>
+        }
+    </div>
+    <div class="input-group mb-1">
+        <span class="input-group-text mb-1" style="width: 6.5em;">업무목표</span>
+        <InputTextArea id="Task_TaskObjective" class="form-control mb-1" rows="5" @bind-Value="@task.TaskObjective">
+        </InputTextArea>
+    </div>
+    <div class="input-group mb-1">
+        <span class="input-group-text mb-1" style="width: 6.5em;">계획달성도</span>
+        <InputNumber class="form-control mb-1" id="Task_ObjectiveProportion" step="1" min="0" max="100" @bind-Value=@task.TargetProportion></InputNumber>
+        <span class="input-group-text mb-1">%</span>
+    </div>
+    <div class="input-group mb-1">
+        <input id="Task_ObjectiveProportion" type="range" class="form-control-range input-group mb-1" step="5" min="0" max="100" @bind-value=@task.TargetProportion>
     </div>
 
-    <div class="mb-3">
-        <label class="form-label">평가직무</label>
-        <InputText class="form-control" @bind-Value="newAgreement.Report_Item_Name_2" />
-        <ValidationMessage For="@(() => newAgreement.Report_Item_Name_2)" />
+    <div class="input-group mb-1">
+        <span class="input-group-text mb-1" style="width: 6.5em;">계획일자</span>
+        <input type="date" class="form-control mb-1" @bind-value="@task.TargetDate"></input>
     </div>
-
-    <div class="mb-3">
-        <label class="form-label">직무비중 (%)</label>
-        <InputNumber class="form-control" @bind-Value="newAgreement.Report_Item_Proportion" />
-        <ValidationMessage For="@(() => newAgreement.Report_Item_Proportion)" />
+    <div class="input-group mb-1">
+        <span class="input-group-text mb-1" style="width: 6.5em;">업무난이도</span>
+        <InputSelect id="TasksLevel" class="form-select mb-1" @bind-Value="@task.TaskLevel">
+            @foreach (var item in taskLevels)
+            {
+                <option value="@item.TaskLevelScore">@item.TaskLevelName</option>
+            }
+        </InputSelect>
     </div>
-
-    <button type="submit" class="btn btn-primary">생성</button>
+    <button type="submit" class="btn btn-primary">세부업무 생성</button>
 </EditForm>

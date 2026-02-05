@@ -47,11 +47,11 @@ public class v_SubAgreementRepository(string connectionString, ILoggerFactory lo
     }
     #endregion
 
-    #region + [3] GetByUserIdAsync
+    #region + [3] GetByUidAsync
     /// <summary>
     /// 사용자별 세부협의 목록 조회
     /// </summary>
-    public async Task<List<v_SubAgreementDB>> GetByUserIdAsync(Int64 uid)
+    public async Task<List<v_SubAgreementDB>> GetByUidAsync(Int64 uid)
     {
         const string sql = """
             SELECT * FROM v_SubAgreementDB

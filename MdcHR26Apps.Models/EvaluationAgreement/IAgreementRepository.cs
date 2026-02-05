@@ -7,6 +7,6 @@ public interface IAgreementRepository : IDisposable
     Task<AgreementDb> GetByIdAsync(long id);
     Task<bool> UpdateAsync(AgreementDb model);
     Task<bool> DeleteAsync(long id);
-    Task<List<AgreementDb>> GetByUserIdAllAsync(long userId);
-    Task<List<AgreementDb>> GetByTasksPeroportionAsync(long userId, string deptName, string indexName);
+    Task<List<AgreementDb>> GetByUidAllAsync(long uid);
+    Task<List<AgreementDb>> GetByTasksPeroportionAsync(long uid, string deptName, string indexName);
 }

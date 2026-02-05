@@ -1,0 +1,56 @@
+﻿@page "/SubAgreement/User/Delete/{Sid:long}"
+@implements IDisposable
+
+<PageTitle>세부 직무 삭제</PageTitle>
+
+<h3>세부 직무 삭제</h3>
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <label for="ReportItemNumber">평가번호 : </label>
+                    @model.Report_Item_Number
+                </li>
+                <li class="list-group-item">
+                    <label for="Report_Item_Name_1">평가지표 : </label>
+                    @model.Report_Item_Name_1
+                </li>
+                <li class="list-group-item">
+                    <label for="Report_Item_Name_2">평가직무 : </label>
+                    @model.Report_Item_Name_2
+                </li>
+                <li class="list-group-item">
+                    <label for="User_Evaluation_Proportion">평가비중 : </label>
+                    @model.Report_Item_Proportion.ToString() %
+                </li>
+                <li class="list-group-item">
+                    <label for="Report_Item_Name_2">세부평가직무 : </label>
+                    @model.Report_SubItem_Name
+                </li>
+                <li class="list-group-item">
+                    <label for="User_Evaluation_Proportion">세부직무비중 : </label>
+                    @model.Report_SubItem_Proportion.ToString() %
+                </li>
+            </ul>
+        </div>
+        <hr />
+        <div class="col-md-12">
+            <button class="btn btn-outline-primary" @onclick="MoveUserSubAgreementMainPage">목록</button>
+            <button class="btn btn-outline-info" @onclick="(() => MoveUserSubAgreementEditPage(model.Sid))">수정</button>
+            <button class="btn btn-outline-danger" @onclick="DeleteUserSubAgreement">삭제</button>
+        </div>
+
+        @if (AppState.IsDeleteModalShow)
+        {
+            <SubAgreementDeleteModal Id="@model.Sid"></SubAgreementDeleteModal>
+        }
+
+    </div>
+}

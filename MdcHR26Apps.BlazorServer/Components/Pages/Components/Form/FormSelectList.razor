@@ -38,6 +38,7 @@ else
     [Parameter] public List<SelectListModel> list { get; set; } = new();
     [Parameter] public bool IsDisabled { get; set; } = false;
     [Parameter] public EventCallback<string> OnValueChanged { get; set; }
+    [Parameter] public EventCallback<string> OnInput { get; set; }
 
     private async Task HandleValueChanged(ChangeEventArgs e)
     {
@@ -54,6 +55,12 @@ else
         if (OnValueChanged.HasDelegate)
         {
             await OnValueChanged.InvokeAsync(value);
+        }
+
+        // OnInput 이벤트 발생 (25년도 호환)
+        if (OnInput.HasDelegate)
+        {
+            await OnInput.InvokeAsync(value);
         }
     }
 }

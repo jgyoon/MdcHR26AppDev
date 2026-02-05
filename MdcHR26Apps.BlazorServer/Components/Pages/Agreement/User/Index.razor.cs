@@ -68,7 +68,7 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Agreement.User
             IsTeamLeaderAndDirectorSettings = GetTeamLeaderAndDirectorSettings(processDb);
 
             // Agreement 리스트 로드
-            agreements = await agreementRepository.GetByUserIdAllAsync(loginUser.LoginUid);
+            agreements = await agreementRepository.GetByUidAllAsync(loginUser.LoginUid);
 
             // 비중 합계 계산
             if (agreements != null && agreements.Count > 0)

@@ -118,34 +118,53 @@ public class SubAgreementRepository(string connectionString, ILoggerFactory logg
     }
     #endregion
 
-    #region + [6] 사용자별 출력: GetByUserIdAllAsync
-    public async Task<List<SubAgreementDb>> GetByUserIdAllAsync(long userId)
+    #region + [6] 사용자별 출력: GetByUidAllAsync
+    public async Task<List<SubAgreementDb>> GetByUidAllAsync(long uid)
     {
-        const string query = "Select * From SubAgreementDb Where Uid = @userId Order By Sid";
+        const string query = "Select * From SubAgreementDb Where Uid = @uid Order By Sid";
 
         using (var connection = new SqlConnection(dbContext))
         {
-            var result = await connection.QueryAsync<SubAgreementDb>(query, new { userId }, commandType: CommandType.Text);
+            var result = await connection.QueryAsync<SubAgreementDb>(query, new { uid }, commandType: CommandType.Text);
             return result.ToList();
         }
     }
     #endregion
 
     #region + [7] 사용자 && 지표분류명 && 직무분류명 출력: GetByTasksPeroportionAsync
-    public async Task<List<SubAgreementDb>> GetByTasksPeroportionAsync(long userId, string deptName, string indexName)
+    public async Task<List<SubAgreementDb>> GetByTasksPeroportionAsync(long uid, string deptName, string indexName)
     {
         const string query = @"
             Select Top(1) *
             From SubAgreementDb
-            Where Uid = @userId
+            Where Uid = @uid
                 And Report_Item_Name_1 = @deptName
                 And Report_Item_Name_2 = @indexName
             Order By Sid";
 
         using (var connection = new SqlConnection(dbContext))
         {
-            var result = await connection.QueryAsync<SubAgreementDb>(query, new { userId, deptName, indexName }, commandType: CommandType.Text);
+            var result = await connection.QueryAsync<SubAgreementDb>(query, new { uid, deptName, indexName }, commandType: CommandType.Text);
             return result.ToList();
+        }
+    }
+    #endregion
+
+    #region + [8] 사용자 && Item Names 출력: GetByUidAndItemNamesAllAsync
+    public async Task<SubAgreementDb> GetByUidAndItemNamesAllAsync(long uid, string item1, string item2)
+    {
+        const string query = @"
+            Select Top(1) *
+            From SubAgreementDb
+            Where Uid = @uid
+                And Report_Item_Name_1 = @item1
+                And Report_Item_Name_2 = @item2
+            Order By Sid";
+
+        using (var connection = new SqlConnection(dbContext))
+        {
+            var result = await connection.QueryFirstOrDefaultAsync<SubAgreementDb>(query, new { uid, item1, item2 }, commandType: CommandType.Text);
+            return result ?? new SubAgreementDb();
         }
     }
     #endregion

@@ -1,0 +1,166 @@
+﻿@page "/SubAgreement/User"
+@page "/SubAgreement/User/Index"
+
+<PageTitle>세부 직무 작성</PageTitle>
+
+<h3>세부 직무 작성</h3>
+
+<DisplayResultText Comment="@resultText" />
+
+@*세부 직무 작성 및 합의 요청*@
+@if (processDb == null)
+{
+    <LoadingIndicator />
+}
+else
+{
+    @*평가자 설정여부 확인*@
+    @if (!IsTeamLeaderAndDiretorSettings)
+    {
+        <p><em>2차 평가자와 3차 평가자가 설정되지 않았습니다.</em></p>
+    }
+    @*직무평가요청 X && 직무합의 X*@
+    else if (!IsRequest && !IsAgreement)
+    {
+        <p><em>직무 합의이 되지 않았습니다.</em></p>
+        <p><em>직무 합의를 먼저 진행해주세요.</em></p>
+    }
+    @*직무평가요청 O && 직무합의 O*@
+    else if (IsRequest && IsAgreement)
+    {
+        @if (!IsSubAgreementStatus)
+        {
+            @if (model == null)
+            {
+                <LoadingIndicator />
+            }
+            else if (model.Count >= subagreementItemMaxCount)
+            {
+                <p><em>세부 직무 작성이 완료되지 않았습니다.</em></p>
+                <p><em>세부 직무 수 : @model.Count.ToString() 개(최대 : @subagreementItemMaxCount.ToString())</em></p>
+                <p><em>최대 직무 수(@subagreementItemMaxCount.ToString() 개) 이내로 작성해 주세요.</em></p>
+            }
+            else
+            {
+                <div class="input-group mb-1">
+                    <button id="reportCreate" class="btn btn-primary" @onclick="MoveUserSubAgreementCreatePage">세부직무추가</button>
+                </div>
+                <hr />
+                <p><em>세부직무추가 버튼을 클릭하여 세부직무를 작성하여 주세요.</em></p>
+                <p><em>세부 직무 작성이 완료되지 않았습니다.</em></p>
+                <p><em>세부 직무 수 : @model.Count.ToString() 개(최대 : @subagreementItemMaxCount.ToString())</em></p>
+                <p><em>최대 직무 수(@subagreementItemMaxCount.ToString() 개) 이내로 작성해 주세요.</em></p>
+            }
+        }
+        else
+        {
+            @*세부직무평가요청 X && 세부직무합의 X*@
+            @if (!IsSubRequest && !IsSubAgreement)
+            {
+                @if (model == null)
+                {
+                    <LoadingIndicator />
+                }
+                else if (model.Count > subagreementItemMaxCount)
+                {
+                    <p><em>세부 직무 작성는 최대 @subagreementItemMaxCount.ToString() 까지 가능합니다.</em></p>
+                    <p><em>세부 직무 수를 조정해 주세요.</em></p>
+                }
+                else
+                {
+                    <div class="input-group mb-1">
+                        <button class="btn btn-primary" @onclick="SetSubRequst">합의요청</button>
+                    </div>
+                    <hr />
+                    <p><em>@result() - 상단의 합의요청 버튼을 클릭하여 주세요.</em></p>
+                }
+            }
+            @*세부직무평가요청 O && 세부직무합의 X*@
+            else if (IsSubRequest && !IsSubAgreement)
+            {
+                <div class="input-group mb-1">
+                    <button class="btn btn-danger" @onclick="SetSubRequstCancel">요청취소</button>
+                </div>
+                <hr />
+                <p><em>합의여부를 대기중입니다...</em></p>
+            }
+            @*세부직무평가요청 O && 세부직무합의 O*@
+            else if (IsSubRequest && IsSubAgreement)
+            {
+                <p><em>세부 직무합의가 완료되었습니다.</em></p>
+                <p><em>직무평가를 작성하여 주십시오.</em></p>
+            }
+        }
+    }
+}
+<hr />
+
+@*합의된 직무별 작성내역*@
+<AgreeItemLists Collapsed="@ItemsCollapsed" items="@itemlist" Toggle="@ReportToggle" itemCount="@agreementItemCount" />
+
+@*합의 코멘트(펼쳐보기 추가)*@
+<AgreementComment Collapsed="@Collapsed" Comment="@Sub_Agreement_Comment" Toggle="@Toggle" />
+
+@*세부 직무 리스트*@
+@if (model == null)
+{
+    <LoadingIndicator />
+}
+else if (model.Count == 0)
+{
+    <h5>세부 직무 수 ( 현재 : @model.Count().ToString() 개 )</h5>
+    <p><em>최대 세부 직무 수 : @subagreementItemMaxCount.ToString() 개</em></p>
+    <hr />
+}
+else
+{
+    <h5>세부 직무 수 ( 현재 : @model.Count().ToString() 개 )</h5>
+    <p><em>최대 세부 직무 수 : @subagreementItemMaxCount.ToString() 개</em></p>
+    <hr />
+    @*세부합의요청(X) && 세부합의승인(X)*@
+    @if (!IsSubRequest && !IsSubAgreement)
+    {
+        <SubAgreementDbListTable subAgreementDbs="model" OnDetailsClick="MoveDetailsPage"></SubAgreementDbListTable>
+    }
+    else
+    {
+        @*세부합의요청(O) && 세부합의승인(X) : 세부합의진행중*@
+        @if (IsSubRequest && !IsSubAgreement)
+        {
+            <p><em>합의여부를 대기중에는 세부 직무 수정이 불가합니다.</em></p>
+        }
+        @*세부합의요청(O) && 세부합의승인(X) : 세부합의완료*@
+        else if (IsSubRequest && IsSubAgreement)
+        {
+            <p><em>세부직무합의가 완료되면 세부 직무 수정이 불가합니다.</em></p>
+        }
+        <hr />
+        @*세부합의내역(펼쳐보기 추가)*@
+        <div class="row">
+            @if (!SubAgreementCollapsed)
+            {
+                <h5 for="Agreement_Comment" class="form-label mb-1">
+                    세부합의 내역 리스트
+                    <span @onclick="@SubAgreementToggle" class="oi oi-plus mr-1" />
+                </h5>
+            }
+            else
+            {
+                <h5 for="Agreement_Comment" class="form-label mb-1">
+                    세부합의 내역 리스트
+                    <span @onclick="@SubAgreementToggle" class="oi oi-minus mr-1" />
+                </h5>
+            }
+        </div>
+        @if (SubAgreementCollapsed)
+        {
+            <hr />
+            <SubAgreementDbListView subAgreementDbs="model"></SubAgreementDbListView>
+        }
+        <hr />
+        @*세부업무내역(펼쳐보기 추가)*@
+        <ReportTaskListCommonView Collapsed="@TaskListCollapsed"
+                                  Toggle="@TaskListToggle"
+                                  ReportTaskListDB="@v_ReportTaskLists" />
+    }
+}
