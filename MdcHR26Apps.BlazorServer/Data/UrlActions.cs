@@ -75,6 +75,22 @@ public class UrlActions(NavigationManager navigationManager)
     public void MoveTeamLeaderResetSubAgreementPage(long pid) => _navigationManager.NavigateTo($"/SubAgreement/TeamLeader/ResetSubAgreement/{pid}");
     public void MoveTeamLeaderCompleteSubAgreement(long pid) => _navigationManager.NavigateTo($"/SubAgreement/TeamLeader/CompleteSubAgreement/{pid}");
 
-    // === [11] 평가 보고서 (Report) ===
-    public void MoveReportMainPage() => _navigationManager.NavigateTo("/Report/User/Index");
+    // === [11] 평가 보고서 (Report) - 1st_HR_Report 연결 ===
+    public void MoveReportMainPage() => _navigationManager.NavigateTo("/1st_hr_report");
+
+    // === [12] 1st_HR_Report (본인평가) ===
+    public void Move1stReportIndexPage() => _navigationManager.NavigateTo("/1st_hr_report/Index");
+    public void Move1stReportEditPage(long id) => _navigationManager.NavigateTo($"/1st_hr_report/ReportEdit/{id}");
+    public void Move1stReportDetailsPage(long id) => _navigationManager.NavigateTo($"/1st_hr_report/ReportDetails/{id}");
+
+    // === [13] 2nd_HR_Report (부서장평가) ===
+    public void Move2ndMainPage() => _navigationManager.NavigateTo("/2nd_hr_report/Index");
+    public void Move2ndDeteilsPage(long id) => _navigationManager.NavigateTo($"/2nd_hr_report/Details/{id}");
+    public void Move2ndEditPage(long rid) => _navigationManager.NavigateTo($"/2nd_hr_report/Edit/{rid}");
+    public void MoveCompleteDetailsPage(long id) => _navigationManager.NavigateTo($"/2nd_hr_report/Complete_2nd_Details/{id}");
+
+    // === [14] 3rd_HR_Report (임원평가) ===
+    public void Move3rdMainPage() => _navigationManager.NavigateTo("/3rd_hr_report/Index");
+    public void Move3rdDeteilsPage(long id) => _navigationManager.NavigateTo($"/3rd_hr_report/Details/{id}");
+    public void MoveComplete3rdDetailsPage(long id) => _navigationManager.NavigateTo($"/3rd_hr_report/Complete_3rd_Details/{id}");
 }

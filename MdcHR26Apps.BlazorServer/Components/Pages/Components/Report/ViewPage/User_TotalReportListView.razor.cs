@@ -1,39 +1,35 @@
-using MdcHR26Apps.Models.EvaluationReport;
+using MdcHR26Apps.BlazorServer.Utils;
+using MdcHR26Apps.Models.Views.v_TotalReportListDB;
 using Microsoft.AspNetCore.Components;
 
 namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Report.ViewPage;
 
 public partial class User_TotalReportListView
 {
-    #region Inject
-    [Inject] private IReportRepository reportRepository { get; set; } = null!;
-    [Inject] private NavigationManager NavigationManager { get; set; } = null!;
-    #endregion
+    [Parameter]
+    public v_TotalReportListDB TotalReportListDB { get; set; } = new v_TotalReportListDB();
 
-    #region Parameters
-    [Parameter] public long Uid { get; set; }
-    #endregion
+    // 공용함수 호출
+    public ScoreUtils scoreUtils = new ScoreUtils();
 
-    #region Variables
-    private List<ReportDb> reports = new();
-    #endregion
+    public double totalScore = 0;
 
-    #region Lifecycle
+    // 테이블 CSS Style
+    public string table_style_1 = "white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; vertical-align: middle;";
+    public string table_style_2 = "overflow: hidden; text-overflow: ellipsis; text-align: left; vertical-align: middle;";
+
     protected override async Task OnInitializedAsync()
     {
-        await LoadData();
-    }
-    #endregion
-
-    #region Methods
-    private async Task LoadData()
-    {
-        reports = (await reportRepository.GetByUidAllAsync(Uid)).ToList();
+        await SetData();
+        await base.OnInitializedAsync();
     }
 
-    private void HandleEdit(long rid)
+    public async Task SetData()
     {
-        NavigationManager.NavigateTo($"/report/view/{rid}");
+        await Task.Delay(1);
+        totalScore =
+            TotalReportListDB.User_Evaluation_1 +
+            TotalReportListDB.User_Evaluation_2 +
+            TotalReportListDB.User_Evaluation_3;
     }
-    #endregion
 }

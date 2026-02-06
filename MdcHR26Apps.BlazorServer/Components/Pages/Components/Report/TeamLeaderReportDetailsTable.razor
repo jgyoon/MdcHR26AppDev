@@ -1,68 +1,48 @@
 @namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Report
 @rendermode InteractiveServer
 
-@if (report != null)
-{
-    <h4>평가 항목</h4>
-    <table class="table">
-        <tbody>
+<table class="table table-hover table-responsive-md">
+    <thead>
+        <tr>
+            <th class="table-header">#</th>
+            <th class="table-header">
+                <div class="row">
+                    <div class="col-12 col-md-5">평가지표</div>
+                    <div class="col-12 col-md-5">평가직무</div>
+                    <div class="col-12 col-md-2">직무비중</div>
+                </div>
+            </th>
+            <th class="table-header">
+                <div class="row">
+                    <div class="col-12 col-md-6">세부직무</div>
+                    <div class="col-12 col-md-6">세부직무비중</div>
+                </div>
+            </th>
+            <th class="table-header">비고</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in reports)
+        {
             <tr>
-                <th>평가지표</th>
-                <td>@report.Report_Item_Name_1</td>
+                <td class="table-cell">@item.Report_Item_Number</td>
+                <td class="table-cell">
+                    <div class="row">
+                        <div class="col-12 col-md-5 table-text">@item.Report_Item_Name_1</div>
+                        <div class="col-12 col-md-5 table-text">@item.Report_Item_Name_2</div>
+                        <div class="col-12 col-md-2">@item.Report_Item_Proportion %</div>
+                    </div>
+                </td>
+                <td class="table-cell">
+                    <div class="row">
+                        <div class="col-12 col-md-6 table-text">@item.Report_SubItem_Name</div>
+                        <div class="col-12 col-md-6">@item.Report_SubItem_Proportion %</div>
+                    </div>
+                </td>
+                <td class="table-cell">
+                    <button type="button" id="DetailButton" class="btn btn-info" @onclick="@(() => ReportEditAction(item.Rid))">상세</button>
+                </td>
             </tr>
-            <tr>
-                <th>평가직무</th>
-                <td>@report.Report_Item_Name_2</td>
-            </tr>
-            <tr>
-                <th>세부직무</th>
-                <td>@report.Report_SubItem_Name</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h5 class="mt-4">본인 평가 결과</h5>
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>일정준수</th>
-                <td>@report.User_Evaluation_1</td>
-            </tr>
-            <tr>
-                <th>업무 수행의 양</th>
-                <td>@report.User_Evaluation_2</td>
-            </tr>
-            <tr>
-                <th>결과물</th>
-                <td>@report.User_Evaluation_3</td>
-            </tr>
-            <tr>
-                <th>코멘트</th>
-                <td>@report.User_Evaluation_4</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h5 class="mt-4">팀장 평가 입력</h5>
-    <div class="mb-3">
-        <label class="form-label">일정준수</label>
-        <input type="number" class="form-control" @bind="report.TeamLeader_Evaluation_1" step="0.1" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">업무 수행의 양</label>
-        <input type="number" class="form-control" @bind="report.TeamLeader_Evaluation_2" step="0.1" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">결과물</label>
-        <input type="number" class="form-control" @bind="report.TeamLeader_Evaluation_3" step="0.1" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label">코멘트</label>
-        <textarea class="form-control" @bind="report.TeamLeader_Evaluation_4" rows="3"></textarea>
-    </div>
-
-    <div class="mt-3">
-        <button class="btn btn-primary" @onclick="OnSave">저장</button>
-        <button class="btn btn-secondary" @onclick="OnCancel">취소</button>
-    </div>
-}
+        }
+    </tbody>
+</table>

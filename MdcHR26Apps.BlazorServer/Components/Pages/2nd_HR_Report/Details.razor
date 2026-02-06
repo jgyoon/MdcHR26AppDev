@@ -1,0 +1,150 @@
+﻿@page "/2nd_hr_report/Details/{Id:long}"
+
+
+<PageTitle>부서장(팀장) 평가 상세</PageTitle>
+
+<h3>부서장(팀장) 평가 상세</h3>
+
+<div class="input-group mb-1">
+    <button type="button" id="movemainpagebutton" class="btn btn-outline-success" @onclick="Move2ndMainPage">목록</button>
+</div>
+<hr />
+
+<DisplayResultText Comment="@resultText" />
+<DisplayResultText Comment="@update_resultText" />
+
+@if (processDb == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h3>@userName 님 직무평가 </h3>
+    @if (IsTeamLeader_EvaluationComplete && !Is_TeamLeader_Submission)
+    {
+        @if (
+           @* report_TeamLeader_Score != 0 && *@
+           !String.IsNullOrEmpty(report_TeamLeader_Comment) &&
+           !String.IsNullOrEmpty(report_Feedback_Comment)
+       )
+        {
+            <button type="button" class="btn btn-secondary" @onclick="TeamLeaderReportSubmission">부서장(팀장)평가제출</button>
+        }
+        else
+        {
+            <p><strong>"2025년 종합평가" / "미래성장방안"를 작성하여 주세요.</strong></p>
+        }
+
+    }
+    else if (Is_TeamLeader_Submission)
+    {
+        <p>부서장(팀장)평가제출을 완료했습니다.</p>
+    }
+    else
+    {
+        @*
+            <p>부서장평가(일정준수,업무수행도,결과물 등)을 작성해주세요.</p>
+        *@
+        <p>부서장평가를 작성해주세요.</p>
+    }
+}
+
+@if (totalReportViewModel == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (totalReportViewModel.TRid != 0)
+{
+    @*본인평가*@
+    @if (!UserReportCollapsed)
+    {
+        <h5>
+            본인평가
+            <span @onclick="@UserReportCollapsedToggle" class="oi oi-plus mr-1" />
+        </h5>
+    }
+    else
+    {
+        <h5>
+            본인평가
+            <span @onclick="@UserReportCollapsedToggle" class="oi oi-minus mr-1" />
+        </h5>
+    }
+    @if (UserReportCollapsed)
+    {
+        <User_TotalReportListView TotalReportListDB="totalReportViewModel"></User_TotalReportListView>
+    }
+    <hr />
+
+    @*팀장평가*@
+    @if (!TeamLeaderReportCollapsed)
+    {
+        <h5>
+            부서장평가
+            <span @onclick="@TeamLeaderReportCollapsedToggle" class="oi oi-plus mr-1" />
+        </h5>
+    }
+    else
+    {
+        <h5>
+            부서장평가
+            <span @onclick="@TeamLeaderReportCollapsedToggle" class="oi oi-minus mr-1" />
+        </h5>
+    }
+    @if (TeamLeaderReportCollapsed)
+    {
+        @if (totalReportModel == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <EditForm Model="totalReportModel">
+                @*부서장 점수*@
+                <label for="TeamLeader_Score" class="form-label mb-1">종합점수(0 ~ 100) : @report_TeamLeader_Score.ToString("F2") / 100</label>
+                <div class="input-group mb-1">
+                    <span class="input-group-text mb-1" style="width: 7.5em;">결과평가</span>
+                    <InputNumber class="form-control mb-1" id="Director_Score" step="0.05" min="0" max="100" @bind-Value=@report_TeamLeader_Score></InputNumber>
+                    <span class="input-group-text mb-1">점</span>
+                </div>
+                <div class="input-group mb-1">
+                    <input id="TeamLeader_Score" type="range" class="form-control-range input-group mb-1" step="0.05" min="0" max="100" @bind-value=@report_TeamLeader_Score>
+                </div>
+                @*부서장 종합의견*@
+                <div class="input-group mb-1">
+                    <span class="input-group-text mb-1" style="width: 7.5em;">2025년<br />종합평가</span>
+                    <InputTextArea id="TeamLeader_Comment" class="form-control mb-1" rows="5" @bind-Value="@report_TeamLeader_Comment">
+                    </InputTextArea>
+                </div>
+                @*피드포워드*@
+                <div class="input-group mb-1">
+                    <span class="input-group-text mb-1" style="width: 7.5em;">미래성장방안</span>
+                    <InputTextArea id="TeamLeader_Comment" class="form-control mb-1" rows="5" @bind-Value="@report_Feedback_Comment">
+                    </InputTextArea>
+                </div>
+                @*평가작성 및 제출여부*@
+                <div class="input-group mb-1">
+                    <button type="button" id="editbutton" class="btn btn-primary" @onclick="TeamLeaderUpdateReport">평가작성</button>
+                    <button type="button" id="cencelbutton" class="btn btn-light" @onclick="TeamLeaderReportClear">초기화</button>
+                </div>
+            </EditForm>
+            <DisplayResultText Comment="@update_resultText_1" />
+        }
+    }
+}
+
+<hr />
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (model.Count == 0)
+{
+    <p><em>No DATA</em></p>
+}
+else
+{
+    <hr />
+    <TeamLeaderReportDetailsTable reports="model"></TeamLeaderReportDetailsTable>
+}
