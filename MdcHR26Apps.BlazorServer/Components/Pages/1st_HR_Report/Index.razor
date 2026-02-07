@@ -7,17 +7,6 @@
 
 <DisplayResultText Comment="@resultText" />
 
-<!-- 디버그 정보 -->
-<div style="background-color: #f0f0f0; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc;">
-    <strong>디버그 정보:</strong><br />
-    LoginUid: @loginStatusService.LoginStatus.LoginUid<br />
-    processDb.Pid: @(processDb?.Pid ?? 0)<br />
-    processDb.Uid: @(processDb?.Uid ?? 0)<br />
-    processDb.TeamLeaderId: @(processDb?.TeamLeaderId?.ToString() ?? "NULL")<br />
-    processDb.DirectorId: @(processDb?.DirectorId?.ToString() ?? "NULL")<br />
-    IsTeamLeaderAndDiretorSettings: @IsTeamLeaderAndDiretorSettings
-</div>
-
 @if (processDb == null)
 {
     <LoadingIndicator />

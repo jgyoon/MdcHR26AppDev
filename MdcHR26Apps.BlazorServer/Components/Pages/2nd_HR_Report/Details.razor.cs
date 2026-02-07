@@ -104,11 +104,8 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages._2nd_HR_Report
 
         private async Task SetData(Int64 Id)
         {
-            Console.WriteLine($"[2nd_HR_Report Details] Parameter Id (Pid): {Id}");
             processDb = await processDbRepository.GetByIdAsync(Id);
-            Console.WriteLine($"[2nd_HR_Report Details] ProcessDb found: Pid={processDb.Pid}, Uid={processDb.Uid}");
             model = await reportDbRepository.GetByUidAllAsync(processDb.Uid);
-            Console.WriteLine($"[2nd_HR_Report Details] ReportDb Count: {model.Count}");
             Is_TeamLeader_Submission = processDb.Is_Teamleader_Submission;
             userDb = await userDbRepository.GetByIdAsync(processDb.Uid);
             userName = userDb.UserName;

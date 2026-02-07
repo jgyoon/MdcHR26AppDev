@@ -54,11 +54,9 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages._2nd_HR_Report
         private async Task SetData()
         {
             long sessionUserId = loginStatusService.LoginStatus.LoginUid;
-            Console.WriteLine($"[2nd_HR_Report Index] LoginUid: {sessionUserId}");
             if (sessionUserId > 0)
             {
                 processTRLists = await v_processTRListDBRepository.GetByTeamLeaderIdAsync(sessionUserId);
-                Console.WriteLine($"[2nd_HR_Report Index] processTRLists Count: {processTRLists.Count}");
             }
         }
 
