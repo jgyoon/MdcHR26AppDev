@@ -70,6 +70,10 @@ else
                 <div class="input-group mb-1">
                     <InputCheckbox @bind-Value="@model.IsAdministrator"></InputCheckbox>
                 </div>
+                <label for="DeptObjectiveWriter" class="form-label mb-1">조직목표 작성자</label>
+                <div class="input-group mb-1">
+                    <InputCheckbox @bind-Value="@model.IsDeptObjectiveWriter"></InputCheckbox>
+                </div>
                 <hr />
                 <div class="input-group mb-1">
                     <button type="submit" id="editButton" class="btn btn-primary">변경</button>

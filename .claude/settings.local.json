@@ -46,7 +46,12 @@
       "Bash(test:*)",
       "Bash(git restore:*)",
       "Bash(exit)",
-      "Bash(Select-String -Pattern \"error\" -Context 0,1)"
+      "Bash(Select-String -Pattern \"error\" -Context 0,1)",
+      "Bash(tee:*)",
+      "Bash(Select-String -Pattern \"error|warning|succeeded|failed\" -Context 0,2)"
+    ],
+    "additionalDirectories": [
+      "C:\\Codes\\29_MdcHR25\\MdcHR25Apps\\MdcHR25Apps.BlazorApp\\Pages\\DeptObjective"
     ]
   }
 }

@@ -5,8 +5,8 @@
     <thead>
         <tr>
             <th>순번</th>
-            <th>Uid</th>
             <th>이름</th>
+            <th>부서</th>
             <th>평가부서장</th>
             <th>평가임원</th>
             <th>평가자여부</th>
@@ -18,8 +18,8 @@
         {
             <tr>
                 <td>@sortNoAdd2(sortNo)</td>
-                <td>@item.Uid</td>
                 <td>@item.UserName</td>
+                <td>@item.EDepartmentName</td>
                 <td>@(item.TeamLeaderName ?? "미지정")</td>
                 <td>@(item.DirectorName ?? "미지정")</td>
                 <td>@isuse(item.Is_Evaluation)</td>
