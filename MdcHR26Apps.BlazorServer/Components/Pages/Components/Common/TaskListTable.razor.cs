@@ -2,7 +2,7 @@ using MdcHR26Apps.BlazorServer.Utils;
 using MdcHR26Apps.Models.EvaluationTasks;
 using Microsoft.AspNetCore.Components;
 
-namespace MdcHR26Apps.BlazorServer.Components;
+namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Common;
 
 public partial class TaskListTable
 {
