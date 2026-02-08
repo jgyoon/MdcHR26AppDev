@@ -1,0 +1,28 @@
+@page "/totalreport/result/{uid:long}"
+@rendermode InteractiveServer
+
+<h4>평가결과</h4>
+<hr />
+
+@if (processDb == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @if (CompleteStatus)
+    {
+        @if (totalReportViewModel == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else if (totalReportViewModel.TRid != 0)
+        {
+            <Complete_TotalReportListView TotalReportListDB="totalReportViewModel"></Complete_TotalReportListView>
+        }
+    }
+    else
+    {
+        <p><em>평가가 진행 중입니다.</em></p>
+    }
+}

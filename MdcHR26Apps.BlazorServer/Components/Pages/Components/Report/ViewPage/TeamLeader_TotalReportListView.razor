@@ -1,13 +1,32 @@
 @namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Report.ViewPage
 @rendermode InteractiveServer
 
-<h3>팀장 전체 리포트</h3>
-
-@if (reports == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <TeamLeader_TotalReportList reports="reports" />
-}
+<div class="row">
+    <div class="card col-12 col-md-12">
+        <div class="card-header">
+            <h4>
+                @TotalReportListDB.UserName 님 부서장평가
+            </h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-responsive-md mt-0 pt-0">
+                <thead>
+                    <tr class="row">
+                        <th class="col-6 table-header" scope="col">2026년 종합평가</th>
+                        <th class="col-6 table-header" scope="col">미래성장방안</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="row">
+                        <td class="col-6 table-cell">
+                            @TeamLeader_Comment
+                        </td>
+                        <td class="col-6 table-cell">
+                            @((MarkupString)replaceString(Feedback_Comment))
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

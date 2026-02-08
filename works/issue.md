@@ -18,8 +18,8 @@
 
 | 번호 | 제목 | 시작일 | 진행률 | 현재 단계 |
 |------|------|--------|--------|----------|
-| [#009](issues/009_phase3_webapp_development.md) | Phase 3 - Blazor Server WebApp 개발 | 2026-01-20 | 96% (평가 페이지 기본 완성) | Phase 3-1/2/3 완료, Agreement/SubAgreement 완료, 1st/2nd/3rd HR Report 기본 기능 완료 (2026-02-08) |
-| [#016](issues/016_phase3_4_db_sync_and_2025_differences.md) | Phase 3-4 DB 변경사항 미반영 및 2025년 차이점 발견 | 2026-02-06 | 80% | v_ProcessTRListDB.TeamLeader_Score 추가, 7개 컴포넌트 수정 완료, TotalReport 작업지시서 작성 (2026-02-08) |
+| [#009](issues/009_phase3_webapp_development.md) | Phase 3 - Blazor Server WebApp 개발 | 2026-01-20 | 98% (TotalReport 완성) | Phase 3-1/2/3 완료, Agreement/SubAgreement 완료, 1st/2nd/3rd HR Report 완료, TotalReport 완료 (2026-02-08) |
+| [#016](issues/016_phase3_4_db_sync_and_2025_differences.md) | Phase 3-4 DB 변경사항 미반영 및 2025년 차이점 발견 | 2026-02-06 | 90% | v_ProcessTRListDB.TeamLeader_Score 추가, 7개 컴포넌트 수정, TotalReport 페이지 완료, 25년도 컴포넌트 복사 완료 (2026-02-08) |
 
 ---
 
@@ -311,12 +311,13 @@ works/
 | 20260204_04_phase3_4_report_pages.md | 진행 예정 (Report 13개 페이지, 26 files) | [#009](issues/009_phase3_webapp_development.md) |
 | 20260204_05_phase3_4_deptobjective_pages.md | 진행 예정 (DeptObjective 10개 페이지, 20 files) | [#009](issues/009_phase3_webapp_development.md) |
 | 20260204_11_agreement_teamleader_details_fix_approval_workflow.md | 완료 ✅ (Agreement TeamLeader Details 재작성) - 2026-02-05 | [#015](issues/015_agreement_teamleader_arbitrary_code_generation.md) |
+| 20260208_01_totalreport_pages.md | 완료 ✅ (TotalReport 4개 페이지, 8 files + 25년도 컴포넌트 복사) - 2026-02-08 | [#009](issues/009_phase3_webapp_development.md) / [#016](issues/016_phase3_4_db_sync_and_2025_differences.md) |
 
 ---
 
 ## 다음 이슈 번호
 
-**다음 생성할 이슈**: #016
+**다음 생성할 이슈**: #017
 
 ---
 

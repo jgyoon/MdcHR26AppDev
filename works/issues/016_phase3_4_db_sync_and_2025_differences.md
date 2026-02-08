@@ -186,11 +186,24 @@ Pages.Agreement → Components.Pages.Agreement
 - [x] UrlActions 메서드 추가 (MoveComplete3rdEditPage)
 - [x] 평가 페이지 완성 (1st/2nd/3rd HR Report 기본 기능 완료)
 
+### TotalReport 작업 - 2026-02-08
+- [x] TotalReport 페이지 작업지시서 작성 (20260208_01)
+- [x] TotalReport 페이지 구현 (8개 파일 생성)
+  - [x] TotalReport/Index.razor + .cs (사용자 평가 제출)
+  - [x] TotalReport/Result.razor + .cs (평가 결과 조회)
+  - [x] TotalReport/TeamLeader/Index.razor + .cs (팀장 목록)
+  - [x] TotalReport/TeamLeader/CompleteDetails.razor + .cs (팀장 완료 상세)
+- [x] UrlActions 메서드 4개 추가
+- [x] 25년도 컴포넌트 복사 (TeamLeader_TotalReportListView)
+  - [x] 26년도 컴포넌트가 리팩토링되어 Uid만 받도록 변경됨
+  - [x] 25년도 방식(v_TotalReportListDB 전달) 복사
+  - [x] View entity 사용 원칙 준수
+- [x] 빌드 성공 (오류 0개)
+
 ### 개선 작업
 - [x] 이슈 #016 생성 (현재 이슈)
 - [x] 26년도 DB 변경사항 체크리스트 작성
 - [x] 25년도 코드 복사 프로세스 정립
-- [x] TotalReport 페이지 작업지시서 작성 (20260208_01)
 - [ ] Report 작업 전 준비
 - [ ] DeptObjective 작업 전 준비
 
@@ -299,6 +312,7 @@ if (affectedRows > 0)
 - [20260204_04_phase3_4_report_pages.md](../tasks/20260204_04_phase3_4_report_pages.md) - Report 페이지 (진행 필요)
 - [20260204_05_phase3_4_deptobjective_pages.md](../tasks/20260204_05_phase3_4_deptobjective_pages.md) - DeptObjective 페이지 (진행 필요)
 - [20260204_11_agreement_teamleader_details_fix_approval_workflow.md](../tasks/20260204_11_agreement_teamleader_details_fix_approval_workflow.md) - Agreement TeamLeader Details 재작성
+- [20260208_01_totalreport_pages.md](../tasks/20260208_01_totalreport_pages.md) - TotalReport 페이지 (완료)
 
 **관련 이슈**:
 - [#009: Phase 3 Blazor Server WebApp 개발](009_phase3_webapp_development.md) - Phase 3-4 진행 중
