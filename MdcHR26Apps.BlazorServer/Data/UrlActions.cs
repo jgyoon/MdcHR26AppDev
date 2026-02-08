@@ -92,5 +92,6 @@ public class UrlActions(NavigationManager navigationManager)
     // === [14] 3rd_HR_Report (임원평가) ===
     public void Move3rdMainPage() => _navigationManager.NavigateTo("/3rd_hr_report/Index");
     public void Move3rdDeteilsPage(long id) => _navigationManager.NavigateTo($"/3rd_hr_report/Details/{id}");
+    public void MoveComplete3rdEditPage(long rid) => _navigationManager.NavigateTo($"/3rd_hr_report/Complete_3rd_Edit/{rid}");
     public void MoveComplete3rdDetailsPage(long id) => _navigationManager.NavigateTo($"/3rd_hr_report/Complete_3rd_Details/{id}");
 }

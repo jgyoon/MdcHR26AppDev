@@ -71,4 +71,5 @@ public class v_ProcessTRListDB
     // [5] 종합 점수
     public double Total_Score { get; set; }
     public double Director_Score { get; set; }
+    public double TeamLeader_Score { get; set; }
 }

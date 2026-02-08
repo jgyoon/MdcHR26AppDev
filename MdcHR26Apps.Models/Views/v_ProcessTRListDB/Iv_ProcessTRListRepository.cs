@@ -39,4 +39,9 @@ public interface Iv_ProcessTRListRepository : IDisposable
     /// 부서장 관할 팀원 목록 조회
     /// </summary>
     Task<List<v_ProcessTRListDB>> GetByTeamLeaderIdAsync(Int64 teamLeaderId);
+
+    /// <summary>
+    /// 임원 관할 팀원 목록 조회
+    /// </summary>
+    Task<List<v_ProcessTRListDB>> GetByDirectorIdAsync(Int64 directorId);
 }

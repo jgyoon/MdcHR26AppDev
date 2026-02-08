@@ -20,4 +20,10 @@ public partial class MemberListTable
         sortNo = sort + 1;
         return sort;
     }
+
+    protected override void OnParametersSet()
+    {
+        sortNo = 1;
+        base.OnParametersSet();
+    }
 }

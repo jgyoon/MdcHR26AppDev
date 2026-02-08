@@ -68,4 +68,10 @@ public partial class AgreementListTable
     {
         urlActions.MoveAgreementTeamLeaderDetailsPage(Pid);
     }
+
+    protected override void OnParametersSet()
+    {
+        sortNo = 1;
+        base.OnParametersSet();
+    }
 }

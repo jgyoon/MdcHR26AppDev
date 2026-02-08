@@ -125,7 +125,7 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages._2nd_HR_Report
                 #endregion
 
                 #region + 세부업무표
-                v_ReportTaskLists = await v_ReportTaskListDBRepository.GetByUidAllAsync(model.Uid);
+                v_ReportTaskLists = await v_ReportTaskListDBRepository.GetByTaksListNumberAllAsync(model.Task_Number);
                 #endregion
             }
         }

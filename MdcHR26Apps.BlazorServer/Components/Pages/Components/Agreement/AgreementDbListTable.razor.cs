@@ -21,4 +21,10 @@ public partial class AgreementDbListTable
         return (num).ToString();
     }
     #endregion
+
+    protected override void OnParametersSet()
+    {
+        sortNo = 1;
+        base.OnParametersSet();
+    }
 }

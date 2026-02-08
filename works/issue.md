@@ -1,15 +1,15 @@
 # 이슈 인덱스
 
-**최종 업데이트**: 2026-02-04
+**최종 업데이트**: 2026-02-08
 
 ---
 
 ## 이슈 현황 통계
 
-- **총 이슈**: 15개 (참조 이슈 2개 포함)
-- **프로젝트 이슈**: 13개 (#003부터 시작)
+- **총 이슈**: 17개 (참조 이슈 2개 포함)
+- **프로젝트 이슈**: 15개 (#003부터 시작)
 - **완료**: 14개
-- **진행 중**: 1개
+- **진행 중**: 2개 (#009, #016)
 - **보류**: 0개
 
 ---
@@ -18,7 +18,8 @@
 
 | 번호 | 제목 | 시작일 | 진행률 | 현재 단계 |
 |------|------|--------|--------|----------|
-| [#009](issues/009_phase3_webapp_development.md) | Phase 3 - Blazor Server WebApp 개발 | 2026-01-20 | 92% (Agreement 페이지 완료) | Phase 3-1/2/3 완료, Phase 3-4 컴포넌트 38개 완료, Agreement/TeamLeader 페이지 완료 (2026-02-04) |
+| [#009](issues/009_phase3_webapp_development.md) | Phase 3 - Blazor Server WebApp 개발 | 2026-01-20 | 96% (평가 페이지 기본 완성) | Phase 3-1/2/3 완료, Agreement/SubAgreement 완료, 1st/2nd/3rd HR Report 기본 기능 완료 (2026-02-08) |
+| [#016](issues/016_phase3_4_db_sync_and_2025_differences.md) | Phase 3-4 DB 변경사항 미반영 및 2025년 차이점 발견 | 2026-02-06 | 80% | v_ProcessTRListDB.TeamLeader_Score 추가, 7개 컴포넌트 수정 완료, TotalReport 작업지시서 작성 (2026-02-08) |
 
 ---
 
@@ -26,7 +27,7 @@
 
 | 번호 | 제목 | 완료일 | 관련 작업지시서 |
 |------|------|--------|----------------|
-| [#015](issues/015_agreement_teamleader_arbitrary_code_generation.md) | Agreement TeamLeader 페이지 - 임의 코드 작성으로 인한 디버깅 어려움 | 2026-02-04 | 20260204_11 |
+| [#015](issues/015_agreement_teamleader_arbitrary_code_generation.md) | Agreement TeamLeader 페이지 - 임의 코드 작성으로 인한 디버깅 어려움 | 2026-02-05 | 20260204_11 |
 | [#011](issues/011_phase3_3_admin_pages_build_errors.md) | Phase 3-3 관리자 페이지 빌드 오류 및 재작업 | 2026-01-30 | 20260126_01~20260129_06 (6개) |
 | [#014](issues/014_site_js_not_loaded_app_razor.md) | site.js 파일이 App.razor에 로드되지 않음 | 2026-01-30 | - |
 | [#013](issues/013_v_reporttasklistdb_entity_db_mismatch.md) | v_ReportTaskListDB Entity와 DB View 구조 불일치 | 2026-01-30 | 20260130_02 |
@@ -140,12 +141,16 @@
     │   └─ ✅ Common/Form 컴포넌트 (9개, 17 files) - 완료 (2026-02-04)
     │       ├─ Common 그룹 (3개, 5 files): CheckboxComponent, ObjectiveListTable, EDeptListTable
     │       └─ Form 그룹 (6개, 12 files): FormAgreeTask, FormGroup, FormSelectList 등
-    ├─ Phase 3-4: 평가 프로세스 페이지 (대기 중 ⏸️)
-    │   ├─ 직무평가 협의 (Agreement, SubAgreement)
-    │   ├─ 본인평가 (1st_HR_Report)
-    │   ├─ 부서장평가 (2nd_HR_Report)
-    │   ├─ 임원평가 (3rd_HR_Report)
-    │   └─ 부서 목표 관리 (DeptObjective)
+    ├─ Phase 3-4: 평가 프로세스 페이지 (진행 중 🔄)
+    │   ├─ ✅ 직무평가 협의 (Agreement 7개, SubAgreement 10개) - 2026-02-05
+    │   │   ├─ Agreement/User (5개): Index, Create, Edit, Delete, Details
+    │   │   ├─ Agreement/TeamLeader (2개): Index, Details
+    │   │   ├─ SubAgreement/User (5개): Index, Create, Edit, Delete, Details
+    │   │   └─ SubAgreement/TeamLeader (5개): Index, Details, SubDetails, CompleteSubAgreement, ResetSubAgreement
+    │   ├─ ⏸️ 본인평가 (1st_HR_Report 3개 페이지)
+    │   ├─ ⏸️ 부서장평가 (2nd_HR_Report 5개 페이지)
+    │   ├─ ⏸️ 임원평가 (3rd_HR_Report 5개 페이지)
+    │   └─ ⏸️ 부서 목표 관리 (DeptObjective 10개 페이지)
     ├─ Phase 3-5: 공통 컴포넌트 (완료 ✅)
     │   ├─ SearchbarComponent
     │   ├─ Modal 컴포넌트 (UserDeleteModal, ReportInitModal)
@@ -157,6 +162,18 @@
         ├─ UserUtils
         ├─ ScoreUtils
         └─ TotalScoreRankModel
+    ↓
+[Phase 3-4 작업 중 발견된 문제점 및 개선사항] (2026-02-05)
+    ├─ 문제 1: 임의 코드 작성으로 인한 기능 누락 (#015)
+    │   └─ Agreement TeamLeader Details 페이지가 25년도와 완전히 다른 구조
+    ├─ 문제 2: DB 변경사항 일부 미반영
+    │   └─ SubAgreement: SAid → Sid, UserId → Uid 변경 일부 누락
+    ├─ 개선 1: 25년도 코드 복사 원칙 수립
+    │   └─ 25년도 코드 그대로 복사 → 26년도 DB 변경사항만 수정
+    ├─ 개선 2: 26년도 DB 변경사항 체크리스트 작성
+    │   └─ Entity PK, Repository 반환 타입, 네임스페이스 변경사항 정리
+    └─ 개선 3: Report/DeptObjective 작업 시 적용
+        └─ 25년도 코드 분석, 체크리스트 확인, 작업지시서 검토
     ↓
 [#010] 로그인 비밀번호 검증 실패 (완료 ✅)
     ├─ 해시 순서 불일치 (Password+Salt 순서로 수정)
@@ -289,12 +306,17 @@ works/
 | 20260203_15_components_report_v2.md | 완료 ✅ (15개 컴포넌트, 30 files) - 2026-02-04 | [#009](issues/009_phase3_webapp_development.md) |
 | 20260203_16_components_common_form_v2.md | 완료 ✅ (9개 컴포넌트, 17 files) - 2026-02-04 | [#009](issues/009_phase3_webapp_development.md) |
 | 20260204_01_phase3_4_pages_all.md | 작성 완료 (40개 페이지, 80 files) | [#009](issues/009_phase3_webapp_development.md) |
+| 20260204_02_phase3_4_agreement_pages.md | 완료 ✅ (Agreement 7개 페이지, 14 files) - 2026-02-05 | [#009](issues/009_phase3_webapp_development.md) |
+| 20260204_03_phase3_4_subagreement_pages.md | 완료 ✅ (SubAgreement 10개 페이지, 20 files) - 2026-02-05 | [#009](issues/009_phase3_webapp_development.md) |
+| 20260204_04_phase3_4_report_pages.md | 진행 예정 (Report 13개 페이지, 26 files) | [#009](issues/009_phase3_webapp_development.md) |
+| 20260204_05_phase3_4_deptobjective_pages.md | 진행 예정 (DeptObjective 10개 페이지, 20 files) | [#009](issues/009_phase3_webapp_development.md) |
+| 20260204_11_agreement_teamleader_details_fix_approval_workflow.md | 완료 ✅ (Agreement TeamLeader Details 재작성) - 2026-02-05 | [#015](issues/015_agreement_teamleader_arbitrary_code_generation.md) |
 
 ---
 
 ## 다음 이슈 번호
 
-**다음 생성할 이슈**: #015
+**다음 생성할 이슈**: #016
 
 ---
 

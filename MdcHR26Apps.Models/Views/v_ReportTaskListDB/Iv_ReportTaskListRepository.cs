@@ -31,6 +31,11 @@ public interface Iv_ReportTaskListRepository : IDisposable
     Task<List<v_ReportTaskListDB>> GetByUidAllAsync(Int64 uid);
 
     /// <summary>
+    /// Task_Number별 보고서-업무 목록 조회
+    /// </summary>
+    Task<List<v_ReportTaskListDB>> GetByTaksListNumberAllAsync(Int64 TaksListNumber);
+
+    /// <summary>
     /// 프로세스별 보고서-업무 조회
     /// </summary>
     Task<IEnumerable<v_ReportTaskListDB>> GetByProcessIdAsync(Int64 processId);

@@ -49,5 +49,11 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Table
         {
             urlActions.MoveUserDetailsPage(Uid);
         }
+
+        protected override void OnParametersSet()
+        {
+            sortNo = 1;
+            base.OnParametersSet();
+        }
     }
 }

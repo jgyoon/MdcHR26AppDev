@@ -92,6 +92,24 @@ public class v_ReportTaskListRepository(string connectionString, ILoggerFactory 
     }
     #endregion
 
+    #region + [3-2] Task_Number별 조회: GetByTaksListNumberAllAsync
+    /// <summary>
+    /// Task_Number별 보고서-업무 목록 조회
+    /// </summary>
+    public async Task<List<v_ReportTaskListDB>> GetByTaksListNumberAllAsync(Int64 TaksListNumber)
+    {
+        const string sql = """
+            SELECT * FROM v_ReportTaskListDB
+            WHERE TaksListNumber = @TaksListNumber
+            ORDER BY Tid
+            """;
+
+        using var connection = new SqlConnection(dbContext);
+        var result = await connection.QueryAsync<v_ReportTaskListDB>(sql, new { TaksListNumber });
+        return result.AsList();
+    }
+    #endregion
+
     #region + [4] 프로세스별 조회: GetByProcessIdAsync
     /// <summary>
     /// 프로세스별 보고서-업무 조회

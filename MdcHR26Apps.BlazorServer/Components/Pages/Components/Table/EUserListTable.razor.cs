@@ -39,4 +39,10 @@ public partial class EUserListTable
     {
         urlActions.MoveEUsersEditPage(uid);
     }
+
+    protected override void OnParametersSet()
+    {
+        sortNo = 1;
+        base.OnParametersSet();
+    }
 }

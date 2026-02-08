@@ -131,6 +131,24 @@ public class v_ProcessTRListRepository(string connectionString, ILoggerFactory l
     }
     #endregion
 
+    #region + [11] GetByDirectorIdAsync
+    /// <summary>
+    /// 임원 관할 팀원 목록 조회
+    /// </summary>
+    public async Task<List<v_ProcessTRListDB>> GetByDirectorIdAsync(Int64 directorId)
+    {
+        const string sql = """
+            SELECT * FROM v_ProcessTRListDB
+            WHERE Director_Id = (SELECT UserId FROM UserDb WHERE Uid = @directorId)
+            ORDER BY Pid DESC
+            """;
+
+        using var connection = new SqlConnection(dbContext);
+        var result = await connection.QueryAsync<v_ProcessTRListDB>(sql, new { directorId });
+        return result.AsList();
+    }
+    #endregion
+
     #region + [#] Dispose
     /// <summary>
     /// 리소스 해제

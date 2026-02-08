@@ -12,4 +12,10 @@ public partial class SubAgreementResetList
     #region Variables
     private int sortNo = 1;
     #endregion
+
+    protected override void OnParametersSet()
+    {
+        sortNo = 1;
+        base.OnParametersSet();
+    }
 }

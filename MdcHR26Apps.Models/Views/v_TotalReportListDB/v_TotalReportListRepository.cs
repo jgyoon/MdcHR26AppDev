@@ -22,7 +22,7 @@ public class v_TotalReportListRepository(string connectionString, ILoggerFactory
     {
         const string sql = """
             SELECT * FROM v_TotalReportListDB
-            ORDER BY Process_Year DESC, Final_Score DESC
+            ORDER BY TRid DESC, Total_Score DESC
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -55,7 +55,7 @@ public class v_TotalReportListRepository(string connectionString, ILoggerFactory
         const string sql = """
             SELECT * FROM v_TotalReportListDB
             WHERE Uid = @uid
-            ORDER BY Process_Year DESC
+            ORDER BY TRid DESC
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -72,7 +72,7 @@ public class v_TotalReportListRepository(string connectionString, ILoggerFactory
         const string sql = """
             SELECT * FROM v_TotalReportListDB
             WHERE Pid = @processId
-            ORDER BY Final_Score DESC
+            ORDER BY Total_Score DESC
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -88,8 +88,8 @@ public class v_TotalReportListRepository(string connectionString, ILoggerFactory
     {
         const string sql = """
             SELECT * FROM v_TotalReportListDB
-            WHERE Process_Year = @year
-            ORDER BY Final_Score DESC
+            WHERE TRid = @year
+            ORDER BY Total_Score DESC
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -106,7 +106,7 @@ public class v_TotalReportListRepository(string connectionString, ILoggerFactory
         const string sql = """
             SELECT * FROM v_TotalReportListDB
             WHERE Final_Grade = @grade
-            ORDER BY Process_Year DESC, Final_Score DESC
+            ORDER BY TRid DESC, Total_Score DESC
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -123,7 +123,7 @@ public class v_TotalReportListRepository(string connectionString, ILoggerFactory
         const string sql = """
             SELECT * FROM v_TotalReportListDB
             WHERE EDepartId = @departId
-            ORDER BY Process_Year DESC, Final_Score DESC
+            ORDER BY TRid DESC, Total_Score DESC
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -140,7 +140,7 @@ public class v_TotalReportListRepository(string connectionString, ILoggerFactory
         const string sql = """
             SELECT * FROM v_TotalReportListDB
             WHERE ERankId = @rankId
-            ORDER BY Process_Year DESC, Final_Score DESC
+            ORDER BY TRid DESC, Total_Score DESC
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -156,8 +156,8 @@ public class v_TotalReportListRepository(string connectionString, ILoggerFactory
     {
         const string sql = """
             SELECT * FROM v_TotalReportListDB
-            WHERE Final_Score >= @minScore AND Final_Score <= @maxScore
-            ORDER BY Final_Score DESC
+            WHERE Total_Score >= @minScore AND Total_Score <= @maxScore
+            ORDER BY Total_Score DESC
             """;
 
         using var connection = new SqlConnection(dbContext);

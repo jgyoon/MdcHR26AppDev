@@ -45,7 +45,8 @@
       "Bash(tree:*)",
       "Bash(test:*)",
       "Bash(git restore:*)",
-      "Bash(exit)"
+      "Bash(exit)",
+      "Bash(Select-String -Pattern \"error\" -Context 0,1)"
     ]
   }
 }

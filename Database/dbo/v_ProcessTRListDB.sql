@@ -36,7 +36,8 @@ AS SELECT
 	ISNULL(C.Director_Evaluation_3, 0) AS Director_Evaluation_3,
 	ISNULL(C.Director_Comment,'') AS Director_Comment,
 	ISNULL(C.Total_Score, 0) AS Total_Score,
-	ISNULL(C.Director_Score, 0) AS Director_Score
+	ISNULL(C.Director_Score, 0) AS Director_Score,
+	ISNULL(C.TeamLeader_Score, 0) AS TeamLeader_Score
 FROM
 	[dbo].[ProcessDb] A
 	INNER JOIN [dbo].[UserDb] U ON A.Uid = U.Uid

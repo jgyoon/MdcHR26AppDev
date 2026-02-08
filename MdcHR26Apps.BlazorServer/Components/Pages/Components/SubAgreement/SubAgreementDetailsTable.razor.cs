@@ -38,4 +38,10 @@ public partial class SubAgreementDetailsTable
         urlActions.MoveTeamLeaderSubAgreementSubDetailsPage(Sid);
     }
     #endregion
+
+    protected override void OnParametersSet()
+    {
+        sortNo = 1;
+        base.OnParametersSet();
+    }
 }

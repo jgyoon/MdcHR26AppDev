@@ -440,17 +440,91 @@ builder.Services.AddRazorComponents()
   - Form 그룹 (6개, 12 files): FormAgreeTask.razor/.cs, FormAgreeTaskCreate.razor/.cs, FormGroup.razor, FormSelectList.razor, FormSelectNumber.razor, FormTaskItem.razor/.cs
 - **Git Commit**: `20250a4` - Phase 3-4 Report/Common/Form 컴포넌트 완료 (45 files, +1640 insertions)
 
+**Phase 3-4 페이지 구현**: 2026-02-05 ~ 진행 중
+- ✅ **Agreement 페이지 구현 완료** (2026-02-05)
+  - 작업지시서: [20260204_02_phase3_4_agreement_pages.md](../tasks/20260204_02_phase3_4_agreement_pages.md)
+  - User 페이지 (5개): Index, Create, Edit, Delete, Details
+  - TeamLeader 페이지 (2개): Index, Details
+  - 총 7개 페이지 (14 files)
+  - **발견된 문제**: 이슈 #015 - 임의 코드 작성으로 인한 기능 누락
+  - **해결**: 25년도 코드 기준으로 재작성 (20260204_11)
+
+- ✅ **SubAgreement 페이지 구현 완료** (2026-02-05)
+  - 작업지시서: [20260204_03_phase3_4_subagreement_pages.md](../tasks/20260204_03_phase3_4_subagreement_pages.md)
+  - User 페이지 (5개): Index, Create, Edit, Delete, Details
+  - TeamLeader 페이지 (5개): Index, Details, SubDetails, CompleteSubAgreement, ResetSubAgreement
+  - 총 10개 페이지 (20 files)
+  - **발견된 문제**: DB 변경사항 일부 미반영 (SAid → Sid, UserId → Uid)
+  - **해결**: 코드 검토 후 누락 부분 수정
+
+- ⏸️ **Report 페이지 구현** (대기 중)
+  - 작업지시서: [20260204_04_phase3_4_report_pages.md](../tasks/20260204_04_phase3_4_report_pages.md)
+  - 1st_HR_Report (3개): Index, Edit, Details
+  - 2nd_HR_Report (5개): Index, Edit, Details, Complete_2nd_Edit, Complete_2nd_Details
+  - 3rd_HR_Report (5개): Index, Edit, Details, Complete_3rd_Edit, Complete_3rd_Details
+  - 총 13개 페이지 (26 files)
+
+- ⏸️ **DeptObjective 페이지 구현** (대기 중)
+  - 작업지시서: [20260204_05_phase3_4_deptobjective_pages.md](../tasks/20260204_05_phase3_4_deptobjective_pages.md)
+  - 목록 페이지 (2개): Main, Sub
+  - MainObjective CRUD (4개): Create, Edit, Delete, Details
+  - SubObjective CRUD (4개): Create, Edit, Delete, Details
+  - 총 10개 페이지 (20 files)
+
+**Agreement/SubAgreement 작업 중 발견된 문제점 및 개선사항** (2026-02-05):
+
+### 문제점
+1. **임의 코드 작성** (이슈 #015)
+   - Agreement TeamLeader Details 페이지가 25년도와 완전히 다른 구조로 구현됨
+   - 핵심 기능 누락: 합의 코멘트 입력, 승인/반려 버튼, ProcessDb 업데이트 로직
+   - 원인: 25년도 코드를 복사하지 않고 임의로 새로운 코드 작성
+
+2. **DB 변경사항 일부 미반영**
+   - SubAgreement 페이지에서 Entity PK 필드명 변경 (SAid → Sid) 일부 누락
+   - UserId (string) → Uid (long) 변경 일부 누락
+   - Repository 반환 타입 변경 (bool → int) 일부 누락
+
+3. **26년도 DB 변경사항 체크리스트 부재**
+   - 작업지시서마다 DB 변경사항을 반복 기술
+   - 중앙화된 체크리스트 없어서 누락 발생
+
+### 개선사항
+1. **25년도 코드 복사 원칙 수립** (이슈 #015)
+   - ✅ 25년도 코드를 그대로 복사
+   - ✅ 26년도 DB 변경사항만 수정
+   - ❌ 임의로 코드 재작성 금지
+   - ❌ 구조 변경 금지
+
+2. **26년도 DB 변경사항 체크리스트 작성**
+   ```
+   Entity PK 필드명 변경:
+   - SubAgreementDb: SAid → Sid
+   - DeptObjectiveDb: DOid → DeptObjectiveDbId
+   - UserDb: UserId (string) → Uid (long)
+
+   Repository 반환 타입 변경:
+   - UpdateAsync: bool → int (영향받은 행 수)
+   - DeleteAsync: bool → int (영향받은 행 수)
+   - 사용: if (success) → if (affectedRows > 0)
+
+   네임스페이스 변경:
+   - MdcHR25Apps → MdcHR26Apps
+   - BlazorApp → BlazorServer
+   - Pages.* → Components.Pages.*
+   ```
+
+3. **Report/DeptObjective 작업 시 적용사항**
+   - 작업 전 25년도 코드 철저히 분석
+   - 작업지시서에 DB 변경사항 체크리스트 반영 확인
+   - 25년도 코드 복사 원칙 준수
+
 **다음 단계**:
-1. ⏸️ **Agreement 컴포넌트 구현 (6개)** - 대기
-   - AgreementDbListTable, AgreementDetailsTable, AgreementListTable, AgreementDbListView, AgreementDeleteModal, AgreementComment
+1. 📝 **Report 페이지 구현** (진행 예정)
+   - 25년도 코드 분석 (1st/2nd/3rd_HR_Report)
+   - DB 변경사항 체크리스트 확인
+   - 작업지시서 검토 후 진행
 
-2. ⏸️ **SubAgreement 컴포넌트 구현 (8개)** - 대기
-   - SubAgreementDbListTable, SubAgreementDetailsTable, SubAgreementListTable, SubAgreementResetList, SubAgreementDbListView, SubAgreementDeleteModal, AgreeItemLists, ReportTaskListCommonView
-
-3. 📝 **Phase 3-4 페이지 구현 작업**
-   - 직무평가 협의 (Agreement 페이지)
-   - 세부직무평가 (SubAgreement 페이지)
-   - 본인평가 (1st_HR_Report 페이지)
-   - 부서장평가 (2nd_HR_Report 페이지)
-   - 임원평가 (3rd_HR_Report 페이지)
-   - 부서 목표 관리 (DeptObjective 페이지)
+2. 📝 **DeptObjective 페이지 구현** (진행 예정)
+   - 25년도 코드 분석 (Main/Sub, MainObjective, SubObjective)
+   - DeptObjectiveDb 변경사항 확인 (DOid → DeptObjectiveDbId)
+   - 작업지시서 검토 후 진행
