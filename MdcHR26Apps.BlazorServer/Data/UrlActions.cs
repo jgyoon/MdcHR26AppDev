@@ -102,4 +102,22 @@ public class UrlActions(NavigationManager navigationManager)
     public void Move3rdDeteilsPage(long id) => _navigationManager.NavigateTo($"/3rd_hr_report/Details/{id}");
     public void MoveComplete3rdEditPage(long rid) => _navigationManager.NavigateTo($"/3rd_hr_report/Complete_3rd_Edit/{rid}");
     public void MoveComplete3rdDetailsPage(long id) => _navigationManager.NavigateTo($"/3rd_hr_report/Complete_3rd_Details/{id}");
+
+    // === [15] 부서목표 관리 (DeptObjective) ===
+
+    // [15-1] DeptObjective List Pages
+    public void MoveMainObjectivePage() => _navigationManager.NavigateTo("/DeptObjective/Main");
+    public void MoveSubObjectivePage() => _navigationManager.NavigateTo("/DeptObjective/Sub");
+
+    // [15-2] MainObjective CRUD
+    public void MoveMainObjectiveCreatePage() => _navigationManager.NavigateTo("/DeptObjective/MainObjective/Create");
+    public void MoveMainObjectiveDetailsPage(long id) => _navigationManager.NavigateTo($"/DeptObjective/MainObjective/Details/{id}");
+    public void MoveMainObjectiveEditPage(long id) => _navigationManager.NavigateTo($"/DeptObjective/MainObjective/Edit/{id}");
+    public void MoveMainObjectiveDeletePage(long id) => _navigationManager.NavigateTo($"/DeptObjective/MainObjective/Delete/{id}");
+
+    // [15-3] SubObjective CRUD
+    public void MoveSubObjectiveCreatePage() => _navigationManager.NavigateTo("/DeptObjective/SubObjective/Create");
+    public void MoveSubObjectiveDetailsPage(long id) => _navigationManager.NavigateTo($"/DeptObjective/SubObjective/Details/{id}");
+    public void MoveSubObjectiveEditPage(long id) => _navigationManager.NavigateTo($"/DeptObjective/SubObjective/Edit/{id}");
+    public void MoveSubObjectiveDeletePage(long id) => _navigationManager.NavigateTo($"/DeptObjective/SubObjective/Delete/{id}");
 }

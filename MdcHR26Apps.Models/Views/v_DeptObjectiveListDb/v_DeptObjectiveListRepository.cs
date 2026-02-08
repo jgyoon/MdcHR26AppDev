@@ -22,7 +22,7 @@ public class v_DeptObjectiveListRepository(string connectionString, ILoggerFacto
     {
         const string sql = """
             SELECT * FROM v_DeptObjectiveListDb
-            ORDER BY Start_Date DESC, EDepartName
+            ORDER BY DeptObjectiveDbId DESC, EDepartmentName
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -55,28 +55,11 @@ public class v_DeptObjectiveListRepository(string connectionString, ILoggerFacto
         const string sql = """
             SELECT * FROM v_DeptObjectiveListDb
             WHERE EDepartId = @departId
-            ORDER BY Start_Date DESC
+            ORDER BY DeptObjectiveDbId DESC
             """;
 
         using var connection = new SqlConnection(dbContext);
         return await connection.QueryAsync<v_DeptObjectiveListDb>(sql, new { departId });
-    }
-    #endregion
-
-    #region + [4] 기간별 조회: GetByDateRangeAsync
-    /// <summary>
-    /// 기간별 목표 조회
-    /// </summary>
-    public async Task<IEnumerable<v_DeptObjectiveListDb>> GetByDateRangeAsync(DateTime startDate, DateTime endDate)
-    {
-        const string sql = """
-            SELECT * FROM v_DeptObjectiveListDb
-            WHERE Start_Date >= @startDate AND End_Date <= @endDate
-            ORDER BY Start_Date DESC, EDepartName
-            """;
-
-        using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<v_DeptObjectiveListDb>(sql, new { startDate, endDate });
     }
     #endregion
 

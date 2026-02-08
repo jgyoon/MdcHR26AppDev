@@ -41,4 +41,7 @@ public class LoginStatusService
 
     public bool IsloginAndIsDirectorCheck() =>
         LoginStatus.IsLogin && LoginStatus.LoginIsDirector;
+
+    public bool IsloginAndIsDeptObjectiveWriterCheck() =>
+        LoginStatus.IsLogin && LoginStatus.LoginIsDeptObjectiveWriter;
 }

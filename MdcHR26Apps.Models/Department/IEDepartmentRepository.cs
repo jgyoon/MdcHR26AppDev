@@ -25,4 +25,9 @@ public interface IEDepartmentRepository : IDisposable
     /// 드롭다운용 부서 목록
     /// </summary>
     Task<IEnumerable<SelectListModel>> GetSelectListAsync();
+
+    /// <summary>
+    /// 부서명으로 부서 ID 조회
+    /// </summary>
+    Task<long> GetIdByNameAsync(string name);
 }

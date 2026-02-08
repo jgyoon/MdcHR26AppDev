@@ -1,33 +1,34 @@
-@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Common
-@rendermode InteractiveServer
-
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>번호</th>
-            <th>부서</th>
-            <th>목표 제목</th>
-            <th>목표 내용</th>
-            <th>작성일</th>
-            <th>수정일</th>
-            <th>관리</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in objectives)
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var item in objectList)
         {
-            <tr>
-                <td>@item.DeptObjectiveDbId</td>
-                <td>@item.EDepartment?.EDepartmentName</td>
-                <td>@item.ObjectiveTitle</td>
-                <td>@item.ObjectiveContents</td>
-                <td>@item.CreatedAt.ToString("yyyy-MM-dd")</td>
-                <td>@(item.UpdatedAt?.ToString("yyyy-MM-dd") ?? "-")</td>
-                <td>
-                    <button class="btn btn-sm btn-primary" @onclick="@(() => OnEdit.InvokeAsync(item.DeptObjectiveDbId))">편집</button>
-                    <button class="btn btn-sm btn-danger" @onclick="@(() => OnDelete.InvokeAsync(item.DeptObjectiveDbId))">삭제</button>
-                </td>
-            </tr>
+            <div class="card">
+                <div class="card-header">
+                    <h4>@item.ObjectiveTitle</h4>
+                </div>
+                <div class="card-body">
+                    <pre>@item.ObjectiveContents</pre>
+                </div>
+                @if (isEdit)
+                {
+                    @if (isMain)
+                    {
+                        <div class="card-footer">
+                            <span>전사목표 :</span>
+                            <button type="button" class="btn btn-outline-info" @onclick="(() => urlActions.MoveMainObjectiveEditPage(item.DeptObjectiveDbId))">수정</button>
+                            <button type="button" class="btn btn-outline-danger" @onclick="(() => urlActions.MoveMainObjectiveDeletePage(item.DeptObjectiveDbId))">삭제</button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-footer">
+                            <span>부서목표 :</span>
+                            <button type="button" class="btn btn-outline-info" @onclick="(() => urlActions.MoveSubObjectiveEditPage(item.DeptObjectiveDbId))">수정</button>
+                            <button type="button" class="btn btn-outline-danger" @onclick="(() => urlActions.MoveSubObjectiveDeletePage(item.DeptObjectiveDbId))">삭제</button>
+                        </div>
+                    }
+                }
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+</div>

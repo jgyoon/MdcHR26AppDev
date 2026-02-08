@@ -19,9 +19,4 @@ public interface Iv_DeptObjectiveListRepository : IDisposable
     /// 부서별 목표 목록 조회
     /// </summary>
     Task<IEnumerable<v_DeptObjectiveListDb>> GetByDepartmentAsync(Int64 departId);
-
-    /// <summary>
-    /// 기간별 목표 조회
-    /// </summary>
-    Task<IEnumerable<v_DeptObjectiveListDb>> GetByDateRangeAsync(DateTime startDate, DateTime endDate);
 }

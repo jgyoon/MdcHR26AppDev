@@ -464,12 +464,23 @@ builder.Services.AddRazorComponents()
   - 3rd_HR_Report (5개): Index, Edit, Details, Complete_3rd_Edit, Complete_3rd_Details
   - 총 13개 페이지 (26 files)
 
-- ⏸️ **DeptObjective 페이지 구현** (대기 중)
-  - 작업지시서: [20260204_05_phase3_4_deptobjective_pages.md](../tasks/20260204_05_phase3_4_deptobjective_pages.md)
+- ✅ **DeptObjective 페이지 구현 완료** (2026-02-08)
+  - 작업지시서: [20260208_02_deptobjective_pages_corrected.md](../tasks/20260208_02_deptobjective_pages_corrected.md)
   - 목록 페이지 (2개): Main, Sub
   - MainObjective CRUD (4개): Create, Edit, Delete, Details
   - SubObjective CRUD (4개): Create, Edit, Delete, Details
   - 총 10개 페이지 (20 files)
+  - **발견된 문제**:
+    - 25년도 Repository에 Start_Date/End_Date 컬럼 참조 (26년도 DB에 없음)
+    - GetByDateRangeAsync 메서드가 25년도에도 없었음 (불필요한 메서드)
+  - **해결**:
+    - Repository SQL 쿼리에서 Start_Date/End_Date 제거 → DeptObjectiveDbId로 정렬
+    - GetByDateRangeAsync 메서드 완전 제거 (Interface + Repository)
+  - **권한 변경**: SubObjective 권한 IsTeamLeader → IsDeptObjectiveWriter 변경
+  - **DB 변경사항 적용**:
+    - ObjectiveType 필드 추가 ("Main" / "Sub")
+    - 감사 필드 추가 (CreatedBy/At, UpdatedBy/At)
+    - GetIdByNameAsync 메서드 추가 (부서명 → ID 변환)
 
 **Agreement/SubAgreement 작업 중 발견된 문제점 및 개선사항** (2026-02-05):
 
@@ -518,13 +529,22 @@ builder.Services.AddRazorComponents()
    - 작업지시서에 DB 변경사항 체크리스트 반영 확인
    - 25년도 코드 복사 원칙 준수
 
-**다음 단계**:
-1. 📝 **Report 페이지 구현** (진행 예정)
-   - 25년도 코드 분석 (1st/2nd/3rd_HR_Report)
-   - DB 변경사항 체크리스트 확인
-   - 작업지시서 검토 후 진행
+**완료된 작업** (2026-02-08):
+- ✅ **Agreement 페이지** (7개, 14 files) - 2026-02-05
+- ✅ **SubAgreement 페이지** (10개, 20 files) - 2026-02-05
+- ✅ **DeptObjective 페이지** (10개, 20 files) - 2026-02-08
+- ✅ **TotalReport 페이지** (4개, 8 files) - 2026-02-08
+- ✅ **25년도 컴포넌트 복사** (ScoreResultsTable 등) - 2026-02-08
 
-2. 📝 **DeptObjective 페이지 구현** (진행 예정)
-   - 25년도 코드 분석 (Main/Sub, MainObjective, SubObjective)
-   - DeptObjectiveDb 변경사항 확인 (DOid → DeptObjectiveDbId)
-   - 작업지시서 검토 후 진행
+**다음 단계**:
+1. 📝 **Report 페이지 구현** (남은 작업)
+   - 1st_HR_Report (3개): Index, Edit, Details
+   - 2nd_HR_Report (5개): Index, Edit, Details, Complete_2nd_Edit, Complete_2nd_Details
+   - 3rd_HR_Report (5개): Index, Edit, Details, Complete_3rd_Edit, Complete_3rd_Details
+   - 총 13개 페이지 (26 files)
+   - 25년도 코드 분석 후 작업지시서 검토
+
+2. 📝 **Phase 3-4 최종 검증**
+   - 전체 페이지 빌드 확인
+   - 런타임 테스트 (로그인, 권한, 페이지 이동)
+   - Issue #015 원칙 준수 확인

@@ -20,6 +20,9 @@ public class DeptObjectiveDb
     public string ObjectiveContents { get; set; } = string.Empty;
 
     [Required]
+    public string ObjectiveType { get; set; } = string.Empty; // "Main" or "Sub"
+
+    [Required]
     public Int64 CreatedBy { get; set; }
 
     [Required]

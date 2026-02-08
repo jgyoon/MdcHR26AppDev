@@ -113,6 +113,21 @@ public class EDepartmentRepository(string connectionString, ILoggerFactory logge
     }
     #endregion
 
+    #region + [8] 부서명으로 ID 조회: GetIdByNameAsync
+    public async Task<long> GetIdByNameAsync(string name)
+    {
+        const string sql = """
+            SELECT EDepartId
+            FROM EDepartmentDb
+            WHERE EDepartmentName = @Name
+            """;
+
+        using var connection = new SqlConnection(dbContext);
+        var result = await connection.QueryFirstOrDefaultAsync<long?>(sql, new { Name = name });
+        return result ?? 0;
+    }
+    #endregion
+
     #region + [#] Dispose
     /// <summary>
     /// 리소스 해제
