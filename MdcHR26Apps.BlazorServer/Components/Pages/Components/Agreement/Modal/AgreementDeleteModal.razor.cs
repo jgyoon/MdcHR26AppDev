@@ -50,14 +50,14 @@ public partial class AgreementDeleteModal
 
             if (result)
             {
-                resultText = "??��?�었?�니??";
+                resultText = "삭제에 성공했습니다.";
                 await Task.Delay(1000);
                 await OnDeleteSuccess.InvokeAsync();
                 Close();
             }
             else
             {
-                resultText = "??�� ?�패?�습?�다.";
+                resultText = "삭제에 실패했습니다.";
             }
         }
     }

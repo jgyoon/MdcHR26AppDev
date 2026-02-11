@@ -11,50 +11,57 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Agreement.User
         public Int64 Id { get; set; }
         #endregion
 
-        // 페이지이동
-        [Inject]
-        public UrlActions urlActions { get; set; } = null!;
-
         // 로그인관리(상태관리)
         [Inject]
         public LoginStatusService loginStatusService { get; set; } = null!;
 
-        // Agreement Repository
+        // 페이지이동
+        [Inject]
+        public UrlActions urlActions { get; set; } = null!;
+
+        // 직무협의관리
         [Inject]
         public IAgreementRepository agreementRepository { get; set; } = null!;
+        public AgreementDb model { get; set; } = new AgreementDb();
+        public List<AgreementDb> agreementDblist { get; set; } = new List<AgreementDb>();
 
-        public AgreementDb? model { get; set; }
-        public string errorMessage { get; set; } = string.Empty;
-        public string successMessage { get; set; } = string.Empty;
+        // 기타
+        public string resultText { get; set; } = String.Empty;
+        public int maxperoportion { get; set; } = 0;
 
         protected override async Task OnInitializedAsync()
         {
             await CheckLogined();
-            await LoadData();
+            await SetData(Id);
             await base.OnInitializedAsync();
         }
 
-        private async Task LoadData()
+        private async Task SetData(Int64 Id)
         {
+            var loginUser = loginStatusService.LoginStatus;
+            long sessionUid = loginUser.LoginUid;
+
+            // 전체 Agreement 목록 로드 (비중 계산용)
+            agreementDblist = await agreementRepository.GetByUidAllAsync(sessionUid);
+
+            // 현재 수정할 Agreement 로드
             model = await agreementRepository.GetByIdAsync(Id);
 
-            if (model == null)
+            if (model != null)
             {
-                errorMessage = "데이터를 찾을 수 없습니다.";
-                return;
-            }
-
-            // 권한 체크 - 본인만 수정 가능
-            var loginUser = loginStatusService.LoginStatus;
-            if (model.Uid != loginUser.LoginUid)
-            {
-                errorMessage = "수정 권한이 없습니다.";
-                StateHasChanged();
-                await Task.Delay(2000);
-                urlActions.MoveAgreementUserIndexPage();
+                // 현재 비중 + 사용 가능한 비중 = 최대 설정 가능 비중
+                maxperoportion = model.Report_Item_Proportion;
+                if (agreementDblist != null && agreementDblist.Count > 0)
+                {
+                    maxperoportion += GetMaxVaule(agreementDblist);
+                }
             }
         }
 
+        #region + CheckLogined : 로그인 체크
+        /// <summary>
+        /// 로그인 체크
+        /// </summary>
         private async Task CheckLogined()
         {
             await Task.Delay(0);
@@ -64,42 +71,69 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Agreement.User
                 urlActions.MoveLoginPage();
             }
         }
+        #endregion
 
-        private async Task HandleValidSubmit()
+        /// <summary>
+        /// 사용가능한 비중을 구하는 메서드
+        /// </summary>
+        /// <param name="lists">전체 Agreement 목록</param>
+        /// <returns>현재 설정된 비중 외 메서드</returns>
+        private int GetMaxVaule(List<AgreementDb> lists)
         {
-            if (model == null)
+            int defalutVaule = 100;
+            if (lists != null && lists.Count != 0)
             {
-                errorMessage = "데이터가 없습니다.";
-                return;
-            }
-
-            try
-            {
-                errorMessage = string.Empty;
-                successMessage = string.Empty;
-
-                var result = await agreementRepository.UpdateAsync(model);
-                if (result)
+                foreach (var item in lists)
                 {
-                    successMessage = "직무평가 협의가 성공적으로 수정되었습니다.";
-                    StateHasChanged();
-                    await Task.Delay(1000);
-                    urlActions.MoveAgreementUserIndexPage();
-                }
-                else
-                {
-                    errorMessage = "수정에 실패했습니다.";
+                    defalutVaule = defalutVaule - item.Report_Item_Proportion;
                 }
             }
-            catch (Exception ex)
-            {
-                errorMessage = $"오류가 발생했습니다: {ex.Message}";
-            }
+
+            return defalutVaule;
         }
 
-        protected void Cancel()
+        /// <summary>
+        /// FormSelectNumber에서 비중 변경 시 호출
+        /// </summary>
+        private void HandlePeroportionChanged(int newValue)
+        {
+            model.Report_Item_Proportion = newValue;
+        }
+
+        #region + MoveUserAgreementMainPage : 직무작성 메인페이지 이동
+        public void MoveUserAgreementMainPage()
         {
             urlActions.MoveAgreementUserIndexPage();
         }
+        #endregion
+
+        #region + 직무수정 : EditUserAgreement
+        private async Task EditUserAgreement()
+        {
+            // 비중 0% 검증
+            if (model.Report_Item_Proportion == 0)
+            {
+                resultText = "직무 비중은 0 % 로 설정할 수 없습니다. 다시 설정해주세요.";
+                return;
+            }
+
+            // 최대 직무 비중 이상 설정 금지
+            model.Report_Item_Proportion = model.Report_Item_Proportion > maxperoportion
+                ? maxperoportion
+                : model.Report_Item_Proportion;
+
+            if (await agreementRepository.UpdateAsync(model))
+            {
+                resultText = "평가 수정에 성공하였습니다.";
+                StateHasChanged();
+                // 평가메인페이지 이동
+                urlActions.MoveAgreementUserIndexPage();
+            }
+            else
+            {
+                resultText = "평가 수정에 실패하였습니다.";
+            }
+        }
+        #endregion
     }
 }

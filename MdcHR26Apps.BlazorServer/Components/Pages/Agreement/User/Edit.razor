@@ -1,10 +1,10 @@
 @page "/Agreement/User/Edit/{Id:long}"
 @using MdcHR26Apps.BlazorServer.Components.Pages.Components.Form
+@using MdcHR26Apps.BlazorServer.Components.Pages.Components.Common
 
-<PageTitle>직무평가 협의 수정</PageTitle>
+<PageTitle>직무 수정</PageTitle>
 
-<h3>직무평가 협의 수정</h3>
-<hr />
+<h3>직무 수정</h3>
 
 @if (model == null)
 {
@@ -12,31 +12,25 @@
 }
 else
 {
-    <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
-        <DataAnnotationsValidator />
-
-        <FormAgreeTask agreement="@model" />
-
-        @if (!string.IsNullOrEmpty(errorMessage))
-        {
-            <div class="alert alert-danger mt-3">
-                @errorMessage
-            </div>
-        }
-
-        @if (!string.IsNullOrEmpty(successMessage))
-        {
-            <div class="alert alert-success mt-3">
-                @successMessage
-            </div>
-        }
-
-        <hr />
-        <div class="row">
-            <div class="col-md-12">
-                <button type="submit" class="btn btn-primary">저장</button>
-                <button type="button" class="btn btn-outline-secondary" @onclick="Cancel">취소</button>
-            </div>
+    <div class="row">
+        <div class="col-md-12">
+            <EditForm Model="model">
+                <FormSelectList Label="평가지표" BindValue="@model.Report_Item_Name_1" IsDisabled="true" />
+                <FormSelectList Label="평가직무" BindValue="@model.Report_Item_Name_2" IsDisabled="true" />
+                <FormSelectNumber Label="평가비중"
+                                  peroportion="@model.Report_Item_Proportion"
+                                  maxperoportion="@maxperoportion"
+                                  PeroportionChanged="HandlePeroportionChanged"
+                                  IsEdit="true" />
+                <div>
+                    <small>설정가능한 비중 : 0 % ~ @maxperoportion %</small>
+                </div>
+                <div class="input-group mb-1">
+                    <button id="editbutton" class="btn btn-primary" @onclick="EditUserAgreement">변경</button>
+                    <button id="movepageutton" class="btn btn-light" @onclick="MoveUserAgreementMainPage">목록</button>
+                </div>
+            </EditForm>
         </div>
-    </EditForm>
+    </div>
+    <DisplayResultText Comment="@resultText" />
 }

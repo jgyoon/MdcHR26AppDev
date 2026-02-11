@@ -4,15 +4,11 @@
 @using MdcHR26Apps.BlazorServer.Components.Pages.Components.Agreement.CommonView
 @using MdcHR26Apps.BlazorServer.Components.Pages.Components.Agreement.ViewPage
 
-<PageTitle>직무평가 협의</PageTitle>
+<PageTitle>직무 작성</PageTitle>
 
-<h3>직무평가 협의</h3>
+<h3>직무 작성</h3>
 
-@* 결과 메시지 표시 *@
-@if (!string.IsNullOrEmpty(resultText))
-{
-    <div class="alert alert-info">@resultText</div>
-}
+<DisplayResultText Comment="@resultText" />
 
 @if (processDb == null)
 {
