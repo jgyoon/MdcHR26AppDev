@@ -37,9 +37,15 @@ public static class MdcHR26AppsAddExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        // 연결 문자열
-        var connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException("연결 문자열 'DefaultConnection'을 찾을 수 없습니다.");
+        // 연결 문자열 (환경에 따라 자동 선택)
+        var isProductionStr = configuration["AppSettings:IsProduction"];
+        var isProduction = !string.IsNullOrEmpty(isProductionStr) && int.Parse(isProductionStr) == 1;
+        var connectionStringName = isProduction
+            ? "MdcHR26AppsContainerConnection"
+            : "DefaultConnection";
+
+        var connectionString = configuration.GetConnectionString(connectionStringName)
+            ?? throw new InvalidOperationException($"연결 문자열 '{connectionStringName}'을 찾을 수 없습니다.");
 
         // === EF Core DbContext ===
         services.AddDbContext<MdcHR26AppsAddDbContext>(options =>

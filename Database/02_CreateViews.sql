@@ -283,7 +283,7 @@ FROM
 	INNER JOIN [dbo].[UserDb] U ON A.Uid = U.Uid
 	LEFT JOIN [dbo].[EDepartmentDb] ED ON U.EDepartId = ED.EDepartId
 	LEFT JOIN [dbo].[ERankDb] ER ON U.ERankId = ER.ERankId
-
+GO  
 PRINT 'v_AgreementDB 뷰 생성 완료';
 GO    
 
@@ -309,7 +309,7 @@ FROM
 	INNER JOIN [dbo].[UserDb] U ON A.Uid = U.Uid
 	LEFT JOIN [dbo].[EDepartmentDb] ED ON U.EDepartId = ED.EDepartId
 	LEFT JOIN [dbo].[ERankDb] ER ON U.ERankId = ER.ERankId
-
+GO  
 PRINT 'v_SubAgreementDB 뷰 생성 완료';
 GO      
 

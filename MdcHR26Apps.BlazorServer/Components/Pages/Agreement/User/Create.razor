@@ -28,11 +28,8 @@ else
                                    list="@list2" />
                     <hr />
                     <FormSelectNumber Label="평가비중"
-                                     Min="1"
-                                     Max="@maxperoportion"
-                                     Step="1"
-                                     Unit="%"
-                                     @bind-SelectedValue="peroportion" />
+                                     maxperoportion="@maxperoportion"
+                                     @bind-peroportion="peroportion" />
 
                     @if (maxperoportion == 0)
                     {

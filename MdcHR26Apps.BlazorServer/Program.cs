@@ -2,8 +2,17 @@ using MdcHR26Apps.BlazorServer.Components;
 using MdcHR26Apps.BlazorServer.Data;
 using MdcHR26Apps.BlazorServer.Utils;
 using MdcHR26Apps.Models;
+using Microsoft.AspNetCore.DataProtection;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// ========================================
+// Data Protection (persist keys for containers)
+// ========================================
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo("/var/dpkeys"))
+    .SetApplicationName("MdcHR26Apps");
 
 // ========================================
 // 1. Blazor Server 서비스 등록
@@ -45,6 +54,9 @@ builder.Services.AddTransient<ExcelManage>();
 // ========================================
 // 3. Model 계층 DI 등록 (Phase 2 연동)
 // ========================================
+// AppSettings:IsProduction 값에 따라 자동으로 연결 문자열 선택
+// 0 = 개발환경 (DefaultConnection - LocalDB)
+// 1 = 프로덕션 환경 (MdcHR26AppsContainerConnection - Docker)
 builder.Services.AddMdcHR26AppsModels(builder.Configuration);
 
 // ========================================
