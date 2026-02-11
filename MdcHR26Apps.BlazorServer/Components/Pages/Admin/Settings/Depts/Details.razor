@@ -13,6 +13,17 @@ else
 {
     <div class="col-md-12">
         <button class="btn btn-outline-primary" @onclick="MoveSettingManagePage">목록</button>
+        <button class="btn btn-outline-secondary" @onclick="MoveEditPage">수정</button>
+        @if (isPossible)
+        {
+            <button class="btn btn-outline-danger" @onclick="MoveDeletePage">삭제</button>
+        }
+        else
+        {
+            <span title="@tooltipMessage" class="d-inline-block ms-2">
+                <button class="btn btn-outline-danger" disabled style="pointer-events: none;">삭제</button>
+            </span>
+        }        
     </div>
     <hr />
     <div class="row">
@@ -49,5 +60,5 @@ else if (!memberList.Any())
 }
 else
 {
-    <MemberListTable memberList="@memberList"></MemberListTable>
+    <MemberListTable Members="@memberList"></MemberListTable>
 }

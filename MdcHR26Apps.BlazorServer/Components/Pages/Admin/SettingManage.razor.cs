@@ -1,6 +1,7 @@
 using MdcHR26Apps.BlazorServer.Data;
 using MdcHR26Apps.Models.Department;
 using MdcHR26Apps.Models.Rank;
+using MdcHR26Apps.Models.HRSetting;
 using Microsoft.AspNetCore.Components;
 
 namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin;
@@ -8,6 +9,7 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin;
 public partial class SettingManage(
     IEDepartmentRepository eDepartmentRepository,
     IERankRepository eRankRepository,
+    IHRSettingRepository hRSettingRepository,
     LoginStatusService loginStatusService,
     UrlActions urlActions)
 {
@@ -19,6 +21,9 @@ public partial class SettingManage(
 
     // 직급 관리
     private List<ERankDb> rankLists { get; set; } = new List<ERankDb>();
+
+    // 시스템 설정
+    private HRSettingDb? currentSetting { get; set; } = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -34,6 +39,16 @@ public partial class SettingManage(
         var ranks = await eRankRepository.GetByAllAsync();
         deptLists = depts.ToList();
         rankLists = ranks.ToList();
+
+        // 시스템 설정 조회
+        var setting = await hRSettingRepository.GetCurrentAsync();
+        if (setting == null)
+        {
+            // 초기 레코드 생성
+            await hRSettingRepository.InitializeAsync();
+            setting = await hRSettingRepository.GetCurrentAsync();
+        }
+        currentSetting = setting;
     }
 
     #region Tab Management
@@ -93,6 +108,30 @@ public partial class SettingManage(
     private string GetStatusText(bool isActive)
     {
         return isActive ? "사용중" : "사용안함";
+    }
+    #endregion
+
+    #region System Setting Methods
+    /// <summary>
+    /// 평가 오픈 토글
+    /// </summary>
+    private async Task UpdateEvaluationOpen()
+    {
+        if (currentSetting == null) return;
+
+        await hRSettingRepository.UpdateAsync(currentSetting);
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// 평가 수정 토글
+    /// </summary>
+    private async Task UpdateEditOpen()
+    {
+        if (currentSetting == null) return;
+
+        await hRSettingRepository.UpdateAsync(currentSetting);
+        StateHasChanged();
     }
     #endregion
 }

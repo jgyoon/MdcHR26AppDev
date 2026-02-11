@@ -1,4 +1,5 @@
 using MdcHR26Apps.BlazorServer.Data;
+using MdcHR26Apps.BlazorServer.Utils;
 using MdcHR26Apps.Models.Department;
 using Microsoft.AspNetCore.Components;
 
@@ -7,17 +8,15 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin.Settings.Depts;
 public partial class Delete(
     IEDepartmentRepository eDepartmentRepository,
     LoginStatusService loginStatusService,
-    UrlActions urlActions)
+    UrlActions urlActions,
+    UserUtils utils)
 {
     #region Parameters
     [Parameter]
     public Int64 Id { get; set; }
     #endregion
 
-    // 부서관리
     private EDepartmentDb model { get; set; } = new EDepartmentDb();
-
-    // 기타
     private string resultText { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -27,12 +26,16 @@ public partial class Delete(
         await base.OnInitializedAsync();
     }
 
-    private async Task SetData(Int64 Id)
+    private async Task SetData(Int64 id)
     {
-        var result = await eDepartmentRepository.GetByIdAsync(Id);
+        var result = await eDepartmentRepository.GetByIdAsync(id);
         if (result != null)
         {
             model = result;
+        }
+        else
+        {
+            resultText = "부서 정보를 찾을 수 없습니다.";
         }
     }
 
@@ -45,6 +48,37 @@ public partial class Delete(
             StateHasChanged();
             urlActions.MoveMainPage();
         }
+    }
+    #endregion
+
+    #region Delete Department
+    private async Task DeleteDepartment()
+    {
+        var result = await eDepartmentRepository.DeleteAsync(Id);
+
+        if (result > 0)
+        {
+            resultText = "부서 삭제 성공";
+            StateHasChanged();
+            await Task.Delay(1000);
+            urlActions.MoveSettingManagePage();
+        }
+        else
+        {
+            resultText = "부서 삭제 실패 (사용 중인 부서일 수 있습니다)";
+        }
+    }
+    #endregion
+
+    #region Page Navigation
+    private void MoveSettingManagePage()
+    {
+        urlActions.MoveSettingManagePage();
+    }
+
+    private void MoveDetailsPage()
+    {
+        urlActions.MoveDeptDetailsPage(Id);
     }
     #endregion
 }

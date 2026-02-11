@@ -1,11 +1,60 @@
 @page "/Admin/Settings/Depts/Edit/{Id:long}"
 @rendermode InteractiveServer
+@using MdcHR26Apps.BlazorServer.Components.Pages.Components.Common
 
 <PageTitle>부서 수정</PageTitle>
 
 <h3>부서 수정</h3>
+<hr />
 
-<h3>Edit</h3>
+<DisplayResultText Comment="@resultText" />
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <EditForm Model="model" OnValidSubmit="UpdateDepartment">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <label for="EDepartmentNo" class="form-label mb-1">부서번호</label>
+                <div class="input-group mb-1">
+                    <InputNumber id="EDepartmentNo" class="form-control"
+                                 @bind-Value="@model.EDepartmentNo" />
+                </div>
+
+                <label for="EDepartmentName" class="form-label mb-1">부서명</label>
+                <div class="input-group mb-1">
+                    <InputText id="EDepartmentName" class="form-control"
+                               @bind-Value="@model.EDepartmentName" />
+                </div>
+
+                <label for="ActivateStatus" class="form-label mb-1">사용여부</label>
+                <div class="input-group mb-1">
+                    <InputCheckbox id="ActivateStatus" @bind-Value="@model.ActivateStatus" />
+                </div>
+
+                <label for="Remarks" class="form-label mb-1">비고</label>
+                <div class="input-group mb-1">
+                    <InputTextArea id="Remarks" class="form-control"
+                                   rows="3"
+                                   @bind-Value="@model.Remarks" />
+                </div>
+
+                <hr />
+                <div class="input-group mb-1">
+                    <button type="submit" class="btn btn-primary">수정</button>
+                    <button type="button" class="btn btn-light"
+                            @onclick="MoveDetailsPage">취소</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
 
 @code {
 

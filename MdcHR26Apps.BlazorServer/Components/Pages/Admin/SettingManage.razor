@@ -22,6 +22,13 @@
             직급 관리
         </button>
     </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link @(activeTab == "system" ? "active" : "")"
+                type="button"
+                @onclick='() => SetActiveTab("system")'>
+            시스템 설정
+        </button>
+    </li>
 </ul>
 
 <!-- 탭 컨텐츠 -->
@@ -125,6 +132,59 @@
                         }
                     </tbody>
                 </table>
+            }
+        </div>
+    }
+    else if (activeTab == "system")
+    {
+        <!-- 시스템 설정 영역 -->
+        <div class="tab-pane active">
+            <h5>시스템 설정</h5>
+            <hr />
+
+            @if (currentSetting == null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else
+            {
+                <!-- 평가 오픈 설정 -->
+                <div class="mb-4">
+                    <h6>평가 오픈</h6>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="evaluationOpenSwitch"
+                               @bind="currentSetting.Evaluation_Open"
+                               @bind:after="UpdateEvaluationOpen" />
+                        <label class="form-check-label" for="evaluationOpenSwitch">
+                            @(currentSetting.Evaluation_Open ? "평가 오픈 중" : "평가 종료")
+                        </label>
+                    </div>
+                    <small class="text-muted">
+                        평가 오픈 여부를 관리합니다. 오픈 시 일반 사용자가 평가를 입력할 수 있습니다.
+                    </small>
+                </div>
+
+                <hr />
+
+                <!-- 평가 수정 설정 -->
+                <div class="mb-4">
+                    <h6>평가 수정</h6>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="editOpenSwitch"
+                               @bind="currentSetting.Edit_Open"
+                               @bind:after="UpdateEditOpen" />
+                        <label class="form-check-label" for="editOpenSwitch">
+                            @(currentSetting.Edit_Open ? "수정 가능" : "수정 불가")
+                        </label>
+                    </div>
+                    <small class="text-muted">
+                        SubAgree 페이지의 팀장 초기화 등 수정 기능 활성화 여부를 관리합니다.
+                    </small>
+                </div>
             }
         </div>
     }

@@ -16,6 +16,7 @@ public class v_MemberListDB
     public string UserName { get; set; } = string.Empty;
     public string ENumber { get; set; } = string.Empty;
     public string ERank { get; set; } = string.Empty;
+    public Int64 ERankId { get; set; }
     public Int64 EDepartId { get; set; }
     public string EDepartmentName { get; set; } = string.Empty;
     public bool ActivateStatus { get; set; }

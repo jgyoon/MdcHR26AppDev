@@ -10,6 +10,7 @@ public interface IEDepartmentRepository : IDisposable
     // === 기본 CRUD ===
     Task<Int64> AddAsync(EDepartmentDb department);
     Task<IEnumerable<EDepartmentDb>> GetByAllAsync();
+    Task<IEnumerable<EDepartmentDb>> GetByAllWithActivateStatusAsync();    
     Task<EDepartmentDb?> GetByIdAsync(long departmentId);
     Task<int> UpdateAsync(EDepartmentDb department);
     Task<int> DeleteAsync(long departmentId);
@@ -30,4 +31,9 @@ public interface IEDepartmentRepository : IDisposable
     /// 부서명으로 부서 ID 조회
     /// </summary>
     Task<long> GetIdByNameAsync(string name);
+
+    /// <summary>
+    /// 부서번호로 부서 조회 (중복 체크용)
+    /// </summary>
+    Task<EDepartmentDb?> GetByDepartmentNoAsync(int departmentNo);
 }

@@ -582,6 +582,21 @@ CREATE TABLE [dbo].[EvaluationLists]
 );
 GO
 
+-- [13] HRSetting (독립적인 마스터 데이터)
+PRINT '  - HRSetting 생성';
+CREATE TABLE [dbo].[HRSetting]
+(
+    -- Primary Key
+    -- 자동 ID생성 
+    -- [01] HRSetting id
+    [HRSid] BIGINT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    -- [02] 평가오픈
+    [Evaluation_Open] BIT NOT NULL DEFAULT 0,
+    -- [03] 평가수정
+    [Edit_Open] BIT NOT NULL DEFAULT 0
+);
+GO
+
 PRINT '독립 테이블들 생성 완료';
 GO
 

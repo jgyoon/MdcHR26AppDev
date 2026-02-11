@@ -1,11 +1,38 @@
 @page "/Admin/Settings/Depts/Delete/{Id:long}"
 @rendermode InteractiveServer
+@using MdcHR26Apps.BlazorServer.Components.Pages.Components.Common
+@using MdcHR26Apps.BlazorServer.Utils
 
 <PageTitle>부서 삭제</PageTitle>
 
 <h3>부서 삭제</h3>
+<hr />
 
-<h3>Delete</h3>
+<DisplayResultText Comment="@resultText" />
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item">부서번호 : @model.EDepartmentNo</li>
+                <li class="list-group-item">부서명 : @model.EDepartmentName</li>
+                <li class="list-group-item">사용여부 : @utils.isuse(model.ActivateStatus)</li>
+                <li class="list-group-item">비고 : @utils.GetRemarks(model.Remarks)</li>
+            </ul>
+        </div>
+        <hr />
+        <div class="col-md-12">
+            <button class="btn btn-outline-primary" @onclick="MoveSettingManagePage">목록</button>
+            <button class="btn btn-outline-info" @onclick="MoveDetailsPage">상세</button>
+            <button class="btn btn-danger" @onclick="DeleteDepartment">삭제</button>
+        </div>
+    </div>
+}
 
 @code {
 

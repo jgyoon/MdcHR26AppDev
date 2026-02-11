@@ -24,6 +24,11 @@ public partial class Details(
     // 멤버리스트View
     private List<v_MemberListDB> memberList { get; set; } = new List<v_MemberListDB>();
 
+    // 가능여부 체크(삭제)
+    private bool isPossible {get; set;} = false;
+    // Tooltip 메시지
+    private string tooltipMessage {get; set;} = string.Empty;
+
     protected override async Task OnInitializedAsync()
     {
         await CheckLogined();
@@ -44,6 +49,14 @@ public partial class Details(
             var members = await vMemberListRepository.GetByDepartmentAsync(model.EDepartId);
             memberList = members.ToList();
         }
+
+        // 멤버가 없으면 삭제 가능
+        if (memberList.Count == 0 )
+        {
+            isPossible = true;
+        }
+
+        tooltipMessage = "사용 중인 구성원이 있습니다.";
     }
 
     #region Login Check
@@ -62,6 +75,16 @@ public partial class Details(
     private void MoveSettingManagePage()
     {
         urlActions.MoveSettingManagePage();
+    }
+
+    private void MoveEditPage()
+    {
+        urlActions.MoveDeptEditPage(Id);
+    }
+
+    private void MoveDeletePage()
+    {
+        urlActions.MoveDeptDeletePage(Id);
     }
     #endregion
 }

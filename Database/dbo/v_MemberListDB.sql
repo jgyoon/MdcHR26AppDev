@@ -4,6 +4,7 @@ AS SELECT
     U.UserId,
     U.UserName,
     U.ENumber,
+    R.ERankId,
     R.ERankName AS ERank,
     D.EDepartId,
     D.EDepartmentName,

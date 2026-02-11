@@ -10,6 +10,7 @@ public interface IERankRepository : IDisposable
     // === 기본 CRUD ===
     Task<Int64> AddAsync(ERankDb rank);
     Task<IEnumerable<ERankDb>> GetByAllAsync();
+    Task<IEnumerable<ERankDb>> GetByAllWithActivateStatusAsync();
     Task<ERankDb?> GetByIdAsync(long rankId);
     Task<int> UpdateAsync(ERankDb rank);
     Task<int> DeleteAsync(long rankId);
@@ -25,4 +26,9 @@ public interface IERankRepository : IDisposable
     /// 드롭다운용 직급 목록
     /// </summary>
     Task<IEnumerable<SelectListModel>> GetSelectListAsync();
+
+    /// <summary>
+    /// 직급번호로 직급 조회 (중복 체크용)
+    /// </summary>
+    Task<ERankDb?> GetByRankNoAsync(int rankNo);
 }

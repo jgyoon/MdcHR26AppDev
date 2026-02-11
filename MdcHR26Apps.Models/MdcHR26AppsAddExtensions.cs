@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using MdcHR26Apps.Models.User;
 using MdcHR26Apps.Models.Department;
 using MdcHR26Apps.Models.Rank;
+using MdcHR26Apps.Models.HRSetting;
 using MdcHR26Apps.Models.EvaluationProcess;
 using MdcHR26Apps.Models.EvaluationReport;
 using MdcHR26Apps.Models.Result;
@@ -68,6 +69,12 @@ public static class MdcHR26AppsAddExtensions
         {
             var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
             return new ERankRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<IHRSettingRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new HRSettingRepository(connectionString, loggerFactory);
         });
 
         // === Phase 2-2: 평가 핵심 Repository 등록 (4개) ===

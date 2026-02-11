@@ -82,10 +82,10 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin.Users
             }
 
             // 전체 직급/부서 목록 조회 (드롭다운용)
-            var ranks = await eRankRepository.GetByAllAsync();
+            var ranks = await eRankRepository.GetByAllWithActivateStatusAsync();
             eRankDbList = ranks.ToList();
 
-            var depts = await eDepartmentRepository.GetByAllAsync();
+            var depts = await eDepartmentRepository.GetByAllWithActivateStatusAsync();
             eDepartmentDbList = depts.ToList();
 
             // 현재 부서명/직급명 설정

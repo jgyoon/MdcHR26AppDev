@@ -21,7 +21,7 @@ public class UserUtils(
     /// </summary>
     public async Task<List<string>> GetDeptListAsync()
     {
-        var depts = await _departmentRepository.GetActiveAsync();
+        var depts = await _departmentRepository.GetByAllWithActivateStatusAsync();
         return depts
             .OrderBy(d => d.EDepartmentNo)
             .Select(d => d.EDepartmentName)
@@ -34,7 +34,7 @@ public class UserUtils(
     /// </summary>
     public async Task<List<string>> GetRankListAsync()
     {
-        var ranks = await _rankRepository.GetActiveAsync();
+        var ranks = await _rankRepository.GetByAllWithActivateStatusAsync();
         return ranks
             .OrderBy(r => r.ERankNo)
             .Select(r => r.ERankName)
