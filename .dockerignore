@@ -1,0 +1,34 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# Development files
+.git/
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Documentation
+works/
+.claude/
+.sync/
+*.md
+!README.md
+
+# Node modules
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+**/temp/
+**/*.tmp
+
+# Test files
+**/tests/
+
+# Database scripts (배포 시 별도 실행)
+Database/

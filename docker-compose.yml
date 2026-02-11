@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # SQL Server 2022
+  mssql_server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mdchr26_mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YOUR_SA_PASSWORD  # 실제 배포 시 변경 필수!
+      - MSSQL_PID=Developer
+      - TZ=Asia/Seoul
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    networks:
+      - mdchr26_network
+    restart: unless-stopped
+
+  # Blazor Server App
+  blazor_app:
+    build:
+      context: .
+      dockerfile: MdcHR26Apps.BlazorServer/Dockerfile
+    container_name: mdchr26_blazor
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - TZ=Asia/Seoul
+      # appsettings.Production.json의 연결 문자열 재정의 (보안)
+      - ConnectionStrings__MdcHR26AppsContainerConnection=Data Source=mssql_server;Database=MdcHR2026;User ID=sa;Password=YOUR_SA_PASSWORD;TrustServerCertificate=true;Connect Timeout=30;
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mssql_server
+    networks:
+      - mdchr26_network
+    restart: unless-stopped
+
+volumes:
+  mssql_data:
+
+networks:
+  mdchr26_network:
+    driver: bridge
