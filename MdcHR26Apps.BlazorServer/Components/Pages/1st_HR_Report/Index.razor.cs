@@ -114,7 +114,7 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages._1st_HR_Report
             if (sessionUserId > 0)
             {
                 #region + processDb
-                processDb = await processDbRepository.GetByUidAsync(sessionUserId);
+                processDb = await processDbRepository.GetByUidAsync(sessionUserId) ?? new ProcessDb();
                 // 직무평가 합의
                 IsRequest = processDb.Is_Request;
                 // 직무평가합의 여부
@@ -138,7 +138,7 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages._1st_HR_Report
 
                 #region + TotalReport관련
                 // 사용자정보
-                userDb = await userDbRepository.GetByIdAsync(sessionUserId);
+                userDb = await userDbRepository.GetByIdAsync(sessionUserId) ?? new UserDb();
                 var totalReportList = await v_TotalReportListDBRepository.GetByUserIdAsync(userDb.Uid);
                 totalReportViewModel = totalReportList.FirstOrDefault() ?? new v_TotalReportListDB();
                 #endregion

@@ -64,9 +64,9 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.SubAgreement.TeamLeader
         }
         private async Task SetData(long id)
         {
-            processDb = await processDbRepository.GetByIdAsync(id);
-            model = await subAgreementDbRepository.GetByUidAllAsync(processDb.Uid);
-            var userDb = await userDbRepository.GetByIdAsync(processDb.Uid);
+            processDb = await processDbRepository.GetByIdAsync(id) ?? new ProcessDb();
+            model = await subAgreementDbRepository.GetByUidAllAsync(processDb.Uid) ?? new List<SubAgreementDb>();
+            var userDb = await userDbRepository.GetByIdAsync(processDb.Uid) ?? new UserDb();
             userName = userDb.UserName;
 
             Old_Agreement_Comment =

@@ -63,12 +63,12 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.SubAgreement.TeamLeader
 
         private async Task SetData(long id)
         {
-            subAgreementmodel = await subAgreementDbRepository.GetByIdAsync(id);
+            subAgreementmodel = await subAgreementDbRepository.GetByIdAsync(id) ?? new SubAgreementDb();
             long taskListNumber = subAgreementmodel.Task_Number != 0 ? subAgreementmodel.Task_Number : id;
-            model = await tasksDbRepository.GetByListNoAllAsync(taskListNumber);
+            model = await tasksDbRepository.GetByListNoAllAsync(taskListNumber) ?? new List<TasksDb>();
             if (subAgreementmodel != null)
             {
-                processDb = await processDbRepository.GetByUidAsync(subAgreementmodel.Uid);
+                processDb = await processDbRepository.GetByUidAsync(subAgreementmodel.Uid) ?? new ProcessDb();
             }
         }
 

@@ -123,12 +123,12 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages._3rd_HR_Report
 
         private async Task SetData(long Id)
         {
-            processDb = await processDbRepository.GetByIdAsync(Id);
-            model = await reportDbRepository.GetByUidAllAsync(processDb.Uid);
+            processDb = await processDbRepository.GetByIdAsync(Id) ?? new ProcessDb();
+            model = await reportDbRepository.GetByUidAllAsync(processDb.Uid) ?? new List<ReportDb>();
             Is_Director_Submission = processDb.Is_Director_Submission;
 
             // 26년도: ProcessDb에 UserName 없음 -> UserDb에서 가져오기
-            userDb = await userDbRepository.GetByIdAsync(processDb.Uid);
+            userDb = await userDbRepository.GetByIdAsync(processDb.Uid) ?? new UserDb();
             userName = userDb.UserName;
 
             //IsDirector_EvaluationComplete = GetIsDirector_EvaluationComplete(model);

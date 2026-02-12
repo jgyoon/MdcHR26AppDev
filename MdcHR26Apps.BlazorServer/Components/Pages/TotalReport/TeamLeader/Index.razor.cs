@@ -31,8 +31,8 @@ public partial class Index(
         string? sessionUserId = loginStatusService.LoginStatus.LoginUserId;
         if (!String.IsNullOrEmpty(sessionUserId))
         {
-            UserDb user = await userDbRepository.GetByUserIdAsync(sessionUserId);
-            processDbList = await processDbRepository.GetByTeamLeaderIdWithTeamLeaderSubmissionAsync(user.Uid);
+            UserDb user = await userDbRepository.GetByUserIdAsync(sessionUserId) ?? new UserDb();
+            processDbList = await processDbRepository.GetByTeamLeaderIdWithTeamLeaderSubmissionAsync(user.Uid) ?? new List<ProcessDb>();
         }
     }
 

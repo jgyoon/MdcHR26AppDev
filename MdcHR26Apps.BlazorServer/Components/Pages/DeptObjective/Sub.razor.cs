@@ -59,8 +59,8 @@ public partial class Sub
 
                 if (!String.IsNullOrEmpty(userId) && deptId > 0)
                 {
-                    memberModel = await vMemberListDbRepository.GetByUserIdAsync(userId);
-                    objectList = (await vDeptObjectiveListDbRepository.GetByDepartmentAsync(deptId)).ToList();
+                    memberModel = await vMemberListDbRepository.GetByUserIdAsync(userId) ?? new v_MemberListDB();
+                    objectList = (await vDeptObjectiveListDbRepository.GetByDepartmentAsync(deptId) ?? new List<v_DeptObjectiveListDb>()).ToList();
                 }
 
                 if (memberModel.Uid > 0)

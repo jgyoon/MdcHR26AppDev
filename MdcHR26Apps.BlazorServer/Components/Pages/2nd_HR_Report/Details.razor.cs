@@ -104,10 +104,10 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages._2nd_HR_Report
 
         private async Task SetData(Int64 Id)
         {
-            processDb = await processDbRepository.GetByIdAsync(Id);
-            model = await reportDbRepository.GetByUidAllAsync(processDb.Uid);
+            processDb = await processDbRepository.GetByIdAsync(Id) ?? new ProcessDb();
+            model = await reportDbRepository.GetByUidAllAsync(processDb.Uid) ?? new List<ReportDb>();
             Is_TeamLeader_Submission = processDb.Is_Teamleader_Submission;
-            userDb = await userDbRepository.GetByIdAsync(processDb.Uid);
+            userDb = await userDbRepository.GetByIdAsync(processDb.Uid) ?? new UserDb();
             userName = userDb.UserName;
             //IsTeamLeader_EvaluationComplete = GetIsTeamLeader_EvaluationComplete(model);
             Sub_IsTeamLeader_EvaluationComplete = GetIsTeamLeader_EvaluationComplete(model);

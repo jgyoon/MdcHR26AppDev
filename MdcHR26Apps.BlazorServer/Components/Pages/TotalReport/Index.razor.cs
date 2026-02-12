@@ -70,7 +70,7 @@ public partial class Index(
         if (!String.IsNullOrEmpty(sessionUserId))
         {
             // 사용자 정보 먼저 조회
-            userDb = await userDbRepository.GetByUserIdAsync(sessionUserId);
+            userDb = await userDbRepository.GetByUserIdAsync(sessionUserId) ?? new UserDb();
 
             #region + ProcessDb 관련
             processDb = await processDbRepository.GetByUidAsync(userDb.Uid) ?? new ProcessDb();

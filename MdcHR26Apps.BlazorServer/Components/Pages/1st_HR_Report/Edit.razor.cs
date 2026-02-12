@@ -86,9 +86,9 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages._1st_HR_Report
 
         private async Task SetData(long Id)
         {
-            model = await reportDbRepository.GetByIdAsync(Id);
+            model = await reportDbRepository.GetByIdAsync(Id) ?? new ReportDb();
 
-            tasklist = await tasksDbRepository.GetByListNoAllAsync(model.Task_Number);
+            tasklist = await tasksDbRepository.GetByListNoAllAsync(model.Task_Number) ?? new List<TasksDb>();
             if (tasklist.Count > 0)
             {
                 CountTask();

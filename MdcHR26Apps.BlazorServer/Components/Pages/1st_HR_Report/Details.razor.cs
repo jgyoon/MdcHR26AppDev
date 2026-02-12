@@ -35,7 +35,7 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages._1st_HR_Report
 
         private async Task SetData(long Id)
         {
-            model = await reportDbRepository.GetByIdAsync(Id);
+            model = await reportDbRepository.GetByIdAsync(Id) ?? new ReportDb();
         }
 
         #region + 로그인 여부 확인

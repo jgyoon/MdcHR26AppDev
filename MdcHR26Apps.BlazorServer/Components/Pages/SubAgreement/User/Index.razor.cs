@@ -131,7 +131,7 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.SubAgreement.User
             long sessionUid = loginStatusService.LoginStatus.LoginUid;
             if (sessionUid > 0)
             {
-                processDb = await processDbRepository.GetByUidAsync(sessionUid);
+                processDb = await processDbRepository.GetByUidAsync(sessionUid) ?? new ProcessDb();
                 // 직무평가합의
                 IsRequest = processDb.Is_Request;
                 // 직무평가합의 여부

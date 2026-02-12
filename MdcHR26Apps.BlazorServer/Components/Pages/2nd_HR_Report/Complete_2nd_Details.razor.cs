@@ -87,12 +87,12 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages._2nd_HR_Report
 
         private async Task SetData(Int64 id)
         {
-            processDb = await processDbRepository.GetByIdAsync(id);
-            model = await reportDbRepository.GetByUidAllAsync(processDb.Uid);
-            userDb = await userDbRepository.GetByIdAsync(processDb.Uid);
+            processDb = await processDbRepository.GetByIdAsync(id) ?? new ProcessDb();
+            model = await reportDbRepository.GetByUidAllAsync(processDb.Uid) ?? new List<ReportDb>();
+            userDb = await userDbRepository.GetByIdAsync(processDb.Uid) ?? new UserDb();
             userName = userDb.UserName;
 
-            v_ReportTaskLists = await v_ReportTaskListDBRepository.GetByUidAllAsync(processDb.Uid);
+            v_ReportTaskLists = await v_ReportTaskListDBRepository.GetByUidAllAsync(processDb.Uid) ?? new List<v_ReportTaskListDB>();
 
             #region + TotalReport 관련
             var totalReportViewList = await v_TotalReportListDBRepository.GetByUserIdAsync(userDb.Uid);

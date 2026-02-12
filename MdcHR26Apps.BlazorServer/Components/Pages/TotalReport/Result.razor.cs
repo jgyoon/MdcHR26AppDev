@@ -55,7 +55,7 @@ public partial class Result(
         if (Uid > 0)
         {
             #region + ProcessDb 관련
-            userDb = await userDbRepository.GetByIdAsync(Uid);
+            userDb = await userDbRepository.GetByIdAsync(Uid) ?? new UserDb();
             processDb = await processDbRepository.GetByUidAsync(Uid) ?? new ProcessDb();
 
             CompleteStatus = processDb.Is_Director_Submission;

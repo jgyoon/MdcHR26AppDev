@@ -93,7 +93,7 @@ public partial class DirectorReportListView
     #region + 평가취소 : CancelAction
     private async Task CancelAction(Int64 Pid)
     {
-        processDb = await processDbRepository.GetByIdAsync(Pid);
+        processDb = await processDbRepository.GetByIdAsync(Pid) ?? new ProcessDb();
 
         if (processDb.Pid != 0)
         {
