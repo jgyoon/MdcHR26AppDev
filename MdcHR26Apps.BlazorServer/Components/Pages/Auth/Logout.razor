@@ -2,6 +2,7 @@
 @inject LoginStatusService LoginStatusService
 @inject NavigationManager NavigationManager
 @inject UrlActions UrlActions
+@inject AppStateService AppState
 
 <PageTitle>로그아웃</PageTitle>
 
@@ -20,6 +21,10 @@
             isdeptobjwriter: false,
             department: string.Empty
         );
+
+        // HRSetting 초기화
+        AppState.SetEvaluationOpen(false);
+        AppState.SetEditOpen(false);
 
         // 로그인 페이지로 리다이렉트 (forceLoad로 세션 완전 초기화)
         NavigationManager.NavigateTo("/auth/login", forceLoad: true);

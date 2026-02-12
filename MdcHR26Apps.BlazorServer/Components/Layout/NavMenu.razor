@@ -72,7 +72,7 @@
                     </NavLink>
                 </div>
                 @*평가단계에서 오픈*@
-                @if (AppState.GetIsOpen())
+                @if (AppState.GetEvaluationOpen())
                 {
                     <div class="nav-item px-3">
                         <NavLink class="nav-link" href="/1st_hr_report">
@@ -117,7 +117,7 @@
                         </NavLink>
                     </div>
                     @*평가단계에서 오픈*@
-                    @if (AppState.GetIsOpen())
+                    @if (AppState.GetEvaluationOpen())
                     {
                         <div class="nav-item px-3">
                             <NavLink class="nav-link" href="/2nd_hr_report">
@@ -140,7 +140,7 @@
             @if (LoginStatus.IsloginAndIsDirectorCheck())
             {
                 @*평가단계에서 오픈*@
-                @if (AppState.GetIsOpen())
+                @if (AppState.GetEvaluationOpen())
                 {
                     <div class="nav-item px-3">
                         <NavLink class="nav-link" href="/3rd_hr_report">
@@ -175,6 +175,7 @@
 
 @code {
     private bool collapseNavMenu = true;
+    private bool isEvaluationOpen = false;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -221,6 +222,7 @@
 
     public void Dispose()
     {
+        AppState.OnChange -= StateHasChanged;
         LoginStatus.OnChange -= StateHasChanged;
     }
 }

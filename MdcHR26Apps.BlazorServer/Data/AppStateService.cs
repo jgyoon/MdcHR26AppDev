@@ -5,15 +5,12 @@ public class AppStateService(IConfiguration configuration)
     /// Primary Constructor 사용 (C# 13)
     private readonly IConfiguration _configuration = configuration;
 
+    public bool evaluationOpen { get; set; } = false;
+    public bool editOpen { get; set; } = false;
+
     // 상태값이 변화됨을 알림
     public event Action? OnChange;
     private void AppStateChanged() => OnChange?.Invoke();
-
-    public bool GetIsOpen()
-    {
-        var isOpen = _configuration.GetValue<int>("AppSettings:IsOpen");
-        return isOpen == 1;
-    }
 
     public string TruncateText(string? text, int maxLength)
     {
@@ -48,6 +45,31 @@ public class AppStateService(IConfiguration configuration)
     public void AppStateInital()
     {
         IsDeleteModalShow = false;
+        AppStateChanged();
+    }
+    #endregion
+
+    #region + 평가 상태관련(HRSetting)
+    public bool GetEvaluationOpen()
+    {
+        return evaluationOpen;
+    }
+
+    public bool GetEditOpen()
+    {
+        return editOpen;
+    }
+
+
+    public void SetEvaluationOpen(bool isEvaluationOpen)
+    {
+        evaluationOpen = isEvaluationOpen;
+        AppStateChanged();
+    }
+
+    public void SetEditOpen(bool isEditOpen)
+    {
+        editOpen = isEditOpen;
         AppStateChanged();
     }
     #endregion

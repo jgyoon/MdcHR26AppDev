@@ -1,11 +1,14 @@
 @page "/auth/login"
 @using MdcHR26Apps.Models.User
 @using MdcHR26Apps.Models.Views.v_MemberListDB
+@using MdcHR26Apps.Models.HRSetting
 @inject IUserRepository UserRepository
 @inject Iv_MemberListRepository MemberListRepository
 @inject LoginStatusService LoginStatusService
 @inject NavigationManager NavigationManager
 @inject UrlActions UrlActions
+@inject IHRSettingRepository iHRSettingRepository
+@inject AppStateService AppState
 
 <PageTitle>로그인페이지</PageTitle>
 
@@ -57,7 +60,7 @@ else
     private string? errorMessage;
     private bool isLoading = false;
     private string passwordInputType = "password";
-    private string eyeIcon = "bi bi-eye-slash";
+    private string eyeIcon = "bi bi-eye-slash";    
 
     protected override async Task OnInitializedAsync()
     {
@@ -132,7 +135,15 @@ else
                 department: member.EDepartmentName
             );
 
-            // 4. 홈으로 리다이렉트
+            // 4. HRSetting 설정
+            var setting = await iHRSettingRepository.GetCurrentAsync();
+            if (setting != null)
+            {
+                AppState.SetEvaluationOpen(setting.Evaluation_Open);
+                AppState.SetEditOpen(setting.Edit_Open);
+            }
+
+            // 5. 홈으로 리다이렉트
             UrlActions.MoveMainPage();
         }
         catch (Exception ex)
