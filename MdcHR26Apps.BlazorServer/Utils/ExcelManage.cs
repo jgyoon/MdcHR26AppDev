@@ -8,7 +8,6 @@ namespace MdcHR26Apps.BlazorServer.Utils;
 public class ExcelManage(IWebHostEnvironment environment)
 {
     private readonly IWebHostEnvironment _environment = environment;
-    private readonly string _containerName = "files";
     private readonly string _folderPath = Path.Combine(environment.WebRootPath, "files");
     private readonly ScoreUtils _scoreUtils = new();
 

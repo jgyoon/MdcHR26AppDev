@@ -15,8 +15,7 @@ public partial class CompleteDetails(
     Iv_ProcessTRListRepository processTRRepository,
     IReportRepository reportDbRepository,
     Iv_ReportTaskListRepository v_ReportTaskListDBRepository,
-    Iv_TotalReportListRepository v_TotalReportListDBRepository,
-    IUserRepository userDbRepository)
+    Iv_TotalReportListRepository v_TotalReportListDBRepository)
 {
     #region Parameters
     [Parameter]
