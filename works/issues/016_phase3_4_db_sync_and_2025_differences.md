@@ -211,6 +211,25 @@ Pages.Agreement → Components.Pages.Agreement
 - [ ] Report 작업 전 준비
 - [ ] DeptObjective 작업 전 준비
 
+### 빌드 경고 수정 - 2026-02-12
+- [x] 빌드 경고 수정 (69개 → 61개)
+  - [x] 중복 using 지시문 제거 (3개 파일)
+    - SubAgreement/User/Create.razor.cs
+    - SubAgreement/User/Delete.razor.cs
+    - SubAgreement/User/Edit.razor.cs
+  - [x] 사용하지 않는 필드 제거 (2개)
+    - NavMenu.razor: `isEvaluationOpen`
+    - ExcelManage.cs: `_containerName`
+  - [x] 사용하지 않는 매개변수 제거 (1개)
+    - TotalReport/TeamLeader/CompleteDetails.razor.cs: `userDbRepository`
+- [x] Nullable 참조 경고 작업지시서 작성
+  - [x] 작업지시서: 20260212_01_fix_nullable_reference_warnings.md
+  - [x] 4가지 수정 방법 분석 및 장단점 비교
+  - [x] 2026년 최신 트렌드 검증 (WebSearch)
+  - [x] ?? 연산자 중심으로 간소화
+  - [x] Microsoft 공식 권장사항 및 커뮤니티 합의 확인
+  - [x] 본 프로젝트 적용 방침 확정: `?? new ClassName()` 패턴 사용
+
 ---
 
 ## 26년도 DB 변경사항 전체 정리
@@ -317,6 +336,7 @@ if (affectedRows > 0)
 - [20260204_05_phase3_4_deptobjective_pages.md](../tasks/20260204_05_phase3_4_deptobjective_pages.md) - DeptObjective 페이지 (진행 필요)
 - [20260204_11_agreement_teamleader_details_fix_approval_workflow.md](../tasks/20260204_11_agreement_teamleader_details_fix_approval_workflow.md) - Agreement TeamLeader Details 재작성
 - [20260208_01_totalreport_pages.md](../tasks/20260208_01_totalreport_pages.md) - TotalReport 페이지 (완료)
+- [20260212_01_fix_nullable_reference_warnings.md](../tasks/20260212_01_fix_nullable_reference_warnings.md) - Nullable 참조 경고 수정 (진행 필요)
 
 **관련 이슈**:
 - [#009: Phase 3 Blazor Server WebApp 개발](009_phase3_webapp_development.md) - Phase 3-4 진행 중
