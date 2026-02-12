@@ -225,3 +225,6 @@ works/**/*.backup
 
 # Sync logs (project synchronization)
 .sync/
+
+# oh-my-claudecode
+.omc/
