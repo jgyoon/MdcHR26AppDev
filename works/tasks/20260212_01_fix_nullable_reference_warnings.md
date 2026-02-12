@@ -25,15 +25,15 @@
 
 ### CS8601: 가능한 null 참조 할당 (약 30개)
 - nullable 타입을 non-nullable 변수에 할당할 때 발생
-- 해결: null 체크 후 할당 또는 null-forgiving operator (`!`) 사용
+- **해결**: `??` 연산자로 기본값 제공
 
 ### CS8602: null 가능 참조에 대한 역참조 (약 30개)
 - null일 수 있는 객체의 속성/메서드 접근
-- 해결: null 조건부 연산자 (`?.`) 또는 null 체크 사용
+- **해결**: `??` 연산자로 기본값 제공 후 안전하게 접근
 
 ### CS8600: null 리터럴을 null 불가능 형식으로 변환 (1개)
 - TotalReport/TeamLeader/Index.razor.cs
-- 해결: 타입 명시 또는 null-forgiving operator 사용
+- **해결**: `??` 연산자로 기본값 제공
 
 ---
 
@@ -105,9 +105,9 @@
 
 ---
 
-## 4. 수정 방법 및 장단점 분석
+## 4. 수정 방법: ?? 연산자로 기본값 제공 (권장)
 
-### 🏆 방법 1: ?? 연산자로 기본값 제공 (가장 권장)
+### 🏆 ?? 연산자 (Null-coalescing operator)
 ```csharp
 // Before
 processDb = await processDbRepository.GetByUidAsync(sessionUid);  // CS8601 경고
@@ -125,137 +125,38 @@ processDb = await processDbRepository.GetByUidAsync(sessionUid) ?? new ProcessDb
 **단점**:
 - ⚠️ 기본값 생성 비용 (new ProcessDb())
 
-**사용 시나리오**:
-- ProcessDb, ReportDb 등 비즈니스 객체가 null이면 안 되는 경우
-- 빈 객체로 초기화해도 로직에 문제가 없는 경우
+**적용 범위**:
+- ProcessDb, ReportDb 등 모든 비즈니스 객체
+- Repository에서 반환되는 nullable 타입
+- 속성 접근이 필요한 모든 경우
 
----
+### 📌 왜 ?? 연산자를 사용하는가?
 
-### ✅ 방법 2: Null 체크 후 사용 (전통적이지만 안전)
-```csharp
-// Before
-var result = await repository.GetByIdAsync(id);
-DoSomething(result.Property);  // CS8602 경고
+**2026년 C# 베스트 프랙티스**:
+- ✅ Microsoft 공식 권장 방법
+- ✅ 런타임 안전성 보장 (NullReferenceException 방지)
+- ✅ 코드 간결성 및 가독성
+- ✅ 한 줄로 null 처리 완료
 
-// After
-var result = await repository.GetByIdAsync(id);
-if (result != null)
-{
-    DoSomething(result.Property);
-}
-```
-
-**장점**:
-- ✅ 가장 명시적이고 안전한 방법
-- ✅ null인 경우 다른 처리 가능 (else 블록)
-- ✅ 복잡한 로직에 적합
-- ✅ 디버깅 용이
-
-**단점**:
-- ⚠️ 코드가 길어짐 (3-5줄)
-- ⚠️ 중첩 if문 시 가독성 저하 가능
-
-**사용 시나리오**:
-- null인 경우 별도 처리가 필요한 경우
-- 복잡한 비즈니스 로직이 있는 경우
-- 에러 메시지를 표시해야 하는 경우
-
----
-
-### 🔧 방법 3: Null 조건부 연산자 (?.) 사용
-```csharp
-// Before
-var result = repository.GetById(id);
-var name = result.Name;  // CS8602 경고
-
-// After
-var name = repository.GetById(id)?.Name ?? "Unknown";
-```
-
-**장점**:
-- ✅ 체이닝 가능 (result?.Property?.SubProperty)
-- ✅ 한 줄로 간결하게 표현
-- ✅ null 안전성 보장
-
-**단점**:
-- ⚠️ 체이닝이 길어지면 가독성 저하
-- ⚠️ 디버깅 어려움
-
-**사용 시나리오**:
-- 속성 접근만 필요한 경우
-- 체이닝이 필요한 경우
-- UI 표시용 값 추출
-
----
-
-### ⚠️ 방법 4: Null-forgiving operator (!) - **사용 자제 권장**
-```csharp
-// Before
-var result = await repository.GetByIdAsync(id);  // CS8601 경고
-processDb = result;
-
-// After (null이 아님을 확신하는 경우)
-var result = await repository.GetByIdAsync(id);
-processDb = result!;  // null이 아님을 명시
-```
-
-**장점**:
-- ✅ 가장 짧고 간단한 코드
-
-**단점**:
-- ❌ **런타임에 NullReferenceException 발생 가능** (가장 큰 문제)
-- ❌ 컴파일러의 null 안전성 검사를 우회
-- ❌ 기술 부채(Technical Debt)로 간주됨
-- ❌ 2026년 C# 커뮤니티에서 Bad Practice로 인식
-- ❌ 코드 리뷰 시 지적 대상
-
-**사용 시나리오** (매우 제한적):
-- 프레임워크/라이브러리가 null이 아님을 보장하는 경우
-- 직전에 null 체크를 했으나 컴파일러가 인식하지 못하는 경우
-- **반드시 주석으로 이유 설명 필요**
-
-```csharp
-// 예시: 사용하는 경우 (주석 필수)
-var user = await GetUserAsync(id);
-if (user == null) return;
-
-// 위에서 null 체크했으므로 여기서는 null이 아님이 보장됨
-ProcessUser(user!);  // null-forgiving operator 사용
-```
-
----
-
-## 📊 2026년 최신 트렌드 및 권장사항
-
-### 베스트 프랙티스 우선순위
-1. **최우선**: `??` 연산자 (Null-coalescing)
-2. **권장**: `if (x != null)` 명시적 체크
-3. **선택적**: `?.` 연산자 (Null-conditional)
-4. **최후**: `!` 연산자 (피할 것) - 기술 부채
-
-### Microsoft 공식 권장사항
-- [Nullable reference types - C# | Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references)
-- [! (null-forgiving) operator - C# reference](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/null-forgiving)
-
-### 커뮤니티 합의
-- [Using the null-forgiving operator (!) in C# can be considered bad practice](https://itnext.io/using-the-null-forgiving-operator-in-c-can-be-considered-bad-practice-f68ffc0f8fb9)
-- [Safer Nullability in Modern C#](https://newdevsguide.com/2023/02/25/csharp-nullability/)
-- [Nullable Types in C#: A Practical Guide for 2026](https://thelinuxcode.com/nullable-types-in-c-a-practical-guide-for-2026/)
+**다른 방법과의 비교**:
+- `if (x != null)` - 코드가 길어지고 중첩 구조 발생
+- `?.` 연산자 - 체이닝이 길어지면 디버깅 어려움
+- `!` 연산자 - 런타임 오류 위험, 기술 부채
 
 ### 본 프로젝트 적용 방침
-1. **ProcessDb, ReportDb 등 비즈니스 객체**: `?? new ProcessDb()` 사용
-2. **복잡한 로직**: `if (x != null)` 명시적 체크
-3. **UI 표시 값**: `?.` 연산자 사용
-4. **Null-forgiving operator (`!`)**: **사용 금지**
+- **모든 경우**: `?? new ClassName()` 사용
+- **예외 없음**: 일관성 유지
 
 ---
 
 ## 5. 작업 순서
 
-### Step 1: 패턴 분석
+### Step 1: 패턴 확인
 - [ ] 25년도 코드에서 동일한 경고 처리 방법 확인
-- [ ] 각 Repository 메서드의 반환 타입 확인 (nullable 여부)
-- [ ] 각 경고별 적절한 수정 방법 결정
+- [ ] ?? 연산자 적용 패턴 확인
+  - ProcessDb: `?? new ProcessDb()`
+  - ReportDb: `?? new ReportDb()`
+  - List: `?? new List<T>()`
 
 ### Step 2: 우선순위별 수정
 1. **높음**: ProcessDb 관련 (가장 많이 사용됨)
@@ -303,11 +204,9 @@ report = await reportRepository.GetByRidAsync(Rid);
 v_ReportTaskLists = await v_ReportTaskListDBRepository.GetByTaksListNumberAllAsync(report.Task_Number);
 
 // After
-report = await reportRepository.GetByRidAsync(Rid);
-if (report != null)
-{
-    v_ReportTaskLists = await v_ReportTaskListDBRepository.GetByTaksListNumberAllAsync(report.Task_Number);
-}
+report = await reportRepository.GetByRidAsync(Rid) ?? new ReportDb();
+// ...
+v_ReportTaskLists = await v_ReportTaskListDBRepository.GetByTaksListNumberAllAsync(report.Task_Number);
 ```
 
 ### 예시 3: DeptObjective/Sub.razor.cs
@@ -318,11 +217,31 @@ deptObjectiveDb = await repository.GetByDeptObjectiveDbIdAsync(mainId);
 model = await repository.GetByMainObjectiveIdAllAsync(deptObjectiveDb.DeptObjectiveDbId);
 
 // After
-deptObjectiveDb = await repository.GetByDeptObjectiveDbIdAsync(mainId);
-if (deptObjectiveDb != null)
-{
-    model = await repository.GetByMainObjectiveIdAllAsync(deptObjectiveDb.DeptObjectiveDbId);
-}
+deptObjectiveDb = await repository.GetByDeptObjectiveDbIdAsync(mainId) ?? new DeptObjectiveDb();
+// ...
+model = await repository.GetByMainObjectiveIdAllAsync(deptObjectiveDb.DeptObjectiveDbId);
+```
+
+### 예시 4: SubAgreement/User/Index.razor.cs
+```csharp
+// Before (Line 134-136)
+processDb = await processDbRepository.GetByUidAsync(sessionUid);
+// ...
+agreementDbList = await agreementDbRepository.GetByUidAllAsync(processDb.Uid);
+
+// After
+processDb = await processDbRepository.GetByUidAsync(sessionUid) ?? new ProcessDb();
+// ...
+agreementDbList = await agreementDbRepository.GetByUidAllAsync(processDb.Uid);
+```
+
+### 예시 5: TotalReport/Index.razor.cs
+```csharp
+// Before (Line 73)
+report = await reportRepository.GetByRidAsync(rid);
+
+// After
+report = await reportRepository.GetByRidAsync(rid) ?? new ReportDb();
 ```
 
 ---
@@ -336,9 +255,10 @@ if (deptObjectiveDb != null)
 4. **일관성 유지**: 동일한 패턴은 동일한 방법으로 수정
 
 ### 수정 기준
-- **Repository.GetByIdAsync()**: 결과가 null일 수 있으므로 null 체크 또는 기본값 제공
-- **processDb, reportDb**: 비즈니스 로직상 null이면 안 되는 경우 기본값 제공
-- **View Model**: null일 수 있으므로 null 조건부 연산자 사용
+- **모든 Repository 메서드**: `?? new ClassName()` 패턴 적용
+- **ProcessDb, ReportDb 등**: `?? new ProcessDb()` 형식으로 기본값 제공
+- **List 타입**: `?? new List<ClassName>()` 형식으로 기본값 제공
+- **일관성**: 모든 파일에서 동일한 패턴 사용
 
 ---
 
