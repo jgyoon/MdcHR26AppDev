@@ -1,13 +1,32 @@
 @namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Report.ViewPage
-@rendermode InteractiveServer
 
-<h3>평가 업무 목록</h3>
-
-@if (reports == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <ReportListTable reports="reports" OnEdit="HandleEdit" />
-}
+<div class="row">
+    @foreach (var item in ReportTaskListDB)
+    {
+        <div class="card col-12 col-md-4 col-xl-4">
+            <div class="card-header">
+                <h4>
+                    @sortNoAdd2(sortNo) . @ReportItemName(@item.Report_Item_Name_1, @item.Report_Item_Name_2, @item.Report_Item_Proportion)
+                </h4>
+                <p>
+                    @ReportSubItemName(@item.Report_SubItem_Name, @item.Report_SubItem_Proportion)
+                </p>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">업무명 : @item.TaskName</h5>
+                <p class="card-text">업무목표 : @item.TaskObjective</p>
+                <p class="card-text">업무목표달성도(%) : </p>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar"
+                         style="width: @item.TargetProportion%;"
+                         aria-valuenow=@item.TargetProportion
+                         aria-valuemin="0" aria-valuemax="100">
+                        @item.TargetProportion %
+                    </div>
+                </div>
+                <p>업무목표달성일 : @item.TargetDate.ToString("yyyy-MM-dd")</p>
+                <p>업무난이도 : @LeveltoName(item.TaskLevel)</p>
+            </div>
+        </div>
+    }
+</div>

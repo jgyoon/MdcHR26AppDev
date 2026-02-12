@@ -120,7 +120,7 @@ else
     @*세부합의요청(X) && 세부합의승인(X)*@
     @if (!IsSubRequest && !IsSubAgreement)
     {
-        <SubAgreementDbListTable subAgreementDbs="model" OnDetailsClick="MoveDetailsPage"></SubAgreementDbListTable>
+        <SubAgreementDbListTable subAgreementDbs="model" OnDetailsClick="MoveDetailsPage" IsSubAgreementCompleted="@IsSubAgreement"></SubAgreementDbListTable>
     }
     else
     {
@@ -155,7 +155,7 @@ else
         @if (SubAgreementCollapsed)
         {
             <hr />
-            <SubAgreementDbListView subAgreementDbs="model"></SubAgreementDbListView>
+            <SubAgreementDbListView subAgreementDbs="model" IsSubAgreementCompleted="@IsSubAgreement"></SubAgreementDbListView>
         }
         <hr />
         @*세부업무내역(펼쳐보기 추가)*@

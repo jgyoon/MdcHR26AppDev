@@ -13,6 +13,7 @@ public partial class SubAgreementDbListView
     #region Parameters
     [Parameter] public long Uid { get; set; }
     [Parameter] public List<SubAgreementDb>? subAgreementDbs { get; set; }
+    [Parameter] public bool IsSubAgreementCompleted { get; set; } = false;
     #endregion
 
     #region Variables

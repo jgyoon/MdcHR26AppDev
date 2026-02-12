@@ -77,6 +77,90 @@ public class ExcelManage(IWebHostEnvironment environment)
     }
     #endregion
 
+    #region + [1].[1] TeamLeader용 excel 생성
+    public bool CreateTeamLeaderExcelFile(List<v_ProcessTRListDB> data, string filefolderPath, string fileName)
+    {
+        string exportFile = Path.Combine(_folderPath, filefolderPath, fileName);
+        if (File.Exists(exportFile))
+        {
+            File.Delete(exportFile);
+        }
+        if (!File.Exists(exportFile))
+        {
+            using (var excelPackage = new XLWorkbook())
+            {
+                //create a new Worksheet
+                var worksheet = excelPackage.Worksheets.Add("Lists");
+                #region + TaskLists
+                worksheet.Cells("A1").Value = "No";
+                worksheet.Cells("B1").Value = "이름";
+                worksheet.Cells("C1").Value = "평가제출";
+                worksheet.Cells("D1").Value = "평가자점수";
+                worksheet.Cells("E1").Value = "평가완료";
+                worksheet.Cells("F1").Value = "부서장(팀장)점수";
+                int recordIndex = 2;
+                foreach (var item in data)
+                {
+                    worksheet.Cell(recordIndex, 1).Value = recordIndex - 1;
+                    worksheet.Cell(recordIndex, 2).Value = item.UserName;
+                    worksheet.Cell(recordIndex, 3).Value = this.IsSubmission(item.Is_User_Submission);
+                    worksheet.Cell(recordIndex, 4).Value = this.IsScore(item.User_Evaluation_1, item.User_Evaluation_2, item.User_Evaluation_3);
+                    worksheet.Cell(recordIndex, 5).Value = this.IsSubmission(item.Is_Teamleader_Submission);
+                    worksheet.Cell(recordIndex, 6).Value = item.TeamLeader_Score;
+                    recordIndex++;
+                }
+                #endregion
+                excelPackage.SaveAs(exportFile);
+            }
+        }
+        return File.Exists(exportFile) ? true : false;
+    }
+    #endregion
+    
+    #region + [1].[2] Director용 excel 생성
+    public bool CreateDirectorExcelFile(List<v_ProcessTRListDB> data, string filefolderPath, string fileName)
+    {
+        string exportFile = Path.Combine(_folderPath, filefolderPath, fileName);
+        if (File.Exists(exportFile))
+        {
+            File.Delete(exportFile);
+        }
+        if (!File.Exists(exportFile))
+        {
+            using (var excelPackage = new XLWorkbook())
+            {
+                //create a new Worksheet
+                var worksheet = excelPackage.Worksheets.Add("Lists");
+                #region + TaskLists
+                worksheet.Cells("A1").Value = "No";
+                worksheet.Cells("B1").Value = "이름";
+                worksheet.Cells("C1").Value = "평가제출";
+                worksheet.Cells("D1").Value = "평가자점수";
+                worksheet.Cells("E1").Value = "평가완료(팀장)";
+                worksheet.Cells("F1").Value = "부서장(팀장)점수";
+                worksheet.Cells("G1").Value = "평가완료(임원)";
+                worksheet.Cells("H1").Value = "최종점수(임원)";
+                int recordIndex = 2;
+                foreach (var item in data)
+                {
+                    worksheet.Cell(recordIndex, 1).Value = recordIndex - 1;
+                    worksheet.Cell(recordIndex, 2).Value = item.UserName;
+                    worksheet.Cell(recordIndex, 3).Value = this.IsSubmission(item.Is_User_Submission);
+                    worksheet.Cell(recordIndex, 4).Value = this.IsScore(item.User_Evaluation_1, item.User_Evaluation_2, item.User_Evaluation_3);
+                    worksheet.Cell(recordIndex, 5).Value = this.IsSubmission(item.Is_Teamleader_Submission);
+                    worksheet.Cell(recordIndex, 6).Value = item.TeamLeader_Score;
+                    worksheet.Cell(recordIndex, 7).Value = this.IsSubmission(item.Is_Director_Submission);
+                    worksheet.Cell(recordIndex, 8).Value = item.Director_Score;
+                    recordIndex++;
+                }
+                #endregion
+                excelPackage.SaveAs(exportFile);
+            }
+        }
+        return File.Exists(exportFile) ? true : false;
+    }
+    #endregion    
+
     #region + [2] CreateExcelFile : 세부 업무 리스트 엑셀 생성
     /// <summary>
     /// 세부 업무 리스트 엑셀 파일 생성 (2026년 구조)

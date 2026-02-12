@@ -169,6 +169,10 @@ Pages.Agreement → Components.Pages.Agreement
 ### SubAgreement 작업
 - [x] SubAgreement 페이지 구현 (20260204_03)
 - [x] DB 변경사항 반영 (SAid → Sid, UserId → Uid)
+- [x] SubAgreementDbListTable 합의 완료 기능 추가 (2026-02-12)
+  - [x] IsSubAgreementCompleted 파라미터 추가
+  - [x] Agreement 패턴 적용 (완료 시 "상세" 버튼 → "완료" 텍스트)
+  - [x] 5개 파일 수정 (SubAgreementDbListTable, SubAgreementDbListView, Index)
 
 ### Report 작업 - 2026-02-08
 - [x] 2nd_HR_Report, 3rd_HR_Report Details 페이지 "No DATA" 문제 해결

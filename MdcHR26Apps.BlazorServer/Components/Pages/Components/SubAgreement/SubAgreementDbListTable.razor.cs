@@ -8,6 +8,7 @@ public partial class SubAgreementDbListTable
     #region Parameters
     [Parameter] public List<SubAgreementDb> subAgreementDbs { get; set; } = new();
     [Parameter] public EventCallback<long> OnDetailsClick { get; set; }
+    [Parameter] public bool IsSubAgreementCompleted { get; set; } = false;
     #endregion
 
     #region Variables
