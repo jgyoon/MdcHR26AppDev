@@ -3,7 +3,7 @@
 
 @if (ReportTaskListDB == null || ReportTaskListDB.Count == 0)
 {
-    <p><em>등록된 업무가 없습니다.</em></p>
+    <p><em>아직 합의된 세부업무가 없습니다.</em></p>
 }
 else
 {
@@ -16,38 +16,16 @@ else
         </div>
     </div>
 
-    @if (Collapsed)
+    @if (Collapsed)    
     {
-        <table class="table table-sm">
-            <thead>
-                <tr>
-                    <th>번호</th>
-                    <th>업무명</th>
-                    <th>업무목표</th>
-                    <th>목표비중</th>
-                    @if (OnSelectTask.HasDelegate)
-                    {
-                        <th>선택</th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var task in ReportTaskListDB)
-                {
-                    <tr>
-                        <td>@task.TaksListNumber</td>
-                        <td>@task.TaskName</td>
-                        <td>@task.TaskObjective</td>
-                        <td>@task.TargetProportion %</td>
-                        @if (OnSelectTask.HasDelegate)
-                        {
-                            <td>
-                                <button type="button" class="btn btn-sm btn-primary" @onclick="@(() => OnSelectTask.InvokeAsync(task.Tid))">선택</button>
-                            </td>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <div class="input-group mb-1">
+            <button id="excelExport" class="btn btn-outline-success mb-1" @onclick="@ClickExportXLS">
+                <i class="oi oi-cloud-download"></i>
+                세부업무내역 다운로드
+            </button>
+        </div>
+        <hr />
+        <DisplayResultText Comment="@Comment" />
+        <ReportTaskListView ReportTaskListDB="@ReportTaskListDB"></ReportTaskListView>
     }
 }
