@@ -78,3 +78,13 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+.table-header,
+.table-cell {
+    /* style의 내용을 여기에 적용 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    vertical-align: middle;
+}

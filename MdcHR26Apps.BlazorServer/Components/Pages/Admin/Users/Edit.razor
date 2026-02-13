@@ -58,21 +58,56 @@ else
                     <InputText id="UserENumber" class="form-control" placeholder="사원번호"
                                @bind-Value="@model.ENumber"></InputText>
                 </div>
-                <label for="TeamLeader" class="form-label mb-1">부서장(2차)</label>
-                <div class="input-group mb-1">
-                    <InputCheckbox @bind-Value="@model.IsTeamLeader"></InputCheckbox>
+                <div class="mb-1">
+                    <label for="TeamLeader" class="form-label mb-1">부서장(2차)</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="isTeamLeaderSwitch"
+                               @bind="@model.IsTeamLeader" />
+                        <label class="form-check-label" for="isTeamLeaderSwitch">
+                            @(@model.IsTeamLeader ? "부서장(2차) : Y " : "부서장(2차) : N")
+                        </label>
+                    </div>
+                    <small class="text-muted">
+                        부서장(2차) 권한을 부여합니다.
+                    </small>
                 </div>
-                <label for="Director" class="form-label mb-1">임원(3차)</label>
-                <div class="input-group mb-1">
-                    <InputCheckbox @bind-Value="@model.IsDirector"></InputCheckbox>
+                <div class="mb-1">
+                    <label for="Director" class="form-label mb-1">임원(3차)</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="isDirectorSwitch" @bind="@model.IsDirector" />
+                        <label class="form-check-label" for="isDirectorSwitch">
+                            @(@model.IsDirector ? "임원(3차) : Y " : "임원(3차) : N")
+                        </label>
+                    </div>
+                    <small class="text-muted">
+                        임원(3차) 권한을 부여합니다.
+                    </small>
                 </div>
-                <label for="Admin" class="form-label mb-1">관리자</label>
-                <div class="input-group mb-1">
-                    <InputCheckbox @bind-Value="@model.IsAdministrator"></InputCheckbox>
+                <div class="mb-1">
+                    <label for="Admin" class="form-label mb-1">관리자</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="isAdministratorSwitch"
+                               @bind="@model.IsAdministrator" />
+                        <label class="form-check-label" for="isAdministratorSwitch">
+                            @(@model.IsAdministrator ? "관리자 : Y " : "관리자 : N")
+                        </label>
+                    </div>
+                    <small class="text-muted">
+                        관리자 권한을 부여합니다.
+                    </small>
                 </div>
-                <label for="DeptObjectiveWriter" class="form-label mb-1">조직목표 작성자</label>
-                <div class="input-group mb-1">
-                    <InputCheckbox @bind-Value="@model.IsDeptObjectiveWriter"></InputCheckbox>
+                <div class="mb-1">
+                    <label for="DeptObjectiveWriter" class="form-label mb-1">조직목표 작성자</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="isDeptObjectiveWriterSwitch"
+                               @bind="@model.IsDeptObjectiveWriter" />
+                        <label class="form-check-label" for="isDeptObjectiveWriterSwitch">
+                            @(@model.IsDeptObjectiveWriter ? "조직목표 작성자 : Y " : "조직목표 작성자 : N")
+                        </label>
+                    </div>
+                    <small class="text-muted">
+                        조직목표 작성자 권한을 부여합니다.
+                    </small>
                 </div>
                 <hr />
                 <div class="input-group mb-1">
