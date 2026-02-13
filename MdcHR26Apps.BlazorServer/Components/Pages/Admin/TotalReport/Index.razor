@@ -11,6 +11,10 @@
                     SearchAction="HandleSearchValueChanged"
                     SearchInitAction="SearchInit" />
 
+<SearchDeptComponent deptlist="@deptlist" SearchDeptAction="HandleDeptValueChanged"
+                     @bind-selectedDept="@selectedDept" />
+<hr />
+
 @if (processTRLists == null || reportTaskLists == null)
 {
     <p><em>Loading...</em></p>

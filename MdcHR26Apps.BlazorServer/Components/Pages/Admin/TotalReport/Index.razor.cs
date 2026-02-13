@@ -10,13 +10,16 @@ public partial class Index(
     Iv_ProcessTRListRepository processTRRepository,
     Iv_ReportTaskListRepository reportTaskRepository,
     LoginStatusService loginStatusService,
-    UrlActions urlActions)
+    UrlActions urlActions,
+    UserUtils utils)
 {
     private List<v_ProcessTRListDB>? processTRLists;
     private List<v_ProcessTRListDB>? allProcessTRLists;
     private List<v_ReportTaskListDB>? reportTaskLists;
     private string searchTerm = string.Empty;
     private string comment = string.Empty;
+    public List<string> deptlist = new List<string>();
+    public string selectedDept { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -39,6 +42,7 @@ public partial class Index(
         allProcessTRLists = await processTRRepository.GetAllAsync();
         processTRLists = allProcessTRLists;
         reportTaskLists = await reportTaskRepository.GetAllAsync();
+        deptlist = await utils.GetDeptListAsync();
     }
 
     private void HandleSearchValueChanged(string value)
@@ -50,6 +54,7 @@ public partial class Index(
     private void SearchInit()
     {
         searchTerm = string.Empty;
+        selectedDept = string.Empty;
         processTRLists = allProcessTRLists;
     }
 
@@ -73,4 +78,27 @@ public partial class Index(
         comment = value;
         StateHasChanged();
     }
+
+    #region + [9].[2] 검색로직 추가(부서)
+    private async Task SearchDept()
+    {
+        if (!String.IsNullOrWhiteSpace(selectedDept))
+        {
+            // 2026년: 클라이언트에서 EDepartmentName 필터링
+            var allUsers = await processTRRepository.GetByAllAsync();
+            processTRLists = allUsers
+                .Where(u => u.EDepartmentName.Contains(selectedDept))
+                .ToList();
+        }
+        else
+        {
+            await LoadData();
+        }
+    }
+    private async Task HandleDeptValueChanged(string newSearchValue)
+    {
+        selectedDept = newSearchValue;
+        await SearchDept();
+    }
+    #endregion
 }

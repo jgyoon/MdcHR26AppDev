@@ -4,6 +4,7 @@ using MdcHR26Apps.BlazorServer.Utils;
 using MdcHR26Apps.Models;
 using Microsoft.AspNetCore.DataProtection;
 using System.IO;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,6 +77,17 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// 런타임 생성 파일 전용 서빙
+var tasksPath = Path.Combine(app.Environment.WebRootPath!, "files", "tasks");
+Directory.CreateDirectory(tasksPath);
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(tasksPath),
+    RequestPath = "/files/tasks"
+});
+
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 app.UseAntiforgery();
 

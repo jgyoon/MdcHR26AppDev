@@ -36,7 +36,9 @@ public partial class ReportTaskListCommonView(
         string fileName = $"업무리스트_{fileNameAdd}.xlsx";
 
         // NavigationManager.BaseUri 사용 (자동으로 현재 환경 URL 감지)
-        string fileUrl = $"{navigationManager.BaseUri}files/tasks/{fileName}";
+        // string fileUrl = $"{navigationManager.BaseUri}files/tasks/{fileName}";
+        // 한글 파일명 URL 안전성 위해 fileUrl 생성 시 인코딩설정
+        string fileUrl = $"{navigationManager.BaseUri}files/tasks/{Uri.EscapeDataString(fileName)}";
 
         bool isCreateResult = excelManage.CreateExcelFile(ReportTaskListDB, fileFolderPath, fileName);
 
@@ -48,6 +50,7 @@ public partial class ReportTaskListCommonView(
             await js.InvokeVoidAsync("downloadURI", fileUrl, fileName);
             await Task.Delay(500);
 
+            // Excel 파일 삭제
             excelManage.DeleteExcelFile(fileFolderPath, fileName);
 
             await Task.Delay(3000);
