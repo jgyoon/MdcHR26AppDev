@@ -5,39 +5,48 @@ namespace MdcHR26Apps.Models.Views.v_TotalReportListDB;
 
 /// <summary>
 /// v_TotalReportListDB View Entity (읽기 전용)
-/// TotalReportDb + ProcessDb + UserDb + EDepartmentDb + ERankDb 조인 뷰
+/// TotalReportDb + UserDb 조인 뷰
 /// </summary>
 [Keyless]
 [Table("v_TotalReportListDB")]
 public class v_TotalReportListDB
 {
-    // TotalReportDb 필드
+    // TotalReportDb 필드 (A)
     public Int64 TRid { get; set; }
-    public Int64 Pid { get; set; }
     public Int64 Uid { get; set; }
-    public decimal Final_Score { get; set; }
-    public string Final_Grade { get; set; } = string.Empty;
-    public string Comments { get; set; } = string.Empty;
-    public int Report_Status { get; set; }
-    public DateTime Created_Date { get; set; }
 
-    // ProcessDb 필드
-    public int Process_Year { get; set; }
-    public string Process_Title { get; set; } = string.Empty;
-    public DateTime Process_Start_Date { get; set; }
-    public DateTime Process_End_Date { get; set; }
-    public int Process_Status { get; set; }
-
-    // UserDb 필드
+    // UserDb 필드 (B)
     public string UserId { get; set; } = string.Empty;
     public string UserName { get; set; } = string.Empty;
-    public string UserEmail { get; set; } = string.Empty;
-
-    // EDepartmentDb 필드
-    public Int64 EDepartId { get; set; }
-    public string EDepartName { get; set; } = string.Empty;
-
-    // ERankDb 필드
-    public Int64 ERankId { get; set; }
+    public string EDepartmentName { get; set; } = string.Empty;
     public string ERankName { get; set; } = string.Empty;
+
+    // [1] 평가대상자 평가 (User_Evaluation)
+    public double User_Evaluation_1 { get; set; }
+    public double User_Evaluation_2 { get; set; }
+    public double User_Evaluation_3 { get; set; }
+    public string User_Evaluation_4 { get; set; } = string.Empty;
+
+    // [2] 팀장 평가 (TeamLeader_Evaluation)
+    public double TeamLeader_Evaluation_1 { get; set; }
+    public double TeamLeader_Evaluation_2 { get; set; }
+    public double TeamLeader_Evaluation_3 { get; set; }
+    public string TeamLeader_Comment { get; set; } = string.Empty;
+
+    // [3] 피드백 (Feedback_Evaluation)
+    public double Feedback_Evaluation_1 { get; set; }
+    public double Feedback_Evaluation_2 { get; set; }
+    public double Feedback_Evaluation_3 { get; set; }
+    public string Feedback_Comment { get; set; } = string.Empty;
+
+    // [4] 임원 평가 (Director_Evaluation)
+    public double Director_Evaluation_1 { get; set; }
+    public double Director_Evaluation_2 { get; set; }
+    public double Director_Evaluation_3 { get; set; }
+    public string Director_Comment { get; set; } = string.Empty;
+
+    // [5] 종합 점수
+    public double Total_Score { get; set; }
+    public double Director_Score { get; set; }
+    public double TeamLeader_Score { get; set; }
 }

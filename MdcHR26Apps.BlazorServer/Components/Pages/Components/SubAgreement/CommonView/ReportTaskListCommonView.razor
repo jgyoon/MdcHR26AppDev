@@ -1,0 +1,31 @@
+﻿@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.SubAgreement.CommonView
+@rendermode InteractiveServer
+
+@if (ReportTaskListDB == null || ReportTaskListDB.Count == 0)
+{
+    <p><em>아직 합의된 세부업무가 없습니다.</em></p>
+}
+else
+{
+    <div class="row mb-3">
+        <div class="col-12">
+            <h5>
+                세부업무 내역 (@ReportTaskListDB.Count 건)
+                <span @onclick="() => Toggle.InvokeAsync()" class="@IconClass" style="cursor: pointer;"></span>
+            </h5>
+        </div>
+    </div>
+
+    @if (Collapsed)    
+    {
+        <div class="input-group mb-1">
+            <button id="excelExport" class="btn btn-outline-success mb-1" @onclick="@ClickExportXLS">
+                <i class="oi oi-cloud-download"></i>
+                세부업무내역 다운로드
+            </button>
+        </div>
+        <hr />
+        <DisplayResultText Comment="@Comment" />
+        <ReportTaskListView ReportTaskListDB="@ReportTaskListDB"></ReportTaskListView>
+    }
+}

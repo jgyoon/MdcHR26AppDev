@@ -1,0 +1,36 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Report.Modal
+@rendermode InteractiveServer
+
+<div class="modal @ModalClass" tabindex="-1" role="dialog" style="display:@ModalDisplay">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">평가 제출</h5>
+                <button type="button" class="btn-close" @onclick="Close" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (!string.IsNullOrEmpty(resultText))
+                {
+                    <div class="alert alert-success">@resultText</div>
+                }
+                else
+                {
+                    <p>평가를 제출하시겠습니까?</p>
+                    <p class="text-muted">제출 후에는 수정할 수 없습니다.</p>
+                }
+            </div>
+            <div class="modal-footer">
+                @if (string.IsNullOrEmpty(resultText))
+                {
+                    <button type="button" class="btn btn-primary" @onclick="Submit">제출</button>
+                    <button type="button" class="btn btn-secondary" @onclick="Close">취소</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}

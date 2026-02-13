@@ -1,0 +1,61 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Report.ViewPage
+@rendermode InteractiveServer
+
+<table class="table table-hover table-responsive-md">
+    <thead>
+        <tr>
+            <th class="table-header">
+                <div class="row">
+                    <div class="col-2 col-md-2">#</div>
+                    <div class="col-10 col-md-10">이름</div>
+                </div>
+            </th>
+            <th class="table-header">
+                <div class="row">
+                    <div class="col-12 col-md-6">평가자</div>
+                    <div class="col-12 col-md-6">부서장</div>
+                </div>
+            </th>
+            <th class="table-header">비고</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in processTRLists)
+        {
+            <tr>
+                <td class="table-cell">
+                    <div class="row">
+                        <div class="col-2 col-md-2">@sortNoAdd3(sortNo)</div>
+                        <div class="col-10 col-md-10">@item.UserName</div>
+                    </div>
+                </td>
+                <td class="table-cell">
+                    <div class="row">
+                        <div class="col-12 col-md-6 table-cell-blue">@IsReportSubmissionStatus(item.Is_User_Submission, item.User_Evaluation_1, item.User_Evaluation_2, item.User_Evaluation_3)</div>
+                        <div class="col-12 col-md-6 table-cell-red">@IsTeamleaderSubmissionStatus(item.Is_Teamleader_Submission, item.TeamLeader_Score)</div>
+                    </div>
+                </td>
+                <td class="table-cell">
+                    <div class="btn-group-vertical btn-size" role="group">
+                        @if (!item.Is_User_Submission && !item.Is_Teamleader_Submission)
+                        {
+                            @IsNotEvaluate
+                        }
+                        else if (item.Is_User_Submission && !item.Is_Teamleader_Submission)
+                        {
+                            <button id="DetailButton" class="btn btn-info btn-size" @onclick="(() => TeamLeaderDetailsAction(item.Pid))">평가하기</button>
+                        }
+                        else if (item.Is_User_Submission && item.Is_Teamleader_Submission)
+                        {
+                            <button id="CompleteDetailButton" class="btn btn-secondary btn-size" @onclick="(() => CompleteDetailsAction(item.Pid))">완료(상세)</button>
+                            @if (!item.Is_Director_Submission)
+                            {
+                                <button id="CancelButton" class="btn btn-danger btn-size" @onclick="(() => CancelAction(item.Pid))">취소</button>
+                            }
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

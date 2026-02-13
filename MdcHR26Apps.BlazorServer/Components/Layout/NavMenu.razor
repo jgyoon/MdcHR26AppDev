@@ -1,0 +1,227 @@
+﻿@inject LoginStatusService LoginStatus
+@inject AppStateService AppState
+@implements IDisposable
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">2026 인사평가</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+
+        @*로그인 && 로그아웃*@
+        @if (!LoginStatus.IsloginCheck())
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/Auth/Login">
+                    <span class="oi oi-power-standby" aria-hidden="true"></span> Login
+                </NavLink>
+            </div>
+        }
+        else
+        {
+            @*목표관리*@
+            @if (treeMenuActivate_Objective)
+            {
+                <div class="nav-item px-3" @onclick="ToggleTreeMenuActivate_Objective">
+                    <NavLink class="nav-link" href="/DeptObjective/Main">
+                        <span class="oi oi-list" aria-hidden="true"></span> 26년 전사목표
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/DeptObjective/Sub">
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="oi oi-plus" aria-hidden="true"></span> 조직목표
+                    </NavLink>
+                </div>
+            }
+            else
+            {
+                <div class="nav-item px-3" @onclick="ToggleTreeMenuActivate_Objective">
+                    <NavLink class="nav-link" href="/DeptObjective/Main">
+                        <span class="oi oi-list" aria-hidden="true"></span> 26년 전사목표
+                    </NavLink>
+                </div>
+            }
+
+            @*직무평가 모음*@
+            @if (treeMenuActivate)
+            {
+                <div class="nav-item px-3" @onclick="ToggleTreeMenuActivate">
+                    <NavLink class="nav-link" href="">
+                        <span class="oi oi-chevron-bottom" aria-hidden="true"></span> 직무평가
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/Agreement/User">
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="oi oi-plus" aria-hidden="true"></span> 직무작성
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/SubAgreement/User">
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="oi oi-plus" aria-hidden="true"></span> 세부직무작성
+                    </NavLink>
+                </div>
+                @*평가단계에서 오픈*@
+                @if (AppState.GetEvaluationOpen())
+                {
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="/1st_hr_report">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="oi oi-list" aria-hidden="true"></span> 본인평가
+                        </NavLink>
+                    </div>
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="/TotalReport">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="oi oi-list" aria-hidden="true"></span> 최종결과
+                        </NavLink>
+                    </div>
+
+                }
+            }
+            else
+            {
+                <div class="nav-item px-3" @onclick="ToggleTreeMenuActivate">
+                    <NavLink class="nav-link" href="">
+                        <span class="oi oi-chevron-right" aria-hidden="true"></span> 직무평가
+                    </NavLink>
+                </div>
+            }
+
+            @*평가자(부서장 및 팀장) 합의 및 평가*@
+            @if (LoginStatus.IsloginAndIsTeamLeaderCheck())
+            {
+                @if (treeMenuActivate_2nd)
+                {
+                    <div class="nav-item px-3" @onclick="ToggleTreeMenuActivate_2nd">
+                        <NavLink class="nav-link" href="">
+                            <span class="oi oi-chevron-bottom" aria-hidden="true"></span> 합의/평가
+                        </NavLink>
+                    </div>
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="/Agreement/TeamLeader">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="oi oi-list" aria-hidden="true"></span> 직무평가합의
+                        </NavLink>
+                    </div>
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="/SubAgreement/TeamLeader">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="oi oi-list" aria-hidden="true"></span> 세부직무합의
+                        </NavLink>
+                    </div>
+                    @*평가단계에서 오픈*@
+                    @if (AppState.GetEvaluationOpen())
+                    {
+                        <div class="nav-item px-3">
+                            <NavLink class="nav-link" href="/2nd_hr_report">
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="oi oi-list-rich" aria-hidden="true"></span> 부서장평가
+                            </NavLink>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="nav-item px-3" @onclick="ToggleTreeMenuActivate_2nd">
+                        <NavLink class="nav-link" href="">
+                            <span class="oi oi-chevron-right" aria-hidden="true"></span> 합의/평가
+                        </NavLink>
+                    </div>
+                }
+            }
+
+            @*평가자(임원) 평가*@
+            @if (LoginStatus.IsloginAndIsDirectorCheck())
+            {
+                @*평가단계에서 오픈*@
+                @if (AppState.GetEvaluationOpen())
+                {
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="/3rd_hr_report">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> 임원평가
+                        </NavLink>
+                    </div>
+                }
+            }
+
+            @*관리자 페이지*@
+            @if (LoginStatus.IsloginAndIsAdminCheck())
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/Admin">
+                        <span class="oi oi-list" aria-hidden="true"></span> 관리자 페이지
+                    </NavLink>
+                </div>
+            }
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/Auth/Manage">
+                    <span class="oi oi-wrench" aria-hidden="true"></span> 비밀번호수정
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/Auth/Logout">
+                    <span class="oi bi-box-arrow-right" aria-hidden="true"></span> Logout
+                </NavLink>
+            </div>
+        }
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    // User Defined Code
+    private bool treeMenuActivate { get; set; } = false;
+
+    private void ToggleTreeMenuActivate()
+    {
+        treeMenuActivate = !treeMenuActivate;
+    }
+
+    private bool treeMenuActivate_2nd { get; set; } = false;
+
+    private void ToggleTreeMenuActivate_2nd()
+    {
+        treeMenuActivate_2nd = !treeMenuActivate_2nd;
+    }
+
+    private bool treeMenuActivate_3rd { get; set; } = false;
+
+    private void ToggleTreeMenuActivate_3rd()
+    {
+        treeMenuActivate_3rd = !treeMenuActivate_3rd;
+    }
+
+    private bool treeMenuActivate_Objective { get; set; } = false;
+
+    private void ToggleTreeMenuActivate_Objective()
+    {
+        treeMenuActivate_Objective = !treeMenuActivate_Objective;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AppState.OnChange += StateHasChanged;
+        LoginStatus.OnChange += StateHasChanged;
+        await base.OnInitializedAsync();
+    }
+
+    public void Dispose()
+    {
+        AppState.OnChange -= StateHasChanged;
+        LoginStatus.OnChange -= StateHasChanged;
+    }
+}

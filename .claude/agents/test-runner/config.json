@@ -1,0 +1,39 @@
+{
+  "name": "test-runner",
+  "description": "Blazor Server 개발 후 Playwright 테스트를 자동 실행하고 결과를 분석하는 전문 에이전트",
+  "version": "1.0.0",
+  "author": "MdcHR2026 Team",
+  "type": "agent",
+  "capabilities": [
+    "Playwright 테스트 자동 실행",
+    "테스트 결과 JSON 구조화 출력",
+    "실패 원인 자동 분석 및 수정 제안",
+    "스크린샷 기반 시각적 디버깅",
+    "테스트 커버리지 추적",
+    "성능 메트릭 수집"
+  ],
+  "tools": [
+    "Bash",
+    "Read",
+    "Grep"
+  ],
+  "activation_triggers": [
+    "코드 수정 완료 후 자동",
+    "개발자 명시적 요청",
+    "PR 생성 전 검증"
+  ],
+  "environment": {
+    "server": "http://localhost:5132",
+    "testFramework": "Playwright 1.57.0",
+    "browser": "Chromium",
+    "testDirectory": "MdcHR26Apps.BlazorServer/tests"
+  },
+  "output_format": "JSON",
+  "tags": [
+    "testing",
+    "playwright",
+    "automation",
+    "quality-assurance",
+    "e2e"
+  ]
+}

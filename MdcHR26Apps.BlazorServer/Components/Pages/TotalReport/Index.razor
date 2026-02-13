@@ -1,0 +1,103 @@
+@page "/totalreport"
+@page "/totalreport/index"
+@rendermode InteractiveServer
+
+<PageTitle>평가제출</PageTitle>
+
+<h3>평가제출</h3>
+<hr />
+
+@if (processDb == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (Is_User_Submission)
+{
+    @if (totalReportViewModel == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else if (totalReportViewModel.TRid != 0)
+    {
+        @*본인평가*@
+        @if (!UserReportCollapsed)
+        {
+            <h5>
+                본인평가
+                <span @onclick="@UserReportCollapsedToggle" class="oi oi-plus mr-1" />
+            </h5>
+        }
+        else
+        {
+            <h5>
+                본인평가
+                <span @onclick="@UserReportCollapsedToggle" class="oi oi-minus mr-1" />
+            </h5>
+        }
+        @if (UserReportCollapsed)
+        {
+            <User_TotalReportListView TotalReportListDB="totalReportViewModel"></User_TotalReportListView>
+        }
+        <hr />
+
+        @*팀장평가*@
+        @if (!TeamLeaderReportCollapsed)
+        {
+            <h5>
+                부서장평가
+                <span @onclick="@TeamLeaderReportCollapsedToggle" class="oi oi-plus mr-1" />
+            </h5>
+        }
+        else
+        {
+            <h5>
+                부서장평가
+                <span @onclick="@TeamLeaderReportCollapsedToggle" class="oi oi-minus mr-1" />
+            </h5>
+        }
+        @if (TeamLeaderReportCollapsed)
+        {
+            @if (!String.IsNullOrEmpty(totalReportViewModel.TeamLeader_Comment))
+            {
+                <TeamLeader_TotalReportListView TotalReportListDB="totalReportViewModel"></TeamLeader_TotalReportListView>
+            }
+            else
+            {
+                <p><em>부서장 평가가 진행중입니다.</em></p>
+            }
+        }
+        <hr />
+
+        @*최종결과*@
+        @if (CompleteStatus)
+        {
+            @if (!CompleteReportCollased)
+            {
+                <h5>
+                    최종결과
+                    <span @onclick="@CompleteReportCollasedToggle" class="oi oi-plus mr-1" />
+                </h5>
+            }
+            else
+            {
+                <h5>
+                    최종결과
+                    <span @onclick="@CompleteReportCollasedToggle" class="oi oi-minus mr-1" />
+                </h5>
+            }
+            @if (CompleteReportCollased)
+            {
+                <hr />
+                <h4>최종결과 : <strong>@scoreUtils.GetTotalScore(totalReportViewModel.Total_Score)</strong></h4>
+            }
+        }
+        @if (IsReportSubmitModalShow)
+        {
+            <ReportSubmitModal Id="processDb.Pid"></ReportSubmitModal>
+        }
+    }
+}
+else
+{
+    <p><em>평가가 진행 중입니다.</em></p>
+}

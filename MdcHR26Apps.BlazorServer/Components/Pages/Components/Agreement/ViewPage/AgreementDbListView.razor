@@ -1,0 +1,13 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Agreement.ViewPage
+@rendermode InteractiveServer
+
+<h3>직무 목록</h3>
+
+@if (agreements == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <AgreementDbListTable agreementDbs="agreements" OnDetailsClick="HandleDetailsClick" IsAgreementCompleted="@IsAgreementCompleted" />
+}

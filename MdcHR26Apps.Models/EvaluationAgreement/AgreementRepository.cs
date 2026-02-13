@@ -1,184 +1,166 @@
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using System.Data;
 
 namespace MdcHR26Apps.Models.EvaluationAgreement;
 
-/// <summary>
-/// AgreementDb Repository 구현 (Dapper)
-/// Primary Constructor 사용 (C# 13)
-/// </summary>
-public class AgreementRepository(string connectionString, ILoggerFactory loggerFactory) : IAgreementRepository
+public class AgreementRepository(string connectionString, ILoggerFactory loggerFactory) : IAgreementRepository, IDisposable
 {
     private readonly SqlConnection db = new(connectionString);
-    private readonly ILogger _logger = loggerFactory.CreateLogger<AgreementRepository>();
+    private readonly ILogger _logger = loggerFactory.CreateLogger(nameof(AgreementRepository));
     private readonly string dbContext = connectionString;
 
     #region + [1] 입력: AddAsync
-    /// <summary>
-    /// 직무평가 협의서 추가
-    /// </summary>
-    public async Task<Int64> AddAsync(AgreementDb model)
+    public async Task<AgreementDb> AddAsync(AgreementDb model)
     {
-        const string sql = """
-            INSERT INTO AgreementDb(
-                Uid, Agreement_Item_Number, Agreement_Item_Name_1, Agreement_Item_Name_2,
-                Agreement_Item_Proportion, DeptObjective_Number, Is_Agreement,
-                Agreement_Comment, Agreement_Date)
-            VALUES(
-                @Uid, @Agreement_Item_Number, @Agreement_Item_Name_1, @Agreement_Item_Name_2,
-                @Agreement_Item_Proportion, @DeptObjective_Number, @Is_Agreement,
-                @Agreement_Comment, @Agreement_Date);
-            SELECT CAST(SCOPE_IDENTITY() AS BIGINT);
-            """;
+        try
+        {
+            const string query =
+                "INSERT INTO AgreementDb(" +
+                    "Uid, Report_Item_Number, Report_Item_Name_1, Report_Item_Name_2, Report_Item_Proportion) " +
+                "VALUES(" +
+                    "@Uid, @Report_Item_Number, @Report_Item_Name_1, @Report_Item_Name_2, @Report_Item_Proportion);" +
+                "Select Cast(SCOPE_IDENTITY() As Int);";
 
-        using var connection = new SqlConnection(dbContext);
-        return await connection.ExecuteScalarAsync<Int64>(sql, model);
+            using (var connection = new SqlConnection(dbContext))
+            {
+                int id = await connection.ExecuteScalarAsync<int>(query, model);
+                model.Aid = id;
+            }
+        }
+        catch (Exception e)
+        {
+            _logger?.LogError($"ERROR({nameof(AddAsync)}): {e.Message}");
+        }
+
+        return model;
     }
     #endregion
 
     #region + [2] 출력: GetByAllAsync
-    /// <summary>
-    /// 전체 협의서 조회
-    /// </summary>
-    public async Task<IEnumerable<AgreementDb>> GetByAllAsync()
+    public async Task<List<AgreementDb>> GetByAllAsync()
     {
-        const string sql = "SELECT * FROM AgreementDb ORDER BY Aid";
+        const string query = "Select * From AgreementDb Order By Aid";
 
-        using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<AgreementDb>(sql);
+        using (var connection = new SqlConnection(dbContext))
+        {
+            var result = await connection.QueryAsync<AgreementDb>(query, commandType: CommandType.Text);
+            return result.ToList();
+        }
     }
     #endregion
 
     #region + [3] 상세: GetByIdAsync
-    /// <summary>
-    /// ID로 협의서 조회
-    /// </summary>
-    public async Task<AgreementDb?> GetByIdAsync(Int64 id)
+    public async Task<AgreementDb> GetByIdAsync(long id)
     {
-        const string sql = "SELECT * FROM AgreementDb WHERE Aid = @id";
+        const string query = "Select * From AgreementDb Where Aid = @id";
 
-        using var connection = new SqlConnection(dbContext);
-        return await connection.QueryFirstOrDefaultAsync<AgreementDb>(sql, new { id });
+        using (var connection = new SqlConnection(dbContext))
+        {
+            var result = await connection.QueryFirstOrDefaultAsync<AgreementDb>(query, new { id }, commandType: CommandType.Text);
+            return result ?? new AgreementDb();
+        }
     }
     #endregion
 
     #region + [4] 수정: UpdateAsync
-    /// <summary>
-    /// 협의서 수정
-    /// </summary>
-    public async Task<int> UpdateAsync(AgreementDb model)
+    public async Task<bool> UpdateAsync(AgreementDb model)
     {
-        const string sql = """
-            UPDATE AgreementDb
-            SET
+        const string query = @"
+            Update AgreementDb
+            Set
                 Uid = @Uid,
-                Agreement_Item_Number = @Agreement_Item_Number,
-                Agreement_Item_Name_1 = @Agreement_Item_Name_1,
-                Agreement_Item_Name_2 = @Agreement_Item_Name_2,
-                Agreement_Item_Proportion = @Agreement_Item_Proportion,
-                DeptObjective_Number = @DeptObjective_Number,
-                Is_Agreement = @Is_Agreement,
-                Agreement_Comment = @Agreement_Comment,
-                Agreement_Date = @Agreement_Date
-            WHERE Aid = @Aid
-            """;
+                Report_Item_Number = @Report_Item_Number,
+                Report_Item_Name_1 = @Report_Item_Name_1,
+                Report_Item_Name_2 = @Report_Item_Name_2,
+                Report_Item_Proportion = @Report_Item_Proportion
+            Where Aid = @Aid";
+        try
+        {
+            using (var connection = new SqlConnection(dbContext))
+            {
+                return await connection.ExecuteAsync(query, model) > 0;
+            }
+        }
+        catch (Exception e)
+        {
+            _logger?.LogError($"ERROR({nameof(UpdateAsync)}): {e.Message}");
+        }
 
-        using var connection = new SqlConnection(dbContext);
-        return await connection.ExecuteAsync(sql, model);
+        return false;
     }
     #endregion
 
     #region + [5] 삭제: DeleteAsync
-    /// <summary>
-    /// 협의서 삭제
-    /// </summary>
-    public async Task<int> DeleteAsync(Int64 id)
+    public async Task<bool> DeleteAsync(long id)
     {
-        const string sql = "DELETE FROM AgreementDb WHERE Aid = @id";
+        const string query = "Delete AgreementDb Where Aid = @id";
 
-        using var connection = new SqlConnection(dbContext);
-        return await connection.ExecuteAsync(sql, new { id });
+        try
+        {
+            using (var connection = new SqlConnection(dbContext))
+            {
+                return await connection.ExecuteAsync(query, new { id }, commandType: CommandType.Text) > 0;
+            }
+        }
+        catch (Exception er)
+        {
+            _logger?.LogError($"ERROR({nameof(DeleteAsync)}): {er.Message}");
+        }
+
+        return false;
     }
     #endregion
 
-    #region + [6] 사용자별 조회: GetByUidAsync
-    /// <summary>
-    /// 사용자별 협의서 조회
-    /// </summary>
-    public async Task<IEnumerable<AgreementDb>> GetByUidAsync(Int64 uid)
+    #region + [6] 사용자별 출력: GetByUserIdAllAsync
+    public async Task<List<AgreementDb>> GetByUidAllAsync(long uid)
     {
-        const string sql = """
-            SELECT * FROM AgreementDb
-            WHERE Uid = @uid
-            ORDER BY Agreement_Item_Number
-            """;
+        const string query = "Select * From AgreementDb Where Uid = @uid Order By Aid";
 
-        using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<AgreementDb>(sql, new { uid });
+        using (var connection = new SqlConnection(dbContext))
+        {
+            var result = await connection.QueryAsync<AgreementDb>(query, new { uid }, commandType: CommandType.Text);
+            return result.ToList();
+        }
     }
     #endregion
 
-    #region + [7] 합의 완료 확인: IsAgreementCompleteAsync
-    /// <summary>
-    /// 합의 완료 여부 확인 (모든 항목이 합의되었는지)
-    /// </summary>
-    public async Task<bool> IsAgreementCompleteAsync(Int64 uid)
+    #region + [7] 평가별 비중 출력: GetByTasksPeroportionAsync
+    public async Task<List<AgreementDb>> GetByTasksPeroportionAsync(long userId, string deptName, string indexName)
     {
-        const string sql = """
-            SELECT COUNT(*)
-            FROM AgreementDb
-            WHERE Uid = @uid AND Is_Agreement = 0
-            """;
+        const string query = @"
+            Select Top(1) *
+            From AgreementDb
+            Where Uid = @uid
+                And Report_Item_Name_1 = @deptName
+                And Report_Item_Name_2 = @indexName
+            Order By Aid";
 
-        using var connection = new SqlConnection(dbContext);
-        int count = await connection.ExecuteScalarAsync<int>(sql, new { uid });
-        return count == 0; // 미합의 항목이 0개면 완료
+        using (var connection = new SqlConnection(dbContext))
+        {
+            var result = await connection.QueryAsync<AgreementDb>(query, new { uid = userId, deptName, indexName }, commandType: CommandType.Text);
+            return result.ToList();
+        }
     }
     #endregion
 
-    #region + [8] 합의 대기: GetPendingAgreementAsync
-    /// <summary>
-    /// 합의 대기 중인 항목 조회
-    /// </summary>
-    public async Task<IEnumerable<AgreementDb>> GetPendingAgreementAsync(Int64 uid)
-    {
-        const string sql = """
-            SELECT * FROM AgreementDb
-            WHERE Uid = @uid AND Is_Agreement = 0
-            ORDER BY Agreement_Item_Number
-            """;
-
-        using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<AgreementDb>(sql, new { uid });
-    }
-    #endregion
-
-    #region + [9] 부서 목표별 조회: GetByDeptObjectiveAsync
-    /// <summary>
-    /// 부서 목표별 협의서 조회
-    /// </summary>
-    public async Task<IEnumerable<AgreementDb>> GetByDeptObjectiveAsync(Int64 deptObjectiveId)
-    {
-        const string sql = """
-            SELECT * FROM AgreementDb
-            WHERE DeptObjective_Number = @deptObjectiveId
-            ORDER BY Aid
-            """;
-
-        using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<AgreementDb>(sql, new { deptObjectiveId });
-    }
-    #endregion
-
-    #region + [#] Dispose
-    /// <summary>
-    /// 리소스 해제
-    /// </summary>
+    #region + Dispose
     public void Dispose()
     {
-        db?.Dispose();
+        Dispose(true);
         GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            if (db != null)
+            {
+                db.Dispose();
+            }
+        }
     }
     #endregion
 }

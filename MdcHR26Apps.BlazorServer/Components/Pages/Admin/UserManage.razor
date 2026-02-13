@@ -1,0 +1,39 @@
+﻿@page "/Admin/UserManage"
+
+<PageTitle>사용자관리페이지</PageTitle>
+
+<h3>사용자관리페이지</h3>
+<hr />
+<div class="input-group mb-1">
+    <button class="btn btn-primary" @onclick="UserCreatePage">사용자생성</button>
+</div>
+<hr />
+<SearchbarComponent searchTerm="@state.SearchTerm" SearchAction="HandleSearchValueChanged"
+                    SearchInitAction="SearchInit" />
+<div class="row g-2 align-items-end mb-2">
+    <div class="col-12 col-md-6">
+        <SearchDeptComponent deptlist="@deptlist" SearchDeptAction="HandleDeptValueChanged" @bind-selectedDept="@selectedDept" />
+    </div>
+    <div class="col-12 col-md-6">
+        <SortSelectorComponent
+            label="정렬"
+            sortOptions="@sortOptions"
+            sortField="@sortField"
+            sortFieldChanged="OnSortFieldChanged"
+            sortAsc="@sortAsc"
+            sortAscChanged="OnSortDirChanged" />
+    </div>
+</div>
+
+@if (state.Userlist == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (state.Userlist.Count() == 0)
+{
+    <p><em>사용자정보가 없습니다.</em></p>
+}
+else
+{
+    <UserListTable Users="@state.Userlist"></UserListTable>
+}

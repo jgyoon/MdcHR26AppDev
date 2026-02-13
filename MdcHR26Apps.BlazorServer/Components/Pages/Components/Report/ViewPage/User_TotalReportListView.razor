@@ -1,0 +1,41 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Report.ViewPage
+@rendermode InteractiveServer
+
+<div class="row">
+    <div class="card col-12 col-md-12">
+        <div class="card-header">
+            <h4>
+                @TotalReportListDB.UserName 님 본인평가
+            </h4>
+        </div>
+        <div class="card-body">
+            @if (totalScore != 0)
+            {
+                <p><em><strong> - 종합점수 : @scoreUtils.TotalScroreTo100thpercentile(totalScore).ToString() / 100 점</strong></em></p>
+                <hr />
+            }
+            <table class="table table-bordered table-responsive-md mb-0 pb-0">
+                <thead>
+                    <tr class="row">
+                        <th class="col-4" scope="col" style=@table_style_1>일정준수</th>
+                        <th class="col-4" scope="col" style=@table_style_1>업무수행도</th>
+                        <th class="col-4" scope="col" style=@table_style_1>결과평가(정성)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="row">
+                        <td class="col-4" style=@table_style_1>
+                            <em><strong>@scoreUtils.ScroreTo100thpercentile(TotalReportListDB.User_Evaluation_1).ToString() / 100 점</strong></em>
+                        </td>
+                        <td class="col-4" style=@table_style_1>
+                            <em><strong>@scoreUtils.ScroreTo100thpercentile(TotalReportListDB.User_Evaluation_2).ToString() / 100 점</strong></em>
+                        </td>
+                        <td class="col-4" style=@table_style_1>
+                            <em><strong>@scoreUtils.ScroreTo100thpercentile(TotalReportListDB.User_Evaluation_3).ToString() / 100 점</strong></em>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

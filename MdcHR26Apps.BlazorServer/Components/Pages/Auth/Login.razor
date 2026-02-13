@@ -1,0 +1,164 @@
+@page "/auth/login"
+@using MdcHR26Apps.Models.User
+@using MdcHR26Apps.Models.Views.v_MemberListDB
+@using MdcHR26Apps.Models.HRSetting
+@inject IUserRepository UserRepository
+@inject Iv_MemberListRepository MemberListRepository
+@inject LoginStatusService LoginStatusService
+@inject NavigationManager NavigationManager
+@inject UrlActions UrlActions
+@inject IHRSettingRepository iHRSettingRepository
+@inject AppStateService AppState
+
+<PageTitle>로그인페이지</PageTitle>
+
+@if (isLoading)
+{
+    <div class="spinner-container">
+        <div class="spinner"></div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <EditForm Model="@loginModel">
+                <div class="input-group mb-1">
+                    <span class="input-group-text input-width" for="userId">ID</span>
+                    <InputText id="userId"
+                               autocomplete="off"
+                               class="form-control"
+                               placeholder="ID"
+                               @bind-Value="loginModel.UserId"
+                               @onkeydown="EnterKeyLogin" />
+                </div>
+                <div class="input-group mb-1">
+                    <span class="input-group-text input-width" for="password">PW</span>
+                    <InputText type="@passwordInputType"
+                               id="password"
+                               class="form-control"
+                               placeholder="Password"
+                               @bind-Value="loginModel.Password"
+                               @onkeydown="EnterKeyLogin"></InputText>
+                    <span class="input-group-text">
+                        <i class="@eyeIcon" @onclick="PasswordVisionToggle"></i>
+                    </span>
+                </div>
+                <div class="input-group mb-1">
+                    <button id="loginButton" class="btn btn-primary" @onclick="HandleLogin">로그인</button>
+                </div>
+            </EditForm>
+        </div>
+        <div>
+            <span>@errorMessage</span>
+        </div>
+    </div>
+}
+
+@code {
+    private LoginModel loginModel = new();
+    private string? errorMessage;
+    private bool isLoading = false;
+    private string passwordInputType = "password";
+    private string eyeIcon = "bi bi-eye-slash";    
+
+    protected override async Task OnInitializedAsync()
+    {
+        // 이미 로그인된 경우 홈으로 리다이렉트
+        if (LoginStatusService.IsloginCheck())
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    private void PasswordVisionToggle()
+    {
+        if (passwordInputType == "password")
+        {
+            passwordInputType = "text";
+            eyeIcon = "bi bi-eye";
+        }
+        else
+        {
+            passwordInputType = "password";
+            eyeIcon = "bi bi-eye-slash";
+        }
+    }
+
+    private async Task EnterKeyLogin(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            // 입력된 값이 있을 경우만 로그인
+            if (!String.IsNullOrEmpty(loginModel.UserId) && !String.IsNullOrEmpty(loginModel.Password))
+            {
+                await HandleLogin();
+            }
+        }
+    }
+
+    private async Task HandleLogin()
+    {
+        try
+        {
+            isLoading = true;
+            errorMessage = null;
+
+            // 1. 로그인 체크 (UserRepository.LoginCheckAsync 사용)
+            bool isValid = await UserRepository.LoginCheckAsync(loginModel.UserId, loginModel.Password);
+
+            if (!isValid)
+            {
+                errorMessage = "사용자 ID 또는 비밀번호가 일치하지 않습니다.";
+                return;
+            }
+
+            // 2. v_MemberListDB에서 사용자 정보 조회 (부서명 포함, 1회 쿼리)
+            var member = await MemberListRepository.GetByUserIdAsync(loginModel.UserId);
+
+            if (member == null)
+            {
+                errorMessage = "사용자 정보를 찾을 수 없습니다.";
+                return;
+            }
+
+            // 3. 로그인 상태 설정
+            LoginStatusService.SetLoginStatus(
+                isLogin: true,
+                uid: member.Uid,
+                userid: member.UserId,
+                username: member.UserName,
+                isadmin: member.IsAdministrator,
+                isteamleader: member.IsTeamLeader,
+                isdirector: member.IsDirector,
+                isdeptobjwriter: member.IsDeptObjectiveWriter,
+                department: member.EDepartmentName
+            );
+
+            // 4. HRSetting 설정
+            var setting = await iHRSettingRepository.GetCurrentAsync();
+            if (setting != null)
+            {
+                AppState.SetEvaluationOpen(setting.Evaluation_Open);
+                AppState.SetEditOpen(setting.Edit_Open);
+            }
+
+            // 5. 홈으로 리다이렉트
+            UrlActions.MoveMainPage();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"로그인 중 오류가 발생했습니다: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private class LoginModel
+    {
+        public string UserId { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+}

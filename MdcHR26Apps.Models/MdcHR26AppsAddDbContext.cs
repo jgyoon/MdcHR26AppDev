@@ -16,6 +16,7 @@ using MdcHR26Apps.Models.Views.v_DeptObjectiveListDb;
 using MdcHR26Apps.Models.Views.v_ProcessTRListDB;
 using MdcHR26Apps.Models.Views.v_ReportTaskListDB;
 using MdcHR26Apps.Models.Views.v_TotalReportListDB;
+using MdcHR26Apps.Models.Views.v_EvaluationUsersList;
 
 namespace MdcHR26Apps.Models;
 
@@ -94,5 +95,6 @@ public class MdcHR26AppsAddDbContext(DbContextOptions<MdcHR26AppsAddDbContext> o
         modelBuilder.Entity<v_ProcessTRListDB>().ToView("v_ProcessTRListDB").HasNoKey();
         modelBuilder.Entity<v_ReportTaskListDB>().ToView("v_ReportTaskListDB").HasNoKey();
         modelBuilder.Entity<v_TotalReportListDB>().ToView("v_TotalReportListDB").HasNoKey();
+        modelBuilder.Entity<v_EvaluationUsersList>().ToView("v_EvaluationUsersList").HasNoKey();
     }
 }

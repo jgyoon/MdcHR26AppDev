@@ -11,6 +11,16 @@ public interface Iv_ProcessTRListRepository : IDisposable
     Task<IEnumerable<v_ProcessTRListDB>> GetByAllAsync();
 
     /// <summary>
+    /// 전체 평가 프로세스-결과 목록 조회 (List 반환)
+    /// </summary>
+    Task<List<v_ProcessTRListDB>> GetAllAsync();
+
+    /// <summary>
+    /// Pid로 특정 평가 프로세스-결과 조회
+    /// </summary>
+    Task<v_ProcessTRListDB?> GetByPidAsync(long pid);
+
+    /// <summary>
     /// 특정 프로세스의 전체 결과 조회
     /// </summary>
     Task<IEnumerable<v_ProcessTRListDB>> GetByProcessIdAsync(Int64 processId);
@@ -21,22 +31,17 @@ public interface Iv_ProcessTRListRepository : IDisposable
     Task<IEnumerable<v_ProcessTRListDB>> GetByUserIdAsync(Int64 uid);
 
     /// <summary>
-    /// 연도별 평가 결과 조회
-    /// </summary>
-    Task<IEnumerable<v_ProcessTRListDB>> GetByYearAsync(int year);
-
-    /// <summary>
-    /// 등급별 평가 결과 조회
-    /// </summary>
-    Task<IEnumerable<v_ProcessTRListDB>> GetByGradeAsync(string grade);
-
-    /// <summary>
-    /// 프로세스 상태별 조회
-    /// </summary>
-    Task<IEnumerable<v_ProcessTRListDB>> GetByProcessStatusAsync(int status);
-
-    /// <summary>
     /// 특정 프로세스의 특정 사용자 결과 조회
     /// </summary>
     Task<v_ProcessTRListDB?> GetByProcessAndUserAsync(Int64 processId, Int64 uid);
+
+    /// <summary>
+    /// 부서장 관할 팀원 목록 조회
+    /// </summary>
+    Task<List<v_ProcessTRListDB>> GetByTeamLeaderIdAsync(Int64 teamLeaderId);
+
+    /// <summary>
+    /// 임원 관할 팀원 목록 조회
+    /// </summary>
+    Task<List<v_ProcessTRListDB>> GetByDirectorIdAsync(Int64 directorId);
 }

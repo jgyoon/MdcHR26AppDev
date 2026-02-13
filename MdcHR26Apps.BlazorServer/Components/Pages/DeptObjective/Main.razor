@@ -1,0 +1,27 @@
+﻿@page "/DeptObjective/Main"
+@rendermode InteractiveServer
+
+<PageTitle>2026년 목표</PageTitle>
+
+<h3>2026년 목표</h3>
+<hr />
+@if (isAdmin)
+{
+    <div class="input-group mb-1">
+        <button class="btn btn-primary" @onclick="MoveMainObjectiveCreatePage">목표 생성</button>
+    </div>
+    <hr />
+}
+
+@if (objectList == null)
+{
+    <LoadingIndicator />
+}
+else if (objectList.Count() == 0)
+{
+    <p><em>목표가 작성되지 않았습니다.</em></p>
+}
+else
+{
+    <ObjectiveListTable objectList="@objectList" isEdit="@isAdmin" isMain="@isMain"></ObjectiveListTable>
+}

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using MdcHR26Apps.Models.User;
 using MdcHR26Apps.Models.Department;
 using MdcHR26Apps.Models.Rank;
+using MdcHR26Apps.Models.HRSetting;
 using MdcHR26Apps.Models.EvaluationProcess;
 using MdcHR26Apps.Models.EvaluationReport;
 using MdcHR26Apps.Models.Result;
@@ -15,10 +16,13 @@ using MdcHR26Apps.Models.EvaluationSubAgreement;
 using MdcHR26Apps.Models.EvaluationTasks;
 using MdcHR26Apps.Models.EvaluationLists;
 using MdcHR26Apps.Models.Views.v_MemberListDB;
+using MdcHR26Apps.Models.Views.v_EvaluationUsersList;
 using MdcHR26Apps.Models.Views.v_DeptObjectiveListDb;
 using MdcHR26Apps.Models.Views.v_ProcessTRListDB;
 using MdcHR26Apps.Models.Views.v_ReportTaskListDB;
 using MdcHR26Apps.Models.Views.v_TotalReportListDB;
+using MdcHR26Apps.Models.Views.v_AgreementDB;
+using MdcHR26Apps.Models.Views.v_SubAgreementDB;
 
 namespace MdcHR26Apps.Models;
 
@@ -34,9 +38,15 @@ public static class MdcHR26AppsAddExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        // 연결 문자열
-        var connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException("연결 문자열 'DefaultConnection'을 찾을 수 없습니다.");
+        // 연결 문자열 (환경에 따라 자동 선택)
+        var isProductionStr = configuration["AppSettings:IsProduction"];
+        var isProduction = !string.IsNullOrEmpty(isProductionStr) && int.Parse(isProductionStr) == 1;
+        var connectionStringName = isProduction
+            ? "MdcHR26AppsContainerConnection"
+            : "DefaultConnection";
+
+        var connectionString = configuration.GetConnectionString(connectionStringName)
+            ?? throw new InvalidOperationException($"연결 문자열 '{connectionStringName}'을 찾을 수 없습니다.");
 
         // === EF Core DbContext ===
         services.AddDbContext<MdcHR26AppsAddDbContext>(options =>
@@ -59,6 +69,12 @@ public static class MdcHR26AppsAddExtensions
         {
             var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
             return new ERankRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<IHRSettingRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new HRSettingRepository(connectionString, loggerFactory);
         });
 
         // === Phase 2-2: 평가 핵심 Repository 등록 (4개) ===
@@ -146,6 +162,24 @@ public static class MdcHR26AppsAddExtensions
         {
             var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
             return new v_TotalReportListRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<Iv_EvaluationUsersListRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new v_EvaluationUsersListRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<Iv_AgreementRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new v_AgreementRepository(connectionString, loggerFactory);
+        });
+
+        services.AddScoped<Iv_SubAgreementRepository>(provider =>
+        {
+            var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+            return new v_SubAgreementRepository(connectionString, loggerFactory);
         });
 
         return services;

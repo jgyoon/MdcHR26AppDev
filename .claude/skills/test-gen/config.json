@@ -1,0 +1,27 @@
+{
+  "name": "test-gen",
+  "description": "작업지시서를 분석하여 Playwright 테스트 시나리오를 자동 생성하는 스킬",
+  "version": "1.0.0",
+  "author": "MdcHR2026 Team",
+  "triggers": [
+    "/test-gen",
+    "/테스트생성"
+  ],
+  "parameters": {
+    "taskNumber": {
+      "type": "string",
+      "description": "작업지시서 번호 (선택사항, 없으면 최근 작업지시서 사용)",
+      "required": false
+    }
+  },
+  "examples": [
+    "/test-gen 20260121_01",
+    "/test-gen"
+  ],
+  "tags": [
+    "test",
+    "playwright",
+    "automation",
+    "qa"
+  ]
+}

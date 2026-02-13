@@ -1,0 +1,14 @@
+@page "/totalreport/teamleader"
+@page "/totalreport/teamleader/index"
+@rendermode InteractiveServer
+
+<h3>Index</h3>
+
+@if (processDbList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <TeamLeader_TotalReportList processDbList="processDbList"></TeamLeader_TotalReportList>
+}

@@ -1,0 +1,67 @@
+﻿[
+    {
+        "File":  "MdcHR26Apps.Models\\DeptObjective\\IDeptObjectiveRepository.cs",
+        "Status":  "MATCH",
+        "Details":  "Content matches"
+    },
+    {
+        "File":  "MdcHR26Apps.Models\\EvaluationAgreement\\AgreementDb.cs",
+        "Status":  "MATCH",
+        "Details":  "Content matches"
+    },
+    {
+        "File":  "MdcHR26Apps.Models\\EvaluationAgreement\\AgreementRepository.cs",
+        "Status":  "MATCH",
+        "Details":  "Content matches"
+    },
+    {
+        "File":  "MdcHR26Apps.Models\\EvaluationAgreement\\IAgreementRepository.cs",
+        "Status":  "MATCH",
+        "Details":  "Content matches"
+    },
+    {
+        "File":  "MdcHR26Apps.Models\\EvaluationLists\\EvaluationLists.cs",
+        "Status":  "DIFFER",
+        "Details":  "Content differs"
+    },
+    {
+        "File":  "MdcHR26Apps.Models\\EvaluationLists\\EvaluationListsRepository.cs",
+        "Status":  "DIFFER",
+        "Details":  "Content differs"
+    },
+    {
+        "File":  "MdcHR26Apps.Models\\EvaluationLists\\IEvaluationListsRepository.cs",
+        "Status":  "DIFFER",
+        "Details":  "Content differs"
+    },
+    {
+        "File":  "MdcHR26Apps.Models\\EvaluationSubAgreement\\ISubAgreementRepository.cs",
+        "Status":  "MATCH",
+        "Details":  "Content matches"
+    },
+    {
+        "File":  "MdcHR26Apps.Models\\EvaluationSubAgreement\\SubAgreementDb.cs",
+        "Status":  "MATCH",
+        "Details":  "Content matches"
+    },
+    {
+        "File":  "MdcHR26Apps.Models\\EvaluationSubAgreement\\SubAgreementRepository.cs",
+        "Status":  "MATCH",
+        "Details":  "Content matches"
+    },
+    {
+        "File":  "MdcHR26Apps.Models\\EvaluationTasks\\ITasksRepository.cs",
+        "Status":  "MATCH",
+        "Details":  "Content matches"
+    },
+    {
+        "File":  "MdcHR26Apps.Models\\EvaluationTasks\\TasksDb.cs",
+        "Status":  "MATCH",
+        "Details":  "Content matches"
+    },
+    {
+        "File":  "MdcHR26Apps.Models\\EvaluationTasks\\TasksRepository.cs",
+        "Status":  "MATCH",
+        "Details":  "Content matches"
+    }
+]

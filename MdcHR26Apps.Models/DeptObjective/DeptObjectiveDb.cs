@@ -3,49 +3,44 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MdcHR26Apps.Models.DeptObjective;
 
-/// <summary>
-/// 부서 목표 Entity
-/// </summary>
 [Table("DeptObjectiveDb")]
 public class DeptObjectiveDb
 {
-    /// <summary>
-    /// DeptObjective ID (PK, IDENTITY)
-    /// </summary>
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Int64 DOid { get; set; }
+    public Int64 DeptObjectiveDbId { get; set; }
 
-    /// <summary>
-    /// 부서 ID (FK → EDepartmentDb.EDepartId)
-    /// </summary>
     [Required]
     public Int64 EDepartId { get; set; }
 
-    /// <summary>
-    /// 목표 제목
-    /// </summary>
     [Required]
-    [StringLength(255)]
-    public string Objective_Title { get; set; } = string.Empty;
+    public string ObjectiveTitle { get; set; } = string.Empty;
 
-    /// <summary>
-    /// 목표 내용
-    /// </summary>
-    public string? Objective_Content { get; set; }
-
-    /// <summary>
-    /// 목표 달성 기준
-    /// </summary>
-    public string? Achievement_Criteria { get; set; }
-
-    /// <summary>
-    /// 활성화 여부
-    /// </summary>
     [Required]
-    public bool IsActive { get; set; } = true;
+    public string ObjectiveContents { get; set; } = string.Empty;
 
-    // Navigation Property
+    [Required]
+    public string ObjectiveType { get; set; } = string.Empty; // "Main" or "Sub"
+
+    [Required]
+    public Int64 CreatedBy { get; set; }
+
+    [Required]
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+    public Int64? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+
+    public string? Remarks { get; set; }
+
+    // Navigation Properties
     [ForeignKey("EDepartId")]
     public Department.EDepartmentDb? EDepartment { get; set; }
+
+    [ForeignKey("CreatedBy")]
+    public User.UserDb? Creator { get; set; }
+
+    [ForeignKey("UpdatedBy")]
+    public User.UserDb? Updater { get; set; }
 }

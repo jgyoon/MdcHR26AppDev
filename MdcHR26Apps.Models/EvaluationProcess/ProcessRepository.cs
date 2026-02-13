@@ -45,12 +45,13 @@ public class ProcessRepository(string connectionString, ILoggerFactory loggerFac
     /// <summary>
     /// 전체 프로세스 목록 조회
     /// </summary>
-    public async Task<IEnumerable<ProcessDb>> GetByAllAsync()
+    public async Task<List<ProcessDb>> GetByAllAsync()
     {
         const string sql = "SELECT * FROM ProcessDb ORDER BY Pid";
 
         using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<ProcessDb>(sql);
+        var result = await connection.QueryAsync<ProcessDb>(sql);
+        return result.ToList();
     }
     #endregion
 
@@ -199,7 +200,7 @@ public class ProcessRepository(string connectionString, ILoggerFactory loggerFac
     /// <summary>
     /// 부서장 관할 팀원 목록 조회
     /// </summary>
-    public async Task<IEnumerable<ProcessDb>> GetByTeamLeaderIdAsync(Int64 teamLeaderId)
+    public async Task<List<ProcessDb>> GetByTeamLeaderIdAsync(Int64 teamLeaderId)
     {
         const string sql = """
             SELECT * FROM ProcessDb
@@ -208,7 +209,8 @@ public class ProcessRepository(string connectionString, ILoggerFactory loggerFac
             """;
 
         using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<ProcessDb>(sql, new { teamLeaderId });
+        var result = await connection.QueryAsync<ProcessDb>(sql, new { teamLeaderId });
+        return result.ToList();
     }
     #endregion
 
@@ -216,7 +218,7 @@ public class ProcessRepository(string connectionString, ILoggerFactory loggerFac
     /// <summary>
     /// 부서장 관할 중 사용자 제출 완료 목록
     /// </summary>
-    public async Task<IEnumerable<ProcessDb>> GetByTeamLeaderIdWithUserSubmissionAsync(Int64 teamLeaderId)
+    public async Task<List<ProcessDb>> GetByTeamLeaderIdWithUserSubmissionAsync(Int64 teamLeaderId)
     {
         const string sql = """
             SELECT * FROM ProcessDb
@@ -226,7 +228,8 @@ public class ProcessRepository(string connectionString, ILoggerFactory loggerFac
             """;
 
         using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<ProcessDb>(sql, new { teamLeaderId });
+        var result = await connection.QueryAsync<ProcessDb>(sql, new { teamLeaderId });
+        return result.ToList();
     }
     #endregion
 
@@ -234,7 +237,7 @@ public class ProcessRepository(string connectionString, ILoggerFactory loggerFac
     /// <summary>
     /// 임원 관할 팀원 목록 조회
     /// </summary>
-    public async Task<IEnumerable<ProcessDb>> GetByDirectorIdAsync(Int64 directorId)
+    public async Task<List<ProcessDb>> GetByDirectorIdAsync(Int64 directorId)
     {
         const string sql = """
             SELECT * FROM ProcessDb
@@ -243,7 +246,8 @@ public class ProcessRepository(string connectionString, ILoggerFactory loggerFac
             """;
 
         using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<ProcessDb>(sql, new { directorId });
+        var result = await connection.QueryAsync<ProcessDb>(sql, new { directorId });
+        return result.ToList();
     }
     #endregion
 
@@ -251,7 +255,7 @@ public class ProcessRepository(string connectionString, ILoggerFactory loggerFac
     /// <summary>
     /// 임원 관할 중 부서장 제출 완료 목록
     /// </summary>
-    public async Task<IEnumerable<ProcessDb>> GetByDirectorIdWithTeamleaderSubmissionAsync(Int64 directorId)
+    public async Task<List<ProcessDb>> GetByDirectorIdWithTeamleaderSubmissionAsync(Int64 directorId)
     {
         const string sql = """
             SELECT * FROM ProcessDb
@@ -261,7 +265,8 @@ public class ProcessRepository(string connectionString, ILoggerFactory loggerFac
             """;
 
         using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<ProcessDb>(sql, new { directorId });
+        var result = await connection.QueryAsync<ProcessDb>(sql, new { directorId });
+        return result.ToList();
     }
     #endregion
 
@@ -269,7 +274,7 @@ public class ProcessRepository(string connectionString, ILoggerFactory loggerFac
     /// <summary>
     /// 부서장 평가 제출 완료 목록
     /// </summary>
-    public async Task<IEnumerable<ProcessDb>> GetByTeamLeaderIdWithTeamLeaderSubmissionAsync(Int64 teamLeaderId)
+    public async Task<List<ProcessDb>> GetByTeamLeaderIdWithTeamLeaderSubmissionAsync(Int64 teamLeaderId)
     {
         const string sql = """
             SELECT * FROM ProcessDb
@@ -279,7 +284,8 @@ public class ProcessRepository(string connectionString, ILoggerFactory loggerFac
             """;
 
         using var connection = new SqlConnection(dbContext);
-        return await connection.QueryAsync<ProcessDb>(sql, new { teamLeaderId });
+        var result = await connection.QueryAsync<ProcessDb>(sql, new { teamLeaderId });
+        return result.ToList();
     }
     #endregion
 

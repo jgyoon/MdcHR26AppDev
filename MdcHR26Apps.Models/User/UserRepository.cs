@@ -2,6 +2,8 @@ using Dapper;
 using MdcHR26Apps.Models.Common;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace MdcHR26Apps.Models.User;
 
@@ -26,6 +28,22 @@ public class UserRepository(string connectionString, ILoggerFactory loggerFactor
     /// </summary>
     public async Task<Int64> AddAsync(UserDb user)
     {
+        // Step 1: Salt 생성 (16바이트)
+        byte[] salt = RandomNumberGenerator.GetBytes(16);
+
+        // Step 2: 비밀번호 + Salt → SHA-256 해싱
+        byte[] hashedPassword;
+        using (var sha256 = SHA256.Create())
+        {
+            byte[] passwordBytes = Encoding.Unicode.GetBytes(user.Password);
+            byte[] passwordWithSalt = new byte[passwordBytes.Length + salt.Length];
+
+            Buffer.BlockCopy(passwordBytes, 0, passwordWithSalt, 0, passwordBytes.Length);
+            Buffer.BlockCopy(salt, 0, passwordWithSalt, passwordBytes.Length, salt.Length);
+
+            hashedPassword = sha256.ComputeHash(passwordWithSalt);
+        }
+
         const string sql = """
             INSERT INTO UserDb
                 (UserId, UserName, UserPassword, UserPasswordSalt, ENumber, Email,
@@ -37,7 +55,22 @@ public class UserRepository(string connectionString, ILoggerFactory loggerFactor
             """;
 
         using var connection = new SqlConnection(dbContext);
-        return await connection.ExecuteScalarAsync<Int64>(sql, user);
+        return await connection.ExecuteScalarAsync<Int64>(sql, new
+        {
+            user.UserId,
+            user.UserName,
+            UserPassword = hashedPassword,  // 해시된 비밀번호 (byte[])
+            UserPasswordSalt = salt,        // Salt (byte[])
+            user.ENumber,
+            user.Email,
+            user.EDepartId,
+            user.ERankId,
+            user.EStatus,
+            user.IsTeamLeader,
+            user.IsDirector,
+            user.IsAdministrator,
+            user.IsDeptObjectiveWriter
+        });
     }
     #endregion
 
@@ -251,16 +284,16 @@ public class UserRepository(string connectionString, ILoggerFactory loggerFactor
         byte[] salt = result.UserPasswordSalt;
         byte[] storedHash = result.UserPassword;
 
-        // 비밀번호 + Salt 조합하여 해시 생성
+        // 비밀번호 + Salt 조합하여 해시 생성 (SQL NVARCHAR는 Unicode 인코딩)
         using var sha256 = System.Security.Cryptography.SHA256.Create();
-        var passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
+        var passwordBytes = System.Text.Encoding.Unicode.GetBytes(password);
         var combined = new byte[passwordBytes.Length + salt.Length];
         Buffer.BlockCopy(passwordBytes, 0, combined, 0, passwordBytes.Length);
         Buffer.BlockCopy(salt, 0, combined, passwordBytes.Length, salt.Length);
         byte[] inputHash = sha256.ComputeHash(combined);
 
         // 해시 비교
-        return storedHash.SequenceEqual(inputHash);
+        return System.Collections.StructuralComparisons.StructuralEqualityComparer.Equals(inputHash, storedHash);
     }
     #endregion
 

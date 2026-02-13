@@ -44,6 +44,16 @@ public class EDepartmentRepository(string connectionString, ILoggerFactory logge
     }
     #endregion
 
+    #region + [2].[1] 출력(활성화만 출력): GetByAllWithActivateStatusAsync
+    public async Task<IEnumerable<EDepartmentDb>> GetByAllWithActivateStatusAsync()
+    {
+        const string sql = "SELECT * FROM EDepartmentDb WHERE ActivateStatus = 1 ORDER BY EDepartmentNo";
+
+        using var connection = new SqlConnection(dbContext);
+        return await connection.QueryAsync<EDepartmentDb>(sql);
+    }
+    #endregion
+
     #region + [3] 상세: GetByIdAsync
     public async Task<EDepartmentDb?> GetByIdAsync(long departmentId)
     {
@@ -110,6 +120,31 @@ public class EDepartmentRepository(string connectionString, ILoggerFactory logge
 
         using var connection = new SqlConnection(dbContext);
         return await connection.QueryAsync<SelectListModel>(sql);
+    }
+    #endregion
+
+    #region + [8] 부서명으로 ID 조회: GetIdByNameAsync
+    public async Task<long> GetIdByNameAsync(string name)
+    {
+        const string sql = """
+            SELECT EDepartId
+            FROM EDepartmentDb
+            WHERE EDepartmentName = @Name
+            """;
+
+        using var connection = new SqlConnection(dbContext);
+        var result = await connection.QueryFirstOrDefaultAsync<long?>(sql, new { Name = name });
+        return result ?? 0;
+    }
+    #endregion
+
+    #region + [9] 부서번호로 조회: GetByDepartmentNoAsync
+    public async Task<EDepartmentDb?> GetByDepartmentNoAsync(int departmentNo)
+    {
+        const string sql = "SELECT * FROM EDepartmentDb WHERE EDepartmentNo = @DepartmentNo";
+
+        using var connection = new SqlConnection(dbContext);
+        return await connection.QueryFirstOrDefaultAsync<EDepartmentDb>(sql, new { DepartmentNo = departmentNo });
     }
     #endregion
 

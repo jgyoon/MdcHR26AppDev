@@ -1,0 +1,62 @@
+@page "/Admin/Users/Details/{Uid:long}"
+
+<PageTitle>사용자 상세</PageTitle>
+
+<h3>사용자 상세</h3>
+<hr />
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <label for="UserId">ID : </label>
+                    @model.UserId
+                </li>
+                <li class="list-group-item">
+                    <label for="UserName">이름 : </label>
+                    @model.UserName
+                </li>
+                <li class="list-group-item">
+                    <label for="EDepartment">부서 : </label>
+                    @model.EDepartmentName
+                </li>
+                <li class="list-group-item">
+                    <label for="ERank">직급 : </label>
+                    @model.ERank
+                </li>
+                <li class="list-group-item">
+                    <label for="ENumber">사번 : </label>
+                    @model.ENumber
+                </li>
+                <li class="list-group-item">
+                    <label for="EStatus">재직여부 : </label>
+                    @EStatusString(model.ActivateStatus)
+                </li>
+                <li class="list-group-item">
+                    <label for="IsAdmin">부서장(2차)여부 : </label>
+                    @isTeamLeader(model.IsTeamLeader)
+                </li>
+                <li class="list-group-item">
+                    <label for="IsAdmin">임원(3차)여부 : </label>
+                    @isDirector(model.IsDirector)
+                </li>
+                <li class="list-group-item">
+                    <label for="IsAdmin">관리자여부 : </label>
+                    @IsAdminString(model.IsAdministrator)
+                </li>
+            </ul>
+        </div>
+        <hr />
+        <div class="col-md-12">
+            <button type="button" class="btn btn-outline-primary" @onclick="UserManagePage">목록</button>
+            <button type="button" class="btn btn-outline-info" @onclick="(() => UserEditAction(model.Uid))">수정</button>
+            <button type="button" class="btn btn-outline-danger" @onclick="(() => UserDeleteAction(model.Uid))">삭제</button>
+        </div>
+    </div>
+}

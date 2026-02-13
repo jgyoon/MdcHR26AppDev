@@ -22,7 +22,7 @@ public class v_MemberListRepository(string connectionString, ILoggerFactory logg
     {
         const string sql = """
             SELECT * FROM v_MemberListDB
-            ORDER BY EDepartName, ERankName, UserName
+            ORDER BY EDepartmentName, ERank, UserName
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -55,7 +55,7 @@ public class v_MemberListRepository(string connectionString, ILoggerFactory logg
         const string sql = """
             SELECT * FROM v_MemberListDB
             WHERE EDepartId = @departId
-            ORDER BY ERankName, UserName
+            ORDER BY ERank, UserName
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -72,7 +72,7 @@ public class v_MemberListRepository(string connectionString, ILoggerFactory logg
         const string sql = """
             SELECT * FROM v_MemberListDB
             WHERE ERankId = @rankId
-            ORDER BY EDepartName, UserName
+            ORDER BY EDepartmentName, UserName
             """;
 
         using var connection = new SqlConnection(dbContext);
@@ -89,7 +89,7 @@ public class v_MemberListRepository(string connectionString, ILoggerFactory logg
         const string sql = """
             SELECT * FROM v_MemberListDB
             WHERE EStatus = 1
-            ORDER BY EDepartName, ERankName, UserName
+            ORDER BY EDepartmentName, ERank, UserName
             """;
 
         using var connection = new SqlConnection(dbContext);

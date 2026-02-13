@@ -3,6 +3,7 @@ AS SELECT
 	A.Pid,
 	U.UserId,
 	U.UserName,
+	ISNULL(ED.EDepartmentName, '') AS EDepartmentName,
 	ISNULL(TL.UserId, '') AS TeamLeader_Id,
 	ISNULL(TL.UserName, '') AS TeamLeader_Name,
 	ISNULL(D.UserId, '') AS Director_Id,
@@ -35,10 +36,12 @@ AS SELECT
 	ISNULL(C.Director_Evaluation_3, 0) AS Director_Evaluation_3,
 	ISNULL(C.Director_Comment,'') AS Director_Comment,
 	ISNULL(C.Total_Score, 0) AS Total_Score,
-	ISNULL(C.Director_Score, 0) AS Director_Score
+	ISNULL(C.Director_Score, 0) AS Director_Score,
+	ISNULL(C.TeamLeader_Score, 0) AS TeamLeader_Score
 FROM
 	[dbo].[ProcessDb] A
 	INNER JOIN [dbo].[UserDb] U ON A.Uid = U.Uid
+	LEFT JOIN [dbo].[EDepartmentDb] ED ON U.EDepartId = ED.EDepartId
 	LEFT JOIN [dbo].[UserDb] TL ON A.TeamLeaderId = TL.Uid
 	LEFT JOIN [dbo].[UserDb] D ON A.DirectorId = D.Uid
 	LEFT JOIN [dbo].[TotalReportDb] C ON A.Uid = C.Uid

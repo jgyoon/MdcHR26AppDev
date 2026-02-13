@@ -1,0 +1,69 @@
+﻿@page "/1st_hr_report/ReportDetails/{Id:long}"
+
+<PageTitle>평가 상세</PageTitle>
+
+<h3>평가 상세</h3>
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <label for="ReportItemNumber">평가번호 : </label>
+                    @model.Report_Item_Number
+                </li>
+                <li class="list-group-item">
+                    <label for="Report_Item_Name_1">평가지표 : </label>
+                    @model.Report_Item_Name_1
+                </li>
+                <li class="list-group-item">
+                    <label for="Report_Item_Name_2">평가직무 : </label>
+                    @model.Report_Item_Name_2
+                </li>
+                <li class="list-group-item">
+                    <label for="User_Evaluation_Proportion">평가비중 : </label>
+                    @model.Report_Item_Proportion.ToString() %
+                </li>
+                <li class="list-group-item">
+                    <label for="Report_Item_Name_3">세부직무 : </label>
+                    @model.Report_SubItem_Name
+                </li>
+                <li class="list-group-item">
+                    <label for="User_Evaluation_Proportion">세부직무비중 : </label>
+                    @model.Report_SubItem_Proportion.ToString() %
+                </li>
+                <li class="list-group-item">
+                    <label for="User_Evaluation_1">일정준수 : </label>
+                    @model.User_Evaluation_1.ToString()
+                </li>
+                <li class="list-group-item">
+                    <label for="User_Evaluation_2">업무수행도 : </label>
+                    @model.User_Evaluation_2.ToString()
+                </li>
+                <li class="list-group-item">
+                    <label for="User_Evaluation_3">결과평가(정성) : </label>
+                    @model.User_Evaluation_3.ToString()
+                </li>
+                <li class="list-group-item">
+                    <label for="User_Evaluation_4">비고 : </label>
+                    <div class="input-group mb-1">
+                        @if (!String.IsNullOrEmpty(model.User_Evaluation_4))
+                        {
+                            @((MarkupString)replaceString(model.User_Evaluation_4))
+                        }
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <hr />
+        <div class="col-md-12">
+            <button class="btn btn-outline-primary" @onclick="MoveReportMainPage">목록</button>
+            <button class="btn btn-outline-info" @onclick="(() => MoveReportEditPage(model.Rid))">수정</button>
+        </div>
+    </div>
+}

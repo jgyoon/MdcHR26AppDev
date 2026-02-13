@@ -44,6 +44,16 @@ public class ERankRepository(string connectionString, ILoggerFactory loggerFacto
     }
     #endregion
 
+    #region + [2].[1] 출력(활성화만 출력): GetByAllWithActivateStatusAsync
+    public async Task<IEnumerable<ERankDb>> GetByAllWithActivateStatusAsync()
+    {
+        const string sql = "SELECT * FROM ERankDb WHERE ActivateStatus = 1 ORDER BY ERankNo";
+
+        using var connection = new SqlConnection(dbContext);
+        return await connection.QueryAsync<ERankDb>(sql);
+    }
+    #endregion    
+
     #region + [3] 상세: GetByIdAsync
     public async Task<ERankDb?> GetByIdAsync(long rankId)
     {
@@ -110,6 +120,16 @@ public class ERankRepository(string connectionString, ILoggerFactory loggerFacto
 
         using var connection = new SqlConnection(dbContext);
         return await connection.QueryAsync<SelectListModel>(sql);
+    }
+    #endregion
+
+    #region + [8] 직급번호로 조회: GetByRankNoAsync
+    public async Task<ERankDb?> GetByRankNoAsync(int rankNo)
+    {
+        const string sql = "SELECT * FROM ERankDb WHERE ERankNo = @RankNo";
+
+        using var connection = new SqlConnection(dbContext);
+        return await connection.QueryFirstOrDefaultAsync<ERankDb>(sql, new { RankNo = rankNo });
     }
     #endregion
 

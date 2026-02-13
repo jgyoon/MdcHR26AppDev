@@ -1,0 +1,39 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Report
+@rendermode InteractiveServer
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>번호</th>
+            <th>평가지표</th>
+            <th>평가직무</th>
+            <th>세부직무</th>
+            <th>본인평가</th>
+            <th>팀장평가</th>
+            <th>상태</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in reports)
+        {
+            <tr>
+                <td>@item.Report_Item_Number</td>
+                <td>@item.Report_Item_Name_1</td>
+                <td>@item.Report_Item_Name_2</td>
+                <td>@item.Report_SubItem_Name</td>
+                <td>@GetAverageScore(item.User_Evaluation_1, item.User_Evaluation_2, item.User_Evaluation_3)</td>
+                <td>@GetAverageScore(item.TeamLeader_Evaluation_1, item.TeamLeader_Evaluation_2, item.TeamLeader_Evaluation_3)</td>
+                <td>
+                    @if (string.IsNullOrEmpty(item.TeamLeader_Evaluation_4))
+                    {
+                        <span class="badge bg-warning">미평가</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">완료</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

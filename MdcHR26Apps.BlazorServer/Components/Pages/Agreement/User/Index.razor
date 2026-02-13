@@ -1,0 +1,160 @@
+@page "/Agreement/User"
+@page "/Agreement/User/Index"
+@using MdcHR26Apps.BlazorServer.Components.Pages.Components.Agreement
+@using MdcHR26Apps.BlazorServer.Components.Pages.Components.Agreement.CommonView
+@using MdcHR26Apps.BlazorServer.Components.Pages.Components.Agreement.ViewPage
+
+<PageTitle>직무 작성</PageTitle>
+
+<h3>직무 작성</h3>
+
+<DisplayResultText Comment="@resultText" />
+
+@if (processDb == null)
+{
+    <LoadingIndicator />
+}
+else
+{
+    @* 평가자 설정여부 확인 *@
+    @if (!IsTeamLeaderAndDirectorSettings)
+    {
+        <div class="alert alert-warning">
+            <p><em>2차 평가자와 3차 평가자가 설정되지 않았습니다.</em></p>
+        </div>
+    }
+    @* 평가요청 X && 합의 X *@
+    else if (!IsRequest && !IsAgreement)
+    {
+        @* 비중 합이 100%가 아니면 *@
+        @if (sumperoportion != 100)
+        {
+            @if (agreements != null && agreements.Count >= agreementItemMaxCount)
+            {
+                <hr />
+                <p><em>총 평가비중 : @sumperoportion %</em></p>
+                <p><em>총 평가비중이 100 % 되어야 합니다.</em></p>
+                <p><em>직무 수 : @agreements.Count 개(최대 : @agreementItemMaxCount)</em></p>
+                <p><em>최대 직무 수(@agreementItemMaxCount 개) 이내로 작성해 주세요.</em></p>
+            }
+            else
+            {
+                <div class="mb-3">
+                    <button class="btn btn-primary" @onclick="CreateAgreement">새 협의 추가</button>
+                </div>
+                <hr />
+                <p><em>직무추가 버튼을 클릭하여 직무를 작성하여 주세요.</em></p>
+                <p><em>총 평가비중 : @sumperoportion %</em></p>
+                <p><em>총 평가비중이 100 % 되어야 합니다.</em></p>
+                <p><em>직무 수 : @(agreements?.Count ?? 0) 개(최대 : @agreementItemMaxCount)</em></p>
+            }
+        }
+        @* 비중 합이 100%이면 *@
+        else
+        {
+            @if (agreements != null && agreements.Count > agreementItemMaxCount)
+            {
+                <p><em>직무 작성은 최대 @agreementItemMaxCount 까지 가능합니다.</em></p>
+                <p><em>직무 수를 조정해 주세요.</em></p>
+            }
+            else if (agreements != null && IsDuplicated(agreements))
+            {
+                <p><em>직무 작성은 중복으로 제출할 수 없습니다.</em></p>
+                <p><em>중복된 직무를 삭제하여 주세요.</em></p>
+            }
+            else
+            {
+                <div class="mb-3">
+                    <button class="btn btn-primary" @onclick="SetRequest">합의요청</button>
+                </div>
+                <hr />
+                <p><em>총 평가비중 : @sumperoportion % - 상단의 합의요청 버튼을 클릭하여 주세요.</em></p>
+            }
+        }
+    }
+    @* 평가요청 O && 합의 X *@
+    else if (IsRequest && !IsAgreement)
+    {
+        <div class="mb-3">
+            <button class="btn btn-danger" @onclick="SetRequestCancel">요청취소</button>
+        </div>
+        <hr />
+        <p><em>합의여부를 대기중입니다...</em></p>
+    }
+    @* 평가요청 O && 합의 O *@
+    else if (IsRequest && IsAgreement)
+    {
+        <div class="alert alert-success">
+            <p><em>직무합의가 완료되었습니다.</em></p>
+            <p><em>세부 직무를 작성하여 주십시오.</em></p>
+        </div>
+    }
+}
+
+<hr />
+
+@* 합의 코멘트 (펼쳐보기) - AgreementComment 컴포넌트 사용 *@
+<AgreementComment Comment="@Agreement_Comment" />
+
+<hr />
+
+@* 직무 리스트 *@
+@if (agreements == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (agreements.Count == 0)
+{
+    <h5>직무 수 ( 현재 : 0 개 )</h5>
+    <p><em>최대 직무 수 : @agreementItemMaxCount 개</em></p>
+    <hr />
+}
+else
+{
+    @* 합의요청(X) && 합의승인(X) - 편집 가능 *@
+    @if (!IsRequest && !IsAgreement)
+    {
+        <AgreementDbListTable agreementDbs="@agreements" OnDetailsClick="@HandleDetails" IsAgreementCompleted="@IsAgreement" />
+    }
+    @* 합의 진행 중 또는 완료 - 읽기 전용 *@
+    else
+    {
+        @if (IsRequest && !IsAgreement)
+        {
+            <p><em>합의여부를 대기중에는 직무 수정이 불가합니다.</em></p>
+        }
+        else if (IsRequest && IsAgreement)
+        {
+            <p><em>합의가 완료되면 직무 수정이 불가합니다.</em></p>
+            <hr />
+            @* 합의내역 펼쳐보기 *@
+            <div class="row">
+                <div class="col">
+                    <h5 @onclick="AgreementToggle" style="cursor: pointer;">
+                        합의 내역 리스트
+                        @if (AgreementCollapsed)
+                        {
+                            <span class="oi oi-minus float-end" />
+                        }
+                        else
+                        {
+                            <span class="oi oi-plus float-end" />
+                        }
+                    </h5>
+                </div>
+            </div>
+            @if (AgreementCollapsed)
+            {
+                <hr />
+                <AgreementDbListView Uid="@loginStatusService.LoginStatus.LoginUid" IsAgreementCompleted="@IsAgreement" />
+            }
+        }
+    }
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <button type="button" class="btn btn-outline-secondary" @onclick="MoveMainPage">메인</button>
+    </div>
+</div>

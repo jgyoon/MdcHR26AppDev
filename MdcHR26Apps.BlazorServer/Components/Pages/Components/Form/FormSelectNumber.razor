@@ -1,0 +1,29 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Form
+@rendermode InteractiveServer
+
+@if (IsDisabled)
+{
+    <div class="input-group mb-1">
+        <span class="input-group-text mb-1 w-20">@Label</span>
+        <InputNumber id="@Id" class="form-control mb-1" style="background-color: white;" @bind-Value="BindValue" disabled>@BindValue</InputNumber>
+        <span class="input-group-text mb-1">%</span>
+    </div>
+}
+else
+{
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        if (!IsEdit)
+        {
+            <label for="@Id" class="form-label mb-1">@Label (@Label 을 설정하여 주세요 / 설정가능한 비중 : @maxperoportion %)</label>
+        }
+        <div class="input-group mb-1">
+            <span class="input-group-text mb-1 w-20">@Label</span>
+            <InputNumber class="form-control mb-1" id="@Id" step="1" min="0" max="@maxperoportion" @bind-Value=@peroportion @oninput="OnPeroportionChanged"></InputNumber>
+            <span class="input-group-text mb-1">%</span>
+        </div>
+        <div class="input-group mb-1">
+            <input id="@Id" type="range" class="form-control-range input-group mb-1" step="1" min="0" max="@maxperoportion" @bind-value=@peroportion @oninput="OnPeroportionChanged">
+        </div>
+    }
+}

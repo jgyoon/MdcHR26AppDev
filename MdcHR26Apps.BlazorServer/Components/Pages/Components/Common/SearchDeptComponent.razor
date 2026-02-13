@@ -1,0 +1,10 @@
+<div class="input-group mb-1">
+    <span class="input-group-text">부서</span>
+    <InputSelect id="Deptment" class="form-select" @bind-Value="@selectedDept" @bind-Value:after="OnSearchAction">
+        <option value="">전체</option>
+        @foreach (var item in deptlist)
+        {
+            <option value="@item">@item</option>
+        }
+    </InputSelect>
+</div>

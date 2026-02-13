@@ -14,10 +14,17 @@ public class v_MemberListDB
     public Int64 Uid { get; set; }
     public string UserId { get; set; } = string.Empty;
     public string UserName { get; set; } = string.Empty;
-    public string UserEmail { get; set; } = string.Empty;
-    public Int64 EDepartId { get; set; }
-    public string EDepartName { get; set; } = string.Empty;
+    public string ENumber { get; set; } = string.Empty;
+    public string ERank { get; set; } = string.Empty;
     public Int64 ERankId { get; set; }
-    public string ERankName { get; set; } = string.Empty;
-    public int EStatus { get; set; }
+    public int ERankNo { get; set; }
+    public string EDepartment { get; set; } = string.Empty;
+    public Int64 EDepartId { get; set; }
+    public int EDepartmentNo { get; set; }
+    public string EDepartmentName { get; set; } = string.Empty;
+    public bool ActivateStatus { get; set; }
+    public bool IsTeamLeader { get; set; }
+    public bool IsDirector { get; set; }
+    public bool IsAdministrator { get; set; }
+    public bool IsDeptObjectiveWriter { get; set; }
 }

@@ -1,0 +1,56 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.SubAgreement
+@rendermode InteractiveServer
+
+<table class="table table-hover table-responsive-md">
+    <thead>
+        <tr>
+            <th class="table-header">#</th>
+            <th class="table-header">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-5">평가지표</div>
+                    <div class="col-12 col-sm-12 col-md-5">평가직무</div>
+                    <div class="col-12 col-sm-12 col-md-2">직무비중</div>
+                </div>
+            </th>
+            <th class="table-header">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-6">세부평가직무</div>
+                    <div class="col-12 col-sm-12 col-md-6">세부직무비중</div>
+                </div>
+            </th>
+            <th class="table-header">비고</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in subAgreementDbs)
+        {
+            <tr>
+                <td class="table-cell">@sortNo</td>
+                <td class="table-cell">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-5">@item.Report_Item_Name_1</div>
+                        <div class="col-12 col-sm-12 col-md-5 table-text">@item.Report_Item_Name_2</div>
+                        <div class="col-12 col-sm-12 col-md-2">@item.Report_Item_Proportion %</div>
+                    </div>
+                </td>
+                <td class="table-cell">
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-6">@item.Report_SubItem_Name</div>
+                        <div class="col-12 col-sm-12 col-md-6">@item.Report_SubItem_Proportion %</div>
+                    </div>
+                </td>
+                <td class="table-cell">
+                    @if (!IsSubAgreementCompleted)
+                    {
+                        <button type="button" id="DetailButton" class="btn btn-info" @onclick="@(() => OnDetailsClick.InvokeAsync(item.Sid))">상세</button>
+                    }
+                    else
+                    {
+                        <span class="text-muted">완료</span>
+                    }
+                </td>
+            </tr>
+            sortNo++;
+        }
+    </tbody>
+</table>
