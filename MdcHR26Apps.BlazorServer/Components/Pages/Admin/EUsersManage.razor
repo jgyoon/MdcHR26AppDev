@@ -6,6 +6,8 @@
 <h3>평가대상자관리페이지</h3>
 <hr />
 <SearchbarComponent searchTerm="@searchTerm" SearchAction="HandleSearchValueChanged" SearchInitAction="SearchInit" />
+<SearchDeptComponent deptlist="@deptlist" SearchDeptAction="HandleDeptValueChanged"
+                     @bind-selectedDept="@selectedDept" />
 <hr />
 
 @if (userlist == null)

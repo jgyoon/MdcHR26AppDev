@@ -3,6 +3,7 @@ using MdcHR26Apps.Models.Views.v_MemberListDB;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components;
 using MdcHR26Apps.BlazorServer.Utils;
+using MdcHR26Apps.BlazorServer.Components.Pages.Components.Common;
 
 namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin
 {
@@ -25,7 +26,17 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin
         [Inject]
         public UserUtils utils { get; set; } = null!;
         public List<string> deptlist = new List<string>();
-        public string selectedDept { get; set; } = string.Empty;        
+        public string selectedDept { get; set; } = string.Empty;
+
+        // 정렬창 추가
+        private string sortField { get; set; } = "Name";
+        private bool sortAsc { get; set; } = true;
+        private List<SortSelectorComponent.SortOption> sortOptions = new()
+        {
+            new("Name", "이름"),
+            new("Rank", "직급"),
+            new("Dept", "부서")
+        };
 
         #region + State 클래스 사용
         // State 클래스 사용
@@ -139,6 +150,43 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin
         {
             selectedDept = newSearchValue;
             await SearchDept();
+        }
+        #endregion
+
+        #region + [9].[3] 정렬
+        private void ApplySort()
+        {
+            if (state.Userlist == null)
+            {
+                return;
+            }
+
+            state.Userlist = sortField switch
+            {
+                "Rank" => sortAsc
+                    ? state.Userlist.OrderBy(u => u.ERankNo).ToList()
+                    : state.Userlist.OrderByDescending(u => u.ERankNo).ToList(),
+                "Dept" => sortAsc
+                    ? state.Userlist.OrderBy(u => u.EDepartmentNo).ToList()
+                    : state.Userlist.OrderByDescending(u => u.EDepartmentNo).ToList(),
+                _ => sortAsc
+                    ? state.Userlist.OrderBy(u => u.UserName).ToList()
+                    : state.Userlist.OrderByDescending(u => u.UserName).ToList()
+            };
+        }
+
+        private Task OnSortFieldChanged(string value)
+        {
+            sortField = value;
+            ApplySort();
+            return Task.CompletedTask;
+        }
+
+        private Task OnSortDirChanged(bool asc)
+        {
+            sortAsc = asc;
+            ApplySort();
+            return Task.CompletedTask;
         }
         #endregion
     }

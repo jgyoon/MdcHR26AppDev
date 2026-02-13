@@ -14,16 +14,20 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Common
         [Parameter]
         public EventCallback<string> SearchInitAction { get; set; }
 
-        public string selectedDept { get; set; } = string.Empty;
+        [Parameter] public string selectedDept { get; set; } = string.Empty;
+        [Parameter] public EventCallback<string> SelectedDeptChanged { get; set; }
+
 
         private async Task OnSearchAction()
         {
             string newSearchValue = !String.IsNullOrEmpty(selectedDept) ? selectedDept : string.Empty;
+            await SelectedDeptChanged.InvokeAsync(newSearchValue);   // 부모 상태 동기화
+            await SearchDeptAction.InvokeAsync(newSearchValue);      // 검색 실행(전체 포함)
 
-            if (!String.IsNullOrEmpty(newSearchValue))
-            {
-                await SearchDeptAction.InvokeAsync(newSearchValue);
-            }
+            // if (!String.IsNullOrEmpty(newSearchValue))
+            // {
+            //     await SearchDeptAction.InvokeAsync(newSearchValue);
+            // }
         }
     }
 }

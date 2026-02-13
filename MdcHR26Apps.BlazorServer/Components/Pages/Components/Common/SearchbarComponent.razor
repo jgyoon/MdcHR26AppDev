@@ -2,5 +2,6 @@
     <InputText id="SearchTerm" class="form-control mb-1" @bind-Value="@searchTerm"
                @onkeyup="SearchEnterKeyPress" placeholder="직원명을 입력하세요."></InputText>
     <button id="SearchAction" class="btn btn-success mb-1" type="button" @onclick="OnSearchAction">검색</button>
-    <button id="SearchActionInit" class="btn btn-warning mb-1" type="button" @onclick="OnSearchInitAction">검색초기화</button>
+    <button id="SearchActionInit" class="btn btn-warning mb-1" type="button" @onclick="OnSearchInitAction"><i
+        class="bi bi-arrow-clockwise"></i></button>
 </div>

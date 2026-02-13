@@ -17,7 +17,10 @@ public class v_MemberListDB
     public string ENumber { get; set; } = string.Empty;
     public string ERank { get; set; } = string.Empty;
     public Int64 ERankId { get; set; }
+    public int ERankNo { get; set; }
+    public string EDepartment { get; set; } = string.Empty;
     public Int64 EDepartId { get; set; }
+    public int EDepartmentNo { get; set; }
     public string EDepartmentName { get; set; } = string.Empty;
     public bool ActivateStatus { get; set; }
     public bool IsTeamLeader { get; set; }
