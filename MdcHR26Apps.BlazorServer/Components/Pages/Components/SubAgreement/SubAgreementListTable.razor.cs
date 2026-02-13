@@ -14,6 +14,9 @@ public partial class SubAgreementListTable
     [Inject]
     public UrlActions urlActions { get; set; } = null!;
 
+    [Inject]
+    public AppStateService AppState { get; set; } = null!;
+
     // 기타
     public int sortNo = 1;
 

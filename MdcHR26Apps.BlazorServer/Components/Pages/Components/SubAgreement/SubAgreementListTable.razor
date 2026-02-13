@@ -66,6 +66,11 @@
                                 <div class="btn-group-vertical btn-size" role="group">
                                     <button id="CompleteDetailButton" class="btn btn-success btn-size" @onclick="(() => CompleteSubAgreementDetailsAction(item.Pid))">상세</button>
                                 </div>
+                                @*조정기간만 활성화*@
+                                @if (AppState.GetEditOpen() && !item.Is_User_Submission)
+                                {
+                                    <button id="ResetButton" class="btn btn-danger btn-size" @onclick="(() => SubAgreementResetAction(item.Pid))">초기화</button>
+                                }
                             }
                         </div>
                     </div>

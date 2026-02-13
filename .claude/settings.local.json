@@ -48,7 +48,8 @@
       "Bash(exit)",
       "Bash(Select-String -Pattern \"error\" -Context 0,1)",
       "Bash(tee:*)",
-      "Bash(Select-String -Pattern \"error|warning|succeeded|failed\" -Context 0,2)"
+      "Bash(Select-String -Pattern \"error|warning|succeeded|failed\" -Context 0,2)",
+      "Bash(if not exist \"works\\\\sync-reports\" mkdir \"works\\\\sync-reports\")"
     ],
     "additionalDirectories": [
       "C:\\Codes\\29_MdcHR25\\MdcHR25Apps\\MdcHR25Apps.BlazorApp\\Pages\\DeptObjective"
