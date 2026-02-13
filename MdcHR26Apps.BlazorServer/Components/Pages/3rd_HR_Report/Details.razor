@@ -1,0 +1,178 @@
+@page "/3rd_hr_report/Details/{Id:long}"
+
+<PageTitle>임원 평가 상세</PageTitle>
+
+<h3>임원 평가 상세</h3>
+
+<div class="input-group mb-1">
+    <button id="movemainpagebutton" class="btn btn-outline-success" @onclick="Move3rdMainPage">목록</button>
+</div>
+<hr />
+
+@if (!String.IsNullOrEmpty(resultText))
+{
+    <p><em>@resultText</em></p>
+}
+
+@if (processDb == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h3>@userName 님 직무평가 </h3>
+    <hr />
+    @*<p><em><strong>@userName 님 종합점수 : @totalScore.ToString("F2") / 45 점</strong></em></p>*@
+    @if (IsDirector_EvaluationComplete && !Is_Director_Submission)
+    {
+        @if (!String.IsNullOrEmpty(report_Director_Comment))
+        {
+            <div class="input-group mb-1">
+                <button id="submitbutton" class="btn btn-secondary" @onclick="DirectorReportSubmission">평가완료하기</button>
+                <button id="cencelbutton" class="btn btn-light" @onclick="DirectorReportSubmissionCencel">평가다시하기</button>
+            </div>
+
+        }
+        else
+        {
+            <p><strong>임원평가(일정준수,업무수행도,결과물 등)를 작성하여 주세요. - 1</strong></p>
+        }
+    }
+    else if (Is_Director_Submission)
+    {
+        <p>임원평가제출을 완료했습니다.</p>
+    }
+    else
+    {
+        <p>임원평가(일정준수,업무수행도,결과물 등)을 작성해주세요.</p>
+    }
+    <hr />
+}
+
+@if (totalReportViewModel == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (totalReportViewModel.TRid != 0)
+{
+    @*본인평가*@
+    @if (!UserReportCollapsed)
+    {
+        <h5>
+            본인평가
+            <span @onclick="@UserReportCollapsedToggle" class="oi oi-plus mr-1" />
+        </h5>
+    }
+    else
+    {
+        <h5>
+            본인평가
+            <span @onclick="@UserReportCollapsedToggle" class="oi oi-minus mr-1" />
+        </h5>
+    }
+    @if (UserReportCollapsed)
+    {
+        <User_TotalReportListView TotalReportListDB="totalReportViewModel"></User_TotalReportListView>
+    }
+    <hr />
+
+    @*팀장평가*@
+    @if (!TeamLeaderReportCollapsed)
+    {
+        <h5>
+            부서장평가
+            <span @onclick="@TeamLeaderReportCollapsedToggle" class="oi oi-plus mr-1" />
+        </h5>
+    }
+    else
+    {
+        <h5>
+            부서장평가
+            <span @onclick="@TeamLeaderReportCollapsedToggle" class="oi oi-minus mr-1" />
+        </h5>
+    }
+    @if (TeamLeaderReportCollapsed)
+    {
+        <FeedBack_TotalReportListView TotalReportListDB="totalReportViewModel"></FeedBack_TotalReportListView>
+    }
+    <hr />
+
+    @*임원평가*@
+    @if (!DirectorReportCollapsed)
+    {
+        <h5>
+            임원평가
+            <span @onclick="@DirectorReportCollapsedToggle" class="oi oi-plus mr-1" />
+        </h5>
+    }
+    else
+    {
+        <h5>
+            임원평가
+            <span @onclick="@DirectorReportCollapsedToggle" class="oi oi-minus mr-1" />
+        </h5>
+    }
+    @if (DirectorReportCollapsed)
+    {
+        if (processDb == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else if (processDb.Is_Director_Submission)
+        {
+            <Complete_TotalReportListView TotalReportListDB="totalReportViewModel"></Complete_TotalReportListView>
+        }
+        else
+        {
+            @if (totalReportModel == null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else
+            {
+                <hr />
+                <EditForm Model="totalReportModel">
+                    @*임원점수*@
+                    <label for="Director_Score" class="form-label mb-1">종합점수(0 ~ 100) : @director_Score.ToString("F2") / 100</label>
+                    <div class="input-group mb-1">
+                        <span class="input-group-text mb-1" style="width: 7.5em;">결과평가</span>
+                        <InputNumber class="form-control mb-1" id="Director_Score" step="0.05" min="0" max="100" @bind-Value=@director_Score></InputNumber>
+                        <span class="input-group-text mb-1">점</span>
+                    </div>
+                    <div class="input-group mb-1">
+                        <input id="Director_Score" type="range" class="form-control-range input-group mb-1" step="0.05" min="0" max="100" @bind-value=@director_Score>
+                    </div>
+                    @*임원 종합의견*@
+                    <div class="input-group mb-1">
+                        <span class="input-group-text mb-1" style="width: 7.5em;">종합평가</span>
+                        <InputTextArea id="TeamLeader_Comment" class="form-control mb-1" rows="5" @bind-Value="@report_Director_Comment">
+                        </InputTextArea>
+                    </div>
+                    <div class="input-group mb-1">
+                        <button id="editbutton" class="btn btn-primary" @onclick="DirectorUpdateReport">평가작성</button>
+                        <button id="cencelbutton" class="btn btn-light" @onclick="DirectorReportClear">초기화</button>
+                    </div>
+                </EditForm>
+                @if (!String.IsNullOrEmpty(update_resultText_1))
+                {
+                    <p><em>@update_resultText_1</em></p>
+                }
+            }
+        }
+    }
+    <hr />
+}
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (model.Count == 0)
+{
+    <p><em>No DATA</em></p>
+}
+else
+{
+    <hr />
+    <DirectorReportDetailsTable reports="model"></DirectorReportDetailsTable>
+}

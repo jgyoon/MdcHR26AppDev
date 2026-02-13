@@ -1,0 +1,74 @@
+@page "/1st_hr_report"
+@page "/1st_hr_report/Index"
+
+<PageTitle>본인 평가</PageTitle>
+
+<h3>본인 평가</h3>
+
+<DisplayResultText Comment="@resultText" />
+
+@if (processDb == null)
+{
+    <LoadingIndicator />
+}
+else
+{
+    @if (!IsTeamLeaderAndDiretorSettings)
+    {
+        <p><em>2차 평가자와 3차 평가자가 설정되지 않았습니다.</em></p>
+    }
+    else if (!IsRequest && !IsAgreement && !IsSubRequest && !IsSubAgreement)
+    {
+        <p>@result()</p>
+        <p>직무합의 및 세부직무합의가 되지 않았습니다.</p>
+    }
+    else
+    {
+        @if (IsUser_EvaluationComplete && !Is_User_Submission)
+        {
+            <button class="btn btn-secondary" @onclick="ReportSubmission">평가제출</button>
+        }
+        else if (Is_User_Submission)
+        {
+            @if (!Is_TeamLeader_Submission)
+            {
+                <button type="button" class="btn btn-outline-danger" @onclick="ReportSubmissionCancle">제출취소</button>
+            }
+            <p>평가제출을 완료했습니다.</p>
+            <hr />
+            @if (totalReportViewModel == null)
+            {
+                <LoadingIndicator />
+            }
+            else if (totalReportViewModel.TRid != 0)
+            {
+                <User_TotalReportListView TotalReportListDB="totalReportViewModel"></User_TotalReportListView>
+            }
+        }
+        else
+        {
+            <p>평가(일정준수,업무수행도,결과물 등)을 작성해주세요.</p>
+        }
+    }
+}
+<hr />
+
+@if (!Is_User_Submission)
+{
+    @if (model == null)
+    {
+        <LoadingIndicator />
+    }
+    else if (model.Count == 0)
+    {
+        <p><em>No DATA</em></p>
+    }
+    else
+    {
+        <ReportListTable reports="model"></ReportListTable>
+    }
+}
+else
+{
+    <p>평가제출을 완료되어서 수정이 불가능합니다.</p>
+}

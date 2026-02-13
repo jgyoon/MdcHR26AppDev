@@ -1,0 +1,29 @@
+﻿@page "/SubAgreement/TeamLeader/CompleteSubAgreement/{Id:long}"
+
+<PageTitle>세부 직무 합의(완료/상세)</PageTitle>
+
+<h3>세부 직무 합의(완료/상세) 초기화</h3>
+
+<div class="input-group mb-1">
+    <button id="movemainpagebutton" class="btn btn-outline-success" @onclick="MoveTeamLeaderSubAgreementMainPage">목록</button>
+</div>
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (model.Count == 0)
+{
+    <p><em>No DATA</em></p>
+}
+else
+{
+    <hr />
+    <p><em>@userName 님 업무비중</em></p>
+    <SubAgreementResetList reportDbList="model"></SubAgreementResetList>
+}
+<hr />
+@*세부업무내역(펼쳐보기 추가)*@
+<ReportTaskListCommonView Collapsed="@TaskListCollapsed"
+                          Toggle="@TaskListToggle"
+                          ReportTaskListDB="@v_ReportTaskLists" />

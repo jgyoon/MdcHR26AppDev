@@ -1,0 +1,36 @@
+@page "/Agreement/User/Edit/{Id:long}"
+@using MdcHR26Apps.BlazorServer.Components.Pages.Components.Form
+@using MdcHR26Apps.BlazorServer.Components.Pages.Components.Common
+
+<PageTitle>직무 수정</PageTitle>
+
+<h3>직무 수정</h3>
+
+@if (model == null)
+{
+    <LoadingIndicator />
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <EditForm Model="model">
+                <FormSelectList Label="평가지표" BindValue="@model.Report_Item_Name_1" IsDisabled="true" />
+                <FormSelectList Label="평가직무" BindValue="@model.Report_Item_Name_2" IsDisabled="true" />
+                <FormSelectNumber Label="평가비중"
+                                  peroportion="@model.Report_Item_Proportion"
+                                  maxperoportion="@maxperoportion"
+                                  PeroportionChanged="HandlePeroportionChanged"
+                                  IsEdit="true" />
+                <div>
+                    <small>설정가능한 비중 : 0 % ~ @maxperoportion %</small>
+                </div>
+                <div class="input-group mb-1">
+                    <button id="editbutton" class="btn btn-primary" @onclick="EditUserAgreement">변경</button>
+                    <button id="movepageutton" class="btn btn-light" @onclick="MoveUserAgreementMainPage">목록</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+    <DisplayResultText Comment="@resultText" />
+}

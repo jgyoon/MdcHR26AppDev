@@ -1,0 +1,82 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.SubAgreement
+@rendermode InteractiveServer
+
+<table class="table table-hover table-responsive-md">
+    <thead>
+        <tr>
+            <th class="table-header">
+                <div class="row">
+                    <div class="col-2 col-md-2">#</div>
+                    <div class="col-2 col-md-2">순번</div>
+                    <div class="col-8 col-md-8">이름</div>
+                </div>
+            </th>
+            <th class="table-header">
+                <div class="row">
+                    <div class="col-12 col-md-6">요청여부</div>
+                    <div class="col-12 col-md-6">승인여부</div>
+                </div>
+            </th>
+            <th class="table-header">
+                <div class="row">
+                    <div class="col-12 col-md-4">합의</div>
+                    <div class="col-12 col-md-4">평가제출</div>
+                    <div class="col-12 col-md-4">비고</div>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in processDbList)
+        {
+            <tr>
+                <td class="table-cell">
+                    <div class="row align-items-center">
+                        <div class="col-2 col-md-2">
+                            <CheckboxComponent IsChecked=@((item.Is_SubRequest && item.Is_SubAgreement)) IsDisabled="true"></CheckboxComponent>
+                        </div>
+                        <div class="col-2 col-md-2">@sortNo</div>
+                        <div class="col-8 col-md-8">@item.UserName</div>
+                    </div>
+                </td>
+                <td class="table-cell">
+                    <div class="row">
+                        <div class="col-12 col-md-6 table-cell-blue">@IsRequestStatus(item.Is_SubRequest)</div>
+                        <div class="col-12 col-md-6 table-cell-red">@IsAgreementStatus(item.Is_SubAgreement)</div>
+                    </div>
+                </td>
+                <td class="table-cell">
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-4">
+                            @if (item.Is_SubRequest && !item.Is_SubAgreement)
+                            {
+                                <button id="DetailButton" class="btn btn-primary" @onclick="(() => SubAgreementDetailsAction(item.Pid))">합의</button>
+                            }
+                            else
+                            {
+                                @Is_SubRequestAndSubAgreementStatus(item.Is_SubRequest, item.Is_SubAgreement)
+                            }
+                        </div>
+                        <div class="col-12 col-md-4">
+                            @IsReportSubmissionStatus(item.Is_User_Submission)
+                        </div>
+                        <div class="col-12 col-md-4">
+                            @if (item.Is_SubRequest && item.Is_SubAgreement)
+                            {
+                                <div class="btn-group-vertical btn-size" role="group">
+                                    <button id="CompleteDetailButton" class="btn btn-success btn-size" @onclick="(() => CompleteSubAgreementDetailsAction(item.Pid))">상세</button>
+                                </div>
+                                @*조정기간만 활성화*@
+                                @if (AppState.GetEditOpen() && !item.Is_User_Submission)
+                                {
+                                    <button id="ResetButton" class="btn btn-danger btn-size" @onclick="(() => SubAgreementResetAction(item.Pid))">초기화</button>
+                                }
+                            }
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            sortNo++;
+        }
+    </tbody>
+</table>

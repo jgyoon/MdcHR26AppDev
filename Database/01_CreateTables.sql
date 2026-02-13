@@ -198,13 +198,13 @@ CREATE TABLE [dbo].[DeptObjectiveDb]
 
     CONSTRAINT FK_DeptObjectiveDb_UserDb_CreatedBy
         FOREIGN KEY (CreatedBy)
-        REFERENCES [dbo].[UserDb](UId)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
 
     CONSTRAINT FK_DeptObjectiveDb_UserDb_UpdatedBy
         FOREIGN KEY (UpdatedBy)
-        REFERENCES [dbo].[UserDb](UId)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION
 );
@@ -219,7 +219,7 @@ CREATE TABLE [dbo].[AgreementDb]
     -- [01] AgreementDb id
     [Aid] BIGINT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     -- [02] 사용자 ID (외래키)
-    [UId] BIGINT NOT NULL,
+    [Uid] BIGINT NOT NULL,
     -- [03] Report_Item_Number
     [Report_Item_Number] INT NOT NULL,
     -- [04] Report_Item_Name_1(지표분류명)
@@ -231,8 +231,8 @@ CREATE TABLE [dbo].[AgreementDb]
 
     -- 외래키 제약조건
     CONSTRAINT FK_AgreementDb_UserDb
-        FOREIGN KEY (UId)
-        REFERENCES [dbo].[UserDb](UId)
+        FOREIGN KEY (Uid)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION
 );
@@ -247,7 +247,7 @@ CREATE TABLE [dbo].[SubAgreementDb]
     -- [01] SubAgreementDb id
     [Sid] BIGINT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     -- [02] 사용자 ID (외래키)
-    [UId] BIGINT NOT NULL,
+    [Uid] BIGINT NOT NULL,
     -- [03] Report_Item_Number
     [Report_Item_Number] INT NOT NULL,
     -- [04] Report_Item_Name_1(지표분류명)
@@ -265,8 +265,8 @@ CREATE TABLE [dbo].[SubAgreementDb]
 
     -- 외래키 제약조건
     CONSTRAINT FK_SubAgreementDb_UserDb
-        FOREIGN KEY (UId)
-        REFERENCES [dbo].[UserDb](UId)
+        FOREIGN KEY (Uid)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION
 );
@@ -281,7 +281,7 @@ CREATE TABLE [dbo].[ProcessDb]
     -- [01] ProcessDb id
     [Pid] BIGINT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     -- [02] 사용자 ID (외래키 - 평가 대상자)
-    [UId] BIGINT NOT NULL,
+    [Uid] BIGINT NOT NULL,
     -- [03] 부서장 ID (외래키 - 2차 평가자)
     [TeamLeaderId] BIGINT,
     -- [04] 임원 ID (외래키 - 3차 평가자)
@@ -311,20 +311,20 @@ CREATE TABLE [dbo].[ProcessDb]
 
     -- 외래키 제약조건
     CONSTRAINT FK_ProcessDb_UserDb_User
-        FOREIGN KEY (UId)
-        REFERENCES [dbo].[UserDb](UId)
+        FOREIGN KEY (Uid)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
 
     CONSTRAINT FK_ProcessDb_UserDb_TeamLeader
         FOREIGN KEY (TeamLeaderId)
-        REFERENCES [dbo].[UserDb](UId)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
 
     CONSTRAINT FK_ProcessDb_UserDb_Director
         FOREIGN KEY (DirectorId)
-        REFERENCES [dbo].[UserDb](UId)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION
 );
@@ -339,7 +339,7 @@ CREATE TABLE [dbo].[ReportDb]
     -- [01] Report id
     [Rid] BIGINT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     -- [02] 사용자 ID (외래키)
-    [UId] BIGINT NOT NULL,
+    [Uid] BIGINT NOT NULL,
     -- [03] Report_Item_Number
     [Report_Item_Number] INT NOT NULL,
     -- [04] Report_Item_Name_1(지표분류명)
@@ -391,8 +391,8 @@ CREATE TABLE [dbo].[ReportDb]
 
     -- 외래키 제약조건
     CONSTRAINT FK_ReportDb_UserDb
-        FOREIGN KEY (UId)
-        REFERENCES [dbo].[UserDb](UId)
+        FOREIGN KEY (Uid)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION
 );
@@ -407,7 +407,7 @@ CREATE TABLE [dbo].[TotalReportDb]
     -- [01] TotalReport id
     [TRid] BIGINT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     -- [02] User id (외래키)
-    [UId] BIGINT NOT NULL,
+    [Uid] BIGINT NOT NULL,
 
     -- 평가대상자 평가점수
     -- [03] User_Evaluation_1(일정준수)
@@ -458,8 +458,8 @@ CREATE TABLE [dbo].[TotalReportDb]
 
     -- 외래키 제약조건
     CONSTRAINT FK_TotalReportDb_UserDb
-        FOREIGN KEY (UId)
-        REFERENCES [dbo].[UserDb](UId)
+        FOREIGN KEY (Uid)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION
 );
@@ -474,7 +474,7 @@ CREATE TABLE [dbo].[EvaluationUsers]
     -- [01] Evaluation User id
     [EUid] BIGINT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     -- [02] 사용자 ID (외래키 - 평가 대상자)
-    [UId] BIGINT NOT NULL,
+    [Uid] BIGINT NOT NULL,
     -- [03] 평가자여부
     [Is_Evaluation] BIT NOT NULL DEFAULT 1,
     -- [04] 부서장 ID (외래키 - 2차 평가자)
@@ -486,20 +486,20 @@ CREATE TABLE [dbo].[EvaluationUsers]
 
     -- 외래키 제약조건
     CONSTRAINT FK_EvaluationUsers_UserDb_User
-        FOREIGN KEY (UId)
-        REFERENCES [dbo].[UserDb](UId)
+        FOREIGN KEY (Uid)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
 
     CONSTRAINT FK_EvaluationUsers_UserDb_TeamLeader
         FOREIGN KEY (TeamLeaderId)
-        REFERENCES [dbo].[UserDb](UId)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
 
     CONSTRAINT FK_EvaluationUsers_UserDb_Director
         FOREIGN KEY (DirectorId)
-        REFERENCES [dbo].[UserDb](UId)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION
 );
@@ -579,6 +579,21 @@ CREATE TABLE [dbo].[EvaluationLists]
     [Evaluation_Task_Name] NVARCHAR(100) NOT NULL,
     -- [08] 평가리스트 비고
     [Evaluation_Lists_Remark] NVARCHAR(100) NULL
+);
+GO
+
+-- [13] HRSetting (독립적인 마스터 데이터)
+PRINT '  - HRSetting 생성';
+CREATE TABLE [dbo].[HRSetting]
+(
+    -- Primary Key
+    -- 자동 ID생성 
+    -- [01] HRSetting id
+    [HRSid] BIGINT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    -- [02] 평가오픈
+    [Evaluation_Open] BIT NOT NULL DEFAULT 0,
+    -- [03] 평가수정
+    [Edit_Open] BIT NOT NULL DEFAULT 0
 );
 GO
 

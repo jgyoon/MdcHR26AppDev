@@ -1,0 +1,43 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Report.ViewPage
+@rendermode InteractiveServer
+
+<div class="row">
+    @foreach (var item in ReportTaskListDB)
+    {
+        <div class="card col-12">
+            <div class="card-header">
+                <h5>업무명(업무난이도) : @item.TaskName (@taskUtils.LeveltoName(item.TaskLevel))</h5>
+            </div>
+            <div class="card-body">
+                <h5>업무목표 : </h5>
+                @item.TaskObjective
+            </div>
+            <div class="card-footer">
+                <label>업무진척도 : </label>
+                <div>
+                    <div class="progress">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: @item.TargetProportion%;" aria-valuenow=@item.TargetProportion aria-valuemin="0" aria-valuemax="100">@item.TargetProportion %</div>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: @item.ResultProportion%;" aria-valuenow=@item.ResultProportion aria-valuemin="0" aria-valuemax="100">@item.ResultProportion %</div>
+                    </div>
+                </div>
+                <hr />
+                <label>목표일자 / 달성일자 : </label>
+                <div>
+                    <div class="input-group mb-1">
+                        <span class="input-group-text mb-1 w-20">목표일자</span>
+                        <input type="date" class="form-control mb-1" style="width: 10em; margin: 0 auto;" @bind-value="@item.TargetDate" disabled></input>
+                    </div>
+                    <div class="input-group mb-1">
+                        <span class="input-group-text mb-1 w-20">달성일자</span>
+                        <input type="date" class="form-control mb-1" style="width: 10em; margin: 0 auto;" @bind-value="@item.ResultDate" disabled></input>
+                    </div>
+                </div>
+                <hr />
+                <h5>상태 : @taskUtils.StatusString(item.TaskStatus)</h5>
+            </div>
+        </div>
+        <hr />
+    }
+</div>

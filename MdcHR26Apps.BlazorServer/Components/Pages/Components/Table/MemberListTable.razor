@@ -1,0 +1,39 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Table
+@rendermode InteractiveServer
+
+<table class="table table-hover table-responsive-md">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>사번</th>
+            <th>아이디</th>
+            <th>이름</th>
+            <th>부서</th>
+            <th>직급</th>
+            <th>상태</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Members == null || !Members.Any())
+        {
+            <tr>
+                <td colspan="7" class="text-center">조회된 사용자가 없습니다.</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Members)
+            {
+                <tr>
+                    <td>@sortNoAdd2(sortNo)</td>
+                    <td>@item.ENumber</td>
+                    <td>@item.UserId</td>
+                    <td>@item.UserName</td>
+                    <td>@item.EDepartmentName</td>
+                    <td>@item.ERank</td>
+                    <td>@(item.ActivateStatus ? "활성" : "비활성")</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

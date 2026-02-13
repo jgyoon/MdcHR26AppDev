@@ -1,0 +1,23 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Agreement.CommonView
+@rendermode InteractiveServer
+
+@if (!string.IsNullOrEmpty(Comment))
+{
+    <div class="row mb-3">
+        <div class="col-12">
+            <h5 class="form-label">
+                합의 내역
+                <span @onclick="HandleToggle" class="@IconClass" style="cursor: pointer;"></span>
+            </h5>
+        </div>
+    </div>
+
+    @if (EffectiveCollapsed)
+    {
+        <hr />
+        <div class="mb-3">
+            @((MarkupString)FormatComment(Comment))
+        </div>
+        <hr />
+    }
+}

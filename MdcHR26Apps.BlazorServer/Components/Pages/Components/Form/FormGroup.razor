@@ -1,0 +1,37 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Form
+@rendermode InteractiveServer
+
+<div class="mb-3">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label for="@Id" class="form-label">@Label</label>
+    }
+
+    <div class="input-group">
+        @if (!string.IsNullOrEmpty(PrependText))
+        {
+            <span class="input-group-text">@PrependText</span>
+        }
+
+        @ChildContent
+
+        @if (!string.IsNullOrEmpty(AppendText))
+        {
+            <span class="input-group-text">@AppendText</span>
+        }
+    </div>
+
+    @if (!string.IsNullOrEmpty(HelpText))
+    {
+        <div class="form-text">@HelpText</div>
+    }
+</div>
+
+@code {
+    [Parameter] public string? Id { get; set; }
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public string? PrependText { get; set; }
+    [Parameter] public string? AppendText { get; set; }
+    [Parameter] public string? HelpText { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

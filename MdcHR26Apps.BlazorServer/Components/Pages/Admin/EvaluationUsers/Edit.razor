@@ -1,0 +1,63 @@
+@page "/Admin/EvaluationUsers/Edit/{Id:long}"
+@rendermode InteractiveServer
+
+<PageTitle>평가대상자 수정</PageTitle>
+
+<h3>평가대상자 수정</h3>
+<hr />
+
+<div>
+    <p>@resultText</p>
+</div>
+
+@if (model == null || user == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <EditForm Model="model">
+                <label for="UserId" class="form-label mb-1">ID : </label>
+                <div class="input-group mb-1">
+                    <InputText id="UserId" class="form-control"
+                               @bind-Value="@user.UserId" disabled></InputText>
+                </div>
+                <label for="UserName" class="form-label mb-1">사용자이름</label>
+                <div class="input-group mb-1">
+                    <InputText id="UserName" class="form-control" placeholder="사용자 이름"
+                               @bind-Value="@user.UserName" disabled></InputText>
+                </div>
+                <div class="form-check mb-1">
+                    <InputCheckbox class="form-check-input" id="Status" @bind-Value="model.Is_Evaluation"></InputCheckbox>
+                    <label class="form-check-label" for="Status">평가대상자 여부</label>
+                </div>
+                <label for="TeamLeader" class="form-label mb-1">평가자(팀장)</label>
+                <div class="input-group mb-1">
+                    <InputSelect id="TeamLeader" class="form-select" @bind-Value="selectedTeamLeaderName">
+                        <option value="@selectedTeamLeaderName" selected disabled hidden>@selectedTeamLeaderName</option>
+                        @foreach (var item in teamleaderlist)
+                        {
+                            <option value="@item.UserName">@item.UserName</option>
+                        }
+                    </InputSelect>
+                </div>
+                <label for="Director" class="form-label mb-1">평가자(임원)</label>
+                <div class="input-group mb-1">
+                    <InputSelect id="Director" class="form-select" @bind-Value="selectedDirectorName">
+                        <option value="@selectedDirectorName" selected disabled hidden>@selectedDirectorName</option>
+                        @foreach (var item in directorlist)
+                        {
+                            <option value="@item.UserName">@item.UserName</option>
+                        }
+                    </InputSelect>
+                </div>
+                <div class="input-group mb-1">
+                    <button id="editbutton" class="btn btn-primary" @onclick="EditUser">변경</button>
+                    <button id="movepageutton" class="btn btn-light" @onclick="MoveEUserManagePage">목록</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}

@@ -1,0 +1,35 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Common
+@rendermode InteractiveServer
+
+<table class="table table-hover table-sm">
+    <thead>
+        <tr>
+            <th>번호</th>
+            <th>부서명</th>
+            <th>평가지표</th>
+            <th>평가업무</th>
+            <th>비고</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in evaluationLists)
+        {
+            <tr>
+                <td>@item.Eid</td>
+                <td>
+                    (@item.Evaluation_Department_Number)
+                    @item.Evaluation_Department_Name
+                </td>
+                <td>
+                    (@item.Evaluation_Index_Number)
+                    @item.Evaluation_Index_Name
+                </td>
+                <td>
+                    (@item.Evaluation_Task_Number)
+                    @item.Evaluation_Task_Name
+                </td>
+                <td>@item.Evaluation_Lists_Remark</td>
+            </tr>
+        }
+    </tbody>
+</table>

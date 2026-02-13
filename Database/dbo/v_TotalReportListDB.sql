@@ -1,9 +1,11 @@
 CREATE VIEW [dbo].[v_TotalReportListDB]
 AS SELECT
 	A.TRid,
-	A.UId,
+	A.Uid,
 	B.UserId,
 	B.UserName,
+	ISNULL(ED.EDepartmentName, '') AS EDepartmentName,
+	ISNULL(ER.ERankName, '') AS ERankName,
 	A.User_Evaluation_1,
 	A.User_Evaluation_2,
 	A.User_Evaluation_3,
@@ -25,4 +27,6 @@ AS SELECT
 	A.TeamLeader_Score
 FROM
 	[dbo].[TotalReportDb] A
-	INNER JOIN [dbo].[UserDb] B ON A.UId = B.UId
+	INNER JOIN [dbo].[UserDb] B ON A.Uid = B.Uid
+	LEFT JOIN [dbo].[EDepartmentDb] ED ON B.EDepartId = ED.EDepartId
+	LEFT JOIN [dbo].[ERankDb] ER ON B.ERankId = ER.ERankId

@@ -1,0 +1,75 @@
+@page "/Admin/Users/Create"
+
+<PageTitle>사용자 등록</PageTitle>
+
+<h3>사용자 등록</h3>
+<hr />
+
+<div>
+    <p>@resultText</p>
+</div>
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <EditForm Model="model">
+                <label for="UserId" class="form-label mb-1">ID</label>
+                <div class="input-group mb-1">
+                    <InputText id="UserId" class="form-control" placeholder="Enter UserId"
+                               @bind-Value="@model.UserId"></InputText>
+                    <button id="checkbutton" class="btn btn-primary" @onclick="@(() => CheckUserId(model.UserId))">중복체크</button>
+                </div>
+                <div class="mb-1" style="@resultUserColor">@resultUser</div>
+                <label for="Password" class="form-label mb-1">Password</label>
+                <div class="input-group mb-1">
+                    <InputText id="Password" type="password" class="form-control" placeholder="Enter UserPassword"
+                               @bind-Value="@password"></InputText>
+                </div>
+                <label for="UserName" class="form-label mb-1">사용자이름</label>
+                <div class="input-group mb-1">
+                    <InputText id="UserName" class="form-control" placeholder="사용자 이름"
+                               @bind-Value="@model.UserName"></InputText>
+                </div>
+                <label for="Deptment" class="form-label mb-1">부서</label>
+                <div class="input-group mb-1">
+                    <InputSelect id="Deptment" class="form-select" @bind-Value="selectedDeptName">
+                        <option value="none" selected disabled hidden>부서 선택</option>
+                        @foreach (var item in deptlist)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </InputSelect>
+                </div>
+                <label for="Rank" class="form-label mb-1">직급/직책</label>
+                <div class="input-group mb-1">
+                    <InputSelect id="Rank" class="form-select" @bind-Value="selectedRankName">
+                        <option value="none" selected disabled hidden>직급 선택</option>
+                        @foreach (var item in ranklist)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </InputSelect>
+                </div>
+                <label for="UserEmail" class="form-label mb-1">Email</label>
+                <div class="input-group mb-1">
+                    <InputText id="UserEmail" class="form-control" placeholder="이메일"
+                               @bind-Value="@model.Email"></InputText>
+                </div>
+                <label for="UserENumber" class="form-label mb-1">사번</label>
+                <div class="input-group mb-1">
+                    <InputText id="UserENumber" class="form-control" placeholder="사원번호"
+                               @bind-Value="@model.ENumber"></InputText>
+                </div>
+                <div class="input-group mb-1">
+                    <button id="createbutton" class="btn btn-primary" @onclick="CreateUser">사용자생성</button>
+                    <button class="btn btn-light" @onclick="MoveUserManagePage">목록</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}

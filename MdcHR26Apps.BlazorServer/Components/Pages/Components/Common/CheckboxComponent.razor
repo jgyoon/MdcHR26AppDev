@@ -1,0 +1,23 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Common
+@rendermode InteractiveServer
+
+<input class="form-check-input"
+       type="checkbox"
+       checked="@IsChecked"
+       disabled="@IsDisabled"
+       @onchange="HandleChange" />
+
+@code {
+    [Parameter] public bool IsChecked { get; set; }
+    [Parameter] public bool IsDisabled { get; set; } = false;
+    [Parameter] public EventCallback<bool> OnChange { get; set; }
+
+    private async Task HandleChange(ChangeEventArgs e)
+    {
+        if (e.Value is bool value)
+        {
+            IsChecked = value;
+            await OnChange.InvokeAsync(value);
+        }
+    }
+}

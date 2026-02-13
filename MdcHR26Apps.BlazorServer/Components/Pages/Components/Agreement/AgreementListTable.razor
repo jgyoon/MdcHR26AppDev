@@ -1,0 +1,65 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Agreement
+@rendermode InteractiveServer
+
+<table class="table table-hover table-responsive-md">
+    <thead>
+        <tr>
+            <th class="table-header">
+                <div class="row">
+                    <div class="col-2 col-md-2">#</div>
+                    <div class="col-2 col-md-2">순번</div>
+                    <div class="col-8 col-md-8">이름</div>
+                </div>
+            </th>
+            <th class="table-header">
+                <div class="row">
+                    <div class="col-12 col-md-6">요청여부</div>
+                    <div class="col-12 col-md-6">승인여부</div>
+                </div>
+            </th>
+            <th class="table-header">
+                <div class="row">
+                    <div class="col-12 col-md-6">합의</div>
+                    <div class="col-12 col-md-6">평가제출</div>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in processDbList)
+        {
+            <tr>
+                <td class="table-cell">
+                    <div class="row align-items-center">
+                        <div class="col-2 col-md-2">
+                            <CheckboxComponent IsChecked=@((item.Is_Request && item.Is_Agreement)) IsDisabled="true"></CheckboxComponent>
+                        </div>
+                        <div class="col-2 col-md-2">@sortNoAdd3(sortNo)</div>
+                        <div class="col-8 col-md-8">@item.UserName</div>
+                    </div>
+                </td>
+                <td class="table-cell">
+                    <div class="row">
+                        <div class="col-12 col-md-6 table-cell-blue">@IsRequestStatus(item.Is_Request)</div>
+                        <div class="col-12 col-md-6 table-cell-red">@IsAgreementStatus(item.Is_Agreement)</div>
+                    </div>
+                </td>
+                <td class="table-cell">
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-6">
+                            @if (item.Is_Request && !item.Is_Agreement)
+                            {
+                                <button id="DetailButton" class="btn btn-info" @onclick="(() => AgreementDetailsAction(item.Pid))">합의</button>
+                            }
+                            else
+                            {
+                                @Is_RequestAndAgreementStatus(item.Is_Request, item.Is_Agreement)
+                            }
+                        </div>
+                        <div class="col-12 col-md-6">@IsReportSubmissionStatus(item.Is_User_Submission)</div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

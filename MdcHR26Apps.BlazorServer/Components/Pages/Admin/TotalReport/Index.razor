@@ -1,0 +1,32 @@
+@page "/Admin/TotalReport"
+@page "/Admin/TotalReport/Index"
+@rendermode InteractiveServer
+
+<PageTitle>전체 평가</PageTitle>
+
+<h3>전체 평가</h3>
+<hr />
+
+<SearchbarComponent searchTerm="@searchTerm"
+                    SearchAction="HandleSearchValueChanged"
+                    SearchInitAction="SearchInit" />
+
+<SearchDeptComponent deptlist="@deptlist" SearchDeptAction="HandleDeptValueChanged"
+                     @bind-selectedDept="@selectedDept" />
+<hr />
+
+@if (processTRLists == null || reportTaskLists == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="input-group mb-1">
+        <!-- 엑셀 다운로드 버튼 -->
+        <AdminTaskViewExcel ReportTaskListDB="reportTaskLists" CommentChanged="HandleCommentChanged" />
+        <AdminViewExcel ProcessTRLists="processTRLists" CommentChanged="HandleCommentChanged" />
+    </div>
+    <DisplayResultText Comment="@comment" />
+    <hr />
+    <AdminReportListView processTRLists="processTRLists" />
+}

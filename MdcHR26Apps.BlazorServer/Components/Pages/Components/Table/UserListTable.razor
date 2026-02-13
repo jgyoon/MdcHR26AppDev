@@ -1,0 +1,31 @@
+<table class="table table-hover table-responsive-md">
+    <thead>
+        <tr>
+            <th class="table-header">순번</th>
+            <th class="table-header">ID</th>
+            <th class="table-header">이름</th>
+            <th class="table-header">부서</th>
+            <th class="table-header">직급</th>
+            <th class="table-header">관리자</th>
+            <th class="table-header">사용여부</th>
+            <th class="table-header">비고</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Users)
+        {
+            <tr>
+                <td class="table-cell">@sortNoAdd2(sortNo)</td>
+                <td class="table-cell">@item.UserId</td>
+                <td class="table-cell">@item.UserName</td>
+                <td class="table-cell">@item.EDepartmentName</td>
+                <td class="table-cell">@item.ERank</td>
+                <td class="table-cell">@isadmin(item.IsAdministrator)</td>
+                <td class="table-cell">@isuse(item.ActivateStatus)</td>
+                <td class="table-cell">
+                    <button id="DetailButton" class="btn btn-info" @onclick="@(() => UserDetailsAction(item.Uid))">상세</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

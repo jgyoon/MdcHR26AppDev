@@ -1,0 +1,147 @@
+﻿@page "/2nd_hr_report/Edit/{Id:long}"
+
+<PageTitle>부서장(팀장)평가</PageTitle>
+
+<h3>부서장(팀장)평가</h3>
+<hr />
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <EditForm Model="model">
+                <FormSelectList Label="평가지표" BindValue="@model.Report_Item_Name_1" IsDisabled="true" />
+                <FormSelectList Label="평가직무" BindValue="@model.Report_Item_Name_2" IsDisabled="true" />
+                <FormSelectNumber Label="평가비중" BindValue="@model.Report_Item_Proportion" IsDisabled="true" />
+                <FormSelectList Label="세부평가직무" BindValue="@model.Report_SubItem_Name" IsDisabled="true" />
+                <FormSelectNumber Label="세부평가비중" BindValue="@model.Report_SubItem_Proportion" IsDisabled="true" />
+                <hr />
+                @*평가 기본정보*@
+                <div class="input-group mb-1">
+                    <span class="input-group-text mb-1 w-20">평가지표</span>
+                    <InputSelect id="Report_Item_Name_1" class="form-select mb-1" @bind-Value="model.Report_Item_Name_1">
+                        <option value="@model.Report_Item_Name_1" selected disabled>@model.Report_Item_Name_1</option>
+                    </InputSelect>
+                </div>
+                <div class="input-group mb-1">
+                    <span class="input-group-text mb-1 w-20">평가직무</span>
+                    <InputSelect id="Report_Item_Name_2" class="form-select mb-1" @bind-Value="model.Report_Item_Name_2">
+                        <option value="@model.Report_Item_Name_2" selected disabled>@model.Report_Item_Name_2</option>
+                    </InputSelect>
+                </div>
+                <div class="input-group mb-1">
+                    <span class="input-group-text mb-1 w-20">평가비중</span>
+                    <InputNumber class="form-control mb-1" id="Report_Item_Proportion" @bind-Value=@model.Report_Item_Proportion disabled></InputNumber>
+                    <span class="input-group-text mb-1">%</span>
+                </div>
+                <div class="input-group mb-1">
+                    <span class="input-group-text mb-1 w-20">세부직무</span>
+                    <InputSelect id="Report_SubItem_Name" class="form-select mb-1" @bind-Value="model.Report_SubItem_Name">
+                        <option value="@model.Report_SubItem_Name" selected disabled>@model.Report_SubItem_Name</option>
+                    </InputSelect>
+                </div>
+                <div class="input-group mb-1">
+                    <span class="input-group-text mb-1 w-20">평가비중</span>
+                    <InputNumber class="form-control mb-1" id="Report_SubItem_Proportion" @bind-Value=@model.Report_SubItem_Proportion disabled></InputNumber>
+                    <span class="input-group-text mb-1">%</span>
+                </div>
+                <hr />
+                @*평가대상자 작성정보*@
+                @if (!reportCollapsed_1)
+                {
+                    <h4 for="User_area" class="form-label mb-1">
+                        평가대상자 작성정보
+                        <span @onclick="@ReportToggle_1" class="oi oi-plus mr-1" />
+                    </h4>
+                }
+                else
+                {
+                    <h4 for="User_area" class="form-label mb-1">
+                        평가대상자 작성정보
+                        <span @onclick="@ReportToggle_1" class="oi oi-minus mr-1" />
+                    </h4>
+                }
+                @if (reportCollapsed_1)
+                {
+                    @*일정준수*@
+                    <label for="User_Evaluation_1" class="form-label mb-1">일정준수(0~100) : @model.User_Evaluation_1.ToString() / 100</label>
+                    <div class="input-group mb-1">
+                        <span class="input-group-text mb-1" style="width: 8em;">일정준수</span>
+                        <InputNumber class="form-control mb-1" id="User_Evaluation_1" step="0.1" min="0" max="100" @bind-Value=@model.User_Evaluation_1 disabled></InputNumber>
+                        <span class="input-group-text mb-1">점</span>
+                    </div>
+                    @*업무수행도*@
+                    <label for="User_Evaluation_2" class="form-label mb-1">업무수행도(0~100) : @model.User_Evaluation_2.ToString() / 100</label>
+                    <div class="input-group mb-1">
+                        <span class="input-group-text mb-1" style="width: 8em;">업무수행도</span>
+                        <InputNumber class="form-control mb-1" id="User_Evaluation_2" step="0.1" min="0" max="100" @bind-Value=@model.User_Evaluation_2 disabled></InputNumber>
+                        <span class="input-group-text mb-1">점</span>
+                    </div>
+                    @*결과물*@
+                    <label for="User_Evaluation_3" class="form-label mb-1">결과평가(정성평가/0~100) : @model.User_Evaluation_3.ToString() / 100</label>
+                    <div class="input-group mb-1">
+                        <span class="input-group-text mb-1" style="width: 8em;">결과평가</span>
+                        <InputNumber class="form-control mb-1" id="User_Evaluation_3" step="0.1" min="0" max="100" @bind-Value=@model.User_Evaluation_3 disabled></InputNumber>
+                        <span class="input-group-text mb-1">점</span>
+                    </div>
+                    @*평가실적*@
+                    <div class="input-group mb-1">
+                        <span class="input-group-text mb-1" style="width: 8em;">평가실적</span>
+                        <InputTextArea id="User_Comment" class="form-control mb-1" rows="5" @bind-Value="@model.User_Evaluation_4" readonly>
+                        </InputTextArea>
+                    </div>
+                }
+                <hr />
+
+                @*Todolist 세부업무리스트*@
+                <div class="card">
+                    <div class="card-header">
+                        @if (!TaskCollapsed)
+                        {
+                            <h5>
+                                세부업무 리스트(@taskCount 개)
+                                <span @onclick="@TaskToggle" class="oi oi-plus mr-1" />
+                            </h5>
+                        }
+                        else
+                        {
+                            <h5>
+                                세부업무 리스트(@taskCount 개)
+                                <span @onclick="@TaskToggle" class="oi oi-minus mr-1" />
+                            </h5>
+                        }
+                    </div>
+                    <div class="card-body">
+                        @if (tasklist.Count == 0)
+                        {
+                            <h5>세부업무가 없습니다.</h5>
+                        }
+                        else
+                        {
+                            @if (TaskCollapsed)
+                            {
+                                <CompletedTaskListView ReportTaskListDB="v_ReportTaskLists"></CompletedTaskListView>
+                            }
+                        }
+                    </div>
+                </div>
+                <hr />
+
+                @*부서장(팀장) 평가*@
+                @*일정준수*@
+                @*업무수행도*@
+                @*결과물*@
+                <div class="input-group mb-1">
+                    @*확인 후 삭제*@
+                    @*
+                <button id="editbutton" class="btn btn-primary" @onclick="TeamLeaderUpdateReport">평가작성</button>
+                *@
+                    <button type="button" id="movepageutton" class="btn btn-primary" @onclick="Move2ndDeteilsPage">평가상세목록</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}

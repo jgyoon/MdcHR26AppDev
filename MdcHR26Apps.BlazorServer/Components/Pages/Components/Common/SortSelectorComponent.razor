@@ -1,0 +1,15 @@
+﻿<div class="input-group mb-1">
+    <span class="input-group-text">@label</span>
+    <InputSelect class="form-select"
+                 Value="sortField"
+                 ValueChanged="sortFieldChanged"
+                 ValueExpression="() => sortField">
+        @foreach (var item in sortOptions)
+        {
+            <option value="@item.Value">@item.Text</option>
+        }
+    </InputSelect>
+    <button class="btn btn-outline-secondary" type="button" @onclick="ToggleSortDir">
+        @(sortAsc ? "오름" : "내림")
+    </button>
+</div>

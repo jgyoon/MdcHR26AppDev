@@ -1,0 +1,64 @@
+@page "/Admin/TotalReport/Edit/{Id:long}"
+@rendermode InteractiveServer
+
+<PageTitle>최종 결과 설정</PageTitle>
+
+<h3>최종 결과 설정</h3>
+
+@if (!string.IsNullOrEmpty(resultText))
+{
+    <p><em>@resultText</em></p>
+}
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (model.TRid == 0)
+{
+    <div class="input-group mb-1">
+        <button type="button" class="btn btn-danger" @onclick="() => urlActions.MoveTotalReportAdminDetailsPage(model.Pid)">이전페이지</button>
+        <button type="button" class="btn btn-secondary" @onclick="urlActions.MoveTotalReportAdminIndexPage">목록</button>
+    </div>
+    <hr />
+    <p><em>평가 작성이 되지 않았습니다.</em></p>
+    <p><em>이전 페이지로 돌아가주세요.</em></p>
+}
+else
+{
+    @if (totalScoreList == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <EditForm Model="editModel">
+                    <div class="input-group mb-1">
+                        <span class="input-group-text mb-1" style="width: 6em;">ID</span>
+                        <InputText id="UserId" class="form-control mb-1" @bind-Value="@model.UserId" disabled />
+                    </div>
+                    <div class="input-group mb-1">
+                        <span class="input-group-text mb-1" style="width: 6em;">이름</span>
+                        <InputText id="UserName" class="form-control mb-1" @bind-Value="@model.UserName" disabled />
+                    </div>
+                    <div class="input-group mb-1">
+                        <span class="input-group-text mb-1" style="width: 6em;">최종등급</span>
+                        <InputSelect id="TotalScore" class="form-select mb-1" @bind-Value="@editModel.Total_Score">
+                            @foreach (var item in totalScoreList)
+                            {
+                                <option value="@item.TotalScoreNumber">@item.TotalScoreRankName</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div class="input-group mb-1">
+                        <button type="button" class="btn btn-success" @onclick="UpdateTotalReport">변경</button>
+                        <button type="button" class="btn btn-danger" @onclick="() => urlActions.MoveTotalReportAdminDetailsPage(model.Pid)">이전페이지</button>
+                        <button type="button" class="btn btn-info" @onclick="urlActions.MoveTotalReportAdminIndexPage">목록</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    }
+}

@@ -38,12 +38,15 @@ PRINT '  - v_MemberListDB 생성';
 GO
 CREATE VIEW [dbo].[v_MemberListDB]
 AS SELECT
-    U.UId,
+    U.Uid,
     U.UserId,
     U.UserName,
     U.ENumber,
+    R.ERankId,
+    R.ERankNo,
     R.ERankName AS ERank,
     D.EDepartId,
+    D.EDepartmentNo,
     D.EDepartmentName,
     U.EStatus AS ActivateStatus,
     U.IsTeamLeader,
@@ -80,6 +83,7 @@ AS SELECT
 	A.Pid,
 	U.UserId,
 	U.UserName,
+	ISNULL(ED.EDepartmentName, '') AS EDepartmentName,
 	ISNULL(TL.UserId, '') AS TeamLeader_Id,
 	ISNULL(TL.UserName, '') AS TeamLeader_Name,
 	ISNULL(D.UserId, '') AS Director_Id,
@@ -93,7 +97,7 @@ AS SELECT
 	A.Is_Director_Submission,
 	A.FeedBackStatus,
 	A.FeedBack_Submission,
-	A.UId,
+	A.Uid,
 	ISNULL(C.TRid, 0) AS TRid,
 	ISNULL(C.User_Evaluation_1, 0) AS User_Evaluation_1,
 	ISNULL(C.User_Evaluation_2, 0) AS User_Evaluation_2,
@@ -112,13 +116,15 @@ AS SELECT
 	ISNULL(C.Director_Evaluation_3, 0) AS Director_Evaluation_3,
 	ISNULL(C.Director_Comment,'') AS Director_Comment,
 	ISNULL(C.Total_Score, 0) AS Total_Score,
-	ISNULL(C.Director_Score, 0) AS Director_Score
+	ISNULL(C.Director_Score, 0) AS Director_Score,
+	ISNULL(C.TeamLeader_Score, 0) AS TeamLeader_Score	
 FROM
 	[dbo].[ProcessDb] A
-	INNER JOIN [dbo].[UserDb] U ON A.UId = U.UId
-	LEFT JOIN [dbo].[UserDb] TL ON A.TeamLeaderId = TL.UId
-	LEFT JOIN [dbo].[UserDb] D ON A.DirectorId = D.UId
-	LEFT JOIN [dbo].[TotalReportDb] C ON A.UId = C.UId;
+	INNER JOIN [dbo].[UserDb] U ON A.Uid = U.Uid
+	LEFT JOIN [dbo].[EDepartmentDb] ED ON U.EDepartId = ED.EDepartId
+	LEFT JOIN [dbo].[UserDb] TL ON A.TeamLeaderId = TL.Uid
+	LEFT JOIN [dbo].[UserDb] D ON A.DirectorId = D.Uid
+	LEFT JOIN [dbo].[TotalReportDb] C ON A.Uid = C.Uid;
 GO
 
 -- [04] v_ReportTaskListDB
@@ -126,20 +132,60 @@ PRINT '  - v_ReportTaskListDB 생성';
 GO
 CREATE VIEW [dbo].[v_ReportTaskListDB]
 AS SELECT
-	A.Rid,
-	U.UserId,
-	U.UserName,
-	A.Report_Item_Number,
-	A.Report_Item_Name_1,
-	A.Report_Item_Name_2,
-	A.Report_Item_Proportion,
-	A.Report_SubItem_Name,
-	A.Report_SubItem_Proportion,
-	B.*
+    -- ProcessDb 필드
+    P.Pid,
+
+    -- ReportDb 필드
+    A.Rid,
+    A.Uid,
+    A.Report_Item_Number,
+    A.Report_Item_Name_1,
+    A.Report_Item_Name_2,
+    A.Report_Item_Proportion,
+    A.Report_SubItem_Name,
+    A.Report_SubItem_Proportion,
+    A.Task_Number,
+    A.User_Evaluation_1,
+    A.User_Evaluation_2,
+    A.User_Evaluation_3,
+    A.User_Evaluation_4,
+    A.TeamLeader_Evaluation_1,
+    A.TeamLeader_Evaluation_2,
+    A.TeamLeader_Evaluation_3,
+    A.TeamLeader_Evaluation_4,
+    A.Director_Evaluation_1,
+    A.Director_Evaluation_2,
+    A.Director_Evaluation_3,
+    A.Director_Evaluation_4,
+    A.Total_Score,
+
+    -- UserDb 필드
+    U.UserId,
+    U.UserName,
+    ISNULL(ED.EDepartmentName, '') AS EDepartmentName,
+    ISNULL(ER.ERankName, '') AS ERankName,
+
+    -- TasksDb 필드 (명시적 선택, B.* 제거)
+    B.Tid,
+    B.TaskName,
+    B.TaksListNumber,
+    B.TaskStatus,
+    B.TaskObjective,
+    B.TargetProportion,
+    B.ResultProportion,
+    B.TargetDate,
+    B.ResultDate,
+    B.Task_Evaluation_1 AS Task_Eval_1,
+    B.Task_Evaluation_2 AS Task_Eval_2,
+    B.TaskLevel,
+    B.TaskComments
 FROM
-	[dbo].[ReportDb] A
-	INNER JOIN [dbo].[UserDb] U ON A.UId = U.UId
-	INNER JOIN [dbo].[TasksDb] B ON A.Task_Number = B.TaksListNumber;
+    [dbo].[ReportDb] A
+    INNER JOIN [dbo].[UserDb] U ON A.Uid = U.Uid
+    LEFT JOIN [dbo].[EDepartmentDb] ED ON U.EDepartId = ED.EDepartId
+    LEFT JOIN [dbo].[ERankDb] ER ON U.ERankId = ER.ERankId
+    INNER JOIN [dbo].[ProcessDb] P ON A.Uid = P.Uid
+    INNER JOIN [dbo].[TasksDb] B ON A.Task_Number = B.TaksListNumber;
 GO
 
 -- [05] v_TotalReportListDB
@@ -148,9 +194,11 @@ GO
 CREATE VIEW [dbo].[v_TotalReportListDB]
 AS SELECT
 	A.TRid,
-	A.UId,
+	A.Uid,
 	B.UserId,
 	B.UserName,
+	ISNULL(ED.EDepartmentName, '') AS EDepartmentName,
+	ISNULL(ER.ERankName, '') AS ERankName,
 	A.User_Evaluation_1,
 	A.User_Evaluation_2,
 	A.User_Evaluation_3,
@@ -172,11 +220,101 @@ AS SELECT
 	A.TeamLeader_Score
 FROM
 	[dbo].[TotalReportDb] A
-	INNER JOIN [dbo].[UserDb] B ON A.UId = B.UId;
+	INNER JOIN [dbo].[UserDb] B ON A.Uid = B.Uid
+	LEFT JOIN [dbo].[EDepartmentDb] ED ON B.EDepartId = ED.EDepartId
+	LEFT JOIN [dbo].[ERankDb] ER ON B.ERankId = ER.ERankId;
 GO
 
 PRINT '뷰 생성 완료';
 GO
+
+-- 기존 뷰 삭제
+IF OBJECT_ID('[dbo].[v_EvaluationUsersList]', 'V') IS NOT NULL
+    DROP VIEW [dbo].[v_EvaluationUsersList];
+GO
+
+-- 뷰 생성
+CREATE VIEW [dbo].[v_EvaluationUsersList]
+AS SELECT
+    EU.EUid,
+    EU.Uid,
+    U.UserId,
+    U.UserName,
+    U.ENumber,
+    U.EDepartId,
+    D.EDepartmentName,
+    R.ERankName AS ERank,
+    EU.Is_Evaluation,
+    EU.TeamLeaderId,
+    TL.UserName AS TeamLeaderName,
+    EU.DirectorId,
+    DI.UserName AS DirectorName,
+    EU.Is_TeamLeader
+FROM [dbo].[EvaluationUsers] EU
+INNER JOIN [dbo].[UserDb] U ON EU.Uid = U.Uid
+LEFT JOIN [dbo].[EDepartmentDb] D ON U.EDepartId = D.EDepartId
+LEFT JOIN [dbo].[ERankDb] R ON U.ERankId = R.ERankId
+LEFT JOIN [dbo].[UserDb] TL ON EU.TeamLeaderId = TL.Uid
+LEFT JOIN [dbo].[UserDb] DI ON EU.DirectorId = DI.Uid
+WHERE U.EStatus = 1
+GO
+
+PRINT 'v_EvaluationUsersList 뷰 생성 완료';
+GO
+
+-- v_AgreementDB
+
+-- 기존 뷰 삭제
+IF OBJECT_ID('[dbo].[v_AgreementDB]', 'V') IS NOT NULL
+    DROP VIEW [dbo].[v_AgreementDB];
+GO
+
+CREATE VIEW [dbo].[v_AgreementDB]
+AS SELECT
+	A.Aid,
+	A.Uid,
+	A.Report_Item_Number,
+	A.Report_Item_Name_1,
+	A.Report_Item_Name_2,
+	A.Report_Item_Proportion,
+	U.UserId,
+	U.UserName,
+	ISNULL(ED.EDepartmentName, '') AS EDepartmentName,
+	ISNULL(ER.ERankName, '') AS ERankName
+FROM
+	[dbo].[AgreementDb] A
+	INNER JOIN [dbo].[UserDb] U ON A.Uid = U.Uid
+	LEFT JOIN [dbo].[EDepartmentDb] ED ON U.EDepartId = ED.EDepartId
+	LEFT JOIN [dbo].[ERankDb] ER ON U.ERankId = ER.ERankId
+GO  
+PRINT 'v_AgreementDB 뷰 생성 완료';
+GO    
+
+-- v_SubAgreementDB
+
+CREATE VIEW [dbo].[v_SubAgreementDB]
+AS SELECT
+	A.Sid,
+	A.Uid,
+	A.Report_Item_Number,
+	A.Report_Item_Name_1,
+	A.Report_Item_Name_2,
+	A.Report_Item_Proportion,
+	A.Report_SubItem_Name,
+	A.Report_SubItem_Proportion,
+	A.Task_Number,
+	U.UserId,
+	U.UserName,
+	ISNULL(ED.EDepartmentName, '') AS EDepartmentName,
+	ISNULL(ER.ERankName, '') AS ERankName
+FROM
+	[dbo].[SubAgreementDb] A
+	INNER JOIN [dbo].[UserDb] U ON A.Uid = U.Uid
+	LEFT JOIN [dbo].[EDepartmentDb] ED ON U.EDepartId = ED.EDepartId
+	LEFT JOIN [dbo].[ERankDb] ER ON U.ERankId = ER.ERankId
+GO  
+PRINT 'v_SubAgreementDB 뷰 생성 완료';
+GO      
 
 -- =============================================
 -- 완료 메시지
@@ -184,11 +322,14 @@ GO
 PRINT '';
 PRINT '=============================================';
 PRINT '모든 뷰 생성이 완료되었습니다.';
-PRINT '총 5개 뷰 생성:';
+PRINT '총 8개 뷰 생성:';
 PRINT '  - v_MemberListDB (부서원 목록)';
 PRINT '  - v_DeptObjectiveListDb (부서 목표 목록)';
 PRINT '  - v_ProcessTRListDB (평가 프로세스 및 종합 리포트)';
 PRINT '  - v_ReportTaskListDB (평가 리포트 및 업무 목록)';
 PRINT '  - v_TotalReportListDB (종합 리포트 목록)';
+PRINT '  - v_EvaluationUsersList (평가자 목록)';
+PRINT '  - v_AgreementDB ';
+PRINT '  - v_SubAgreementDB ';
 PRINT '=============================================';
 GO

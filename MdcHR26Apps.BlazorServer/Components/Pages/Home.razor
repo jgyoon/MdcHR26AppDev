@@ -1,0 +1,122 @@
+﻿@page "/"
+@inject LoginStatusService LoginStatus
+@inject AppStateService AppState
+
+<PageTitle>2026년 인사평가프로그램</PageTitle>
+
+@if (!isProduction)
+{
+    <p><em>개발환경</em></p>
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">2026년 인사평가 시스템</h1>
+
+            @if (LoginStatus.LoginStatus.IsLogin)
+            {
+                <div class="alert alert-success">
+                    <h4>
+                        <i class="bi bi-person-check-fill"></i>
+                        환영합니다, @LoginStatus.LoginStatus.LoginUserName 님!
+                    </h4>
+                    <p class="mb-0">부서: @LoginStatus.LoginStatus.LoginUserEDepartment</p>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">내 권한</h5>
+                        <ul class="list-group list-group-flush">
+                            @if (LoginStatus.LoginStatus.LoginIsAdministrator)
+                            {
+                                <li class="list-group-item">
+                                    <i class="bi bi-shield-check"></i> 시스템 관리자
+                                </li>
+                            }
+                            @if (LoginStatus.LoginStatus.LoginIsDirector)
+                            {
+                                <li class="list-group-item">
+                                    <i class="bi bi-star-fill"></i> 임원
+                                </li>
+                            }
+                            @if (LoginStatus.LoginStatus.LoginIsTeamLeader)
+                            {
+                                <li class="list-group-item">
+                                    <i class="bi bi-people-fill"></i> 팀장
+                                </li>
+                            }
+                            @if (LoginStatus.LoginStatus.LoginIsDeptObjectiveWriter)
+                            {
+                                <li class="list-group-item">
+                                    <i class="bi bi-pencil-square"></i> 부서목표 작성자
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <h4>
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        로그인이 필요합니다
+                    </h4>
+                    <p class="mb-0">인사평가 시스템을 이용하시려면 로그인해주세요.</p>
+                </div>
+                <p>아래의 로그인버튼을 클릭해서 로그인을 해주세요.</p>
+                <button class="btn btn-primary" @onclick="LoginAction">Login</button>
+            }
+        </div>
+    </div>
+</div>
+
+@code
+{
+    // 페이지이동
+    [Inject]
+    public UrlActions urlActions { get; set; } = null!;
+    [Inject]
+    public IConfiguration Config { get; set; } = null!;
+
+    #region + 기타변수
+    // 배포환경여부 확인
+    public bool isProduction { get; set; } = false;
+    #endregion
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GetAppSettings();
+            await setData();
+            StateHasChanged();
+        }
+        else
+        {
+            await setData();
+            StateHasChanged();
+        }
+    }
+
+    protected async Task GetAppSettings()
+    {
+        await Task.Delay(1);
+        var isProduction = Config.GetValue<int>("AppSettings:IsProduction");
+        AppState.SetIsProduction(isProduction);
+    }
+
+    protected async Task setData()
+    {
+        await Task.Delay(1);
+        isProduction = AppState.IsProduction;
+    }
+
+    #region + Login
+    protected void LoginAction()
+    {
+        urlActions.MoveLoginPage();
+    }
+    #endregion
+}

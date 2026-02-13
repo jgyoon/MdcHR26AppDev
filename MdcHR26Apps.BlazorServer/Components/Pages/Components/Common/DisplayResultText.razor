@@ -1,0 +1,14 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.Common
+@rendermode InteractiveServer
+
+@if (!string.IsNullOrEmpty(Comment))
+{
+    <div class="alert alert-info" role="alert">
+        @Comment
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string? Comment { get; set; }
+}

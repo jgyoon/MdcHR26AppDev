@@ -1,0 +1,50 @@
+{
+  "name": "sync-validator",
+  "description": "현재 프로젝트와 실제 프로젝트 간 코드 동기화 상태를 검증하는 에이전트",
+  "version": "1.0.0",
+  "author": "MdcHR2026 Team",
+  "type": "agent",
+  "capabilities": [
+    "체크리스트 기반 파일 존재 확인",
+    "두 프로젝트 간 파일 내용 비교",
+    "차이점 상세 분석",
+    "검증 리포트 자동 생성",
+    "누락 파일 및 불일치 감지"
+  ],
+  "tools": [
+    "Read",
+    "Write",
+    "Glob",
+    "Bash"
+  ],
+  "activation_triggers": [
+    "수동 복사 완료 후",
+    "개발자 명시적 요청",
+    "실제 프로젝트 빌드 전 검증"
+  ],
+  "environment": {
+    "currentProject": "C:\\Codes\\00_Develop_Cursor\\10_MdcHR26Apps",
+    "productionProject": "C:\\Codes\\41_MdcHR26\\MdcHR26App",
+    "namespace": "MdcHR26Apps.BlazorServer",
+    "checklistDir": "works/sync-checklists",
+    "reportDir": "works/sync-reports"
+  },
+  "output_format": "Markdown",
+  "safety": {
+    "readOnly": true,
+    "noFileModification": true,
+    "validationOnly": true
+  },
+  "validation": {
+    "ignoreWhitespace": true,
+    "ignoreLineEndings": true,
+    "compareMode": "line-by-line"
+  },
+  "tags": [
+    "sync",
+    "validation",
+    "verification",
+    "diff",
+    "quality-assurance"
+  ]
+}

@@ -5,7 +5,7 @@ CREATE TABLE [dbo].[ProcessDb]
     -- [01] ProcessDb id
     [Pid] BIGINT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     -- [02] 사용자 ID (외래키 - 평가 대상자)
-    [UId] BIGINT NOT NULL,
+    [Uid] BIGINT NOT NULL,
     -- [03] 부서장 ID (외래키 - 2차 평가자)
     [TeamLeaderId] BIGINT,
     -- [04] 임원 ID (외래키 - 3차 평가자)
@@ -35,20 +35,20 @@ CREATE TABLE [dbo].[ProcessDb]
 
     -- 외래키 제약조건
     CONSTRAINT FK_ProcessDb_UserDb_User
-        FOREIGN KEY (UId)
-        REFERENCES [dbo].[UserDb](UId)
+        FOREIGN KEY (Uid)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
 
     CONSTRAINT FK_ProcessDb_UserDb_TeamLeader
         FOREIGN KEY (TeamLeaderId)
-        REFERENCES [dbo].[UserDb](UId)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
 
     CONSTRAINT FK_ProcessDb_UserDb_Director
         FOREIGN KEY (DirectorId)
-        REFERENCES [dbo].[UserDb](UId)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION
 )

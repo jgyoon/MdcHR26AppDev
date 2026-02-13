@@ -1,0 +1,95 @@
+@page "/3rd_hr_report/Complete_3rd_Details/{Id:long}"
+
+<PageTitle>임원 평가(완료) 상세</PageTitle>
+
+<h3>임원 평가(완료) 상세</h3>
+
+<div class="input-group mb-1">
+    <button id="movemainpagebutton" class="btn btn-outline-success" @onclick="Move3rdMainPage">목록</button>
+</div>
+<hr />
+
+@if (totalReportViewModel == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (totalReportViewModel.TRid != 0)
+{
+    @*본인평가*@
+    @if (!UserReportCollapsed)
+    {
+        <h5>
+            본인평가
+            <span @onclick="@UserReportCollapsedToggle" class="oi oi-plus mr-1" />
+        </h5>
+    }
+    else
+    {
+        <h5>
+            본인평가
+            <span @onclick="@UserReportCollapsedToggle" class="oi oi-minus mr-1" />
+        </h5>
+    }
+    @if (UserReportCollapsed)
+    {
+        <User_TotalReportListView TotalReportListDB="totalReportViewModel"></User_TotalReportListView>
+    }
+    <hr />
+
+    @*팀장평가*@
+    @if (!TeamLeaderReportCollapsed)
+    {
+        <h5>
+            부서장평가
+            <span @onclick="@TeamLeaderReportCollapsedToggle" class="oi oi-plus mr-1" />
+        </h5>
+    }
+    else
+    {
+        <h5>
+            부서장평가
+            <span @onclick="@TeamLeaderReportCollapsedToggle" class="oi oi-minus mr-1" />
+        </h5>
+    }
+    @if (TeamLeaderReportCollapsed)
+    {
+        <FeedBack_TotalReportListView TotalReportListDB="totalReportViewModel"></FeedBack_TotalReportListView>
+    }
+    <hr />
+
+    @*임원평가*@
+    @if (!DirectorReportCollapsed)
+    {
+        <h5>
+            임원평가
+            <span @onclick="@DirectorReportCollapsedToggle" class="oi oi-plus mr-1" />
+        </h5>
+    }
+    else
+    {
+        <h5>
+            임원평가
+            <span @onclick="@DirectorReportCollapsedToggle" class="oi oi-minus mr-1" />
+        </h5>
+    }
+    @if (DirectorReportCollapsed)
+    {
+        <hr />
+        <Complete_TotalReportListView TotalReportListDB="totalReportViewModel"></Complete_TotalReportListView>
+    }
+    <hr />
+}
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (model.Count == 0)
+{
+    <p><em>No DATA</em></p>
+}
+else
+{
+    <hr />
+    <DirectorReportDetailsTable reports="model"></DirectorReportDetailsTable>
+}

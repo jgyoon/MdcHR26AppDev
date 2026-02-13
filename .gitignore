@@ -217,3 +217,14 @@ works/**/*.backup
 
 # Claude AI temp files
 .claude/temp/
+
+# Playwright test files
+**/playwright-report/
+**/test-results/
+**/playwright/.cache/
+
+# Sync logs (project synchronization)
+.sync/
+
+# oh-my-claudecode
+.omc/

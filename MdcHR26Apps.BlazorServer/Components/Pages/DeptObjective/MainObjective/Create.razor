@@ -1,0 +1,38 @@
+﻿@page "/DeptObjective/MainObjective/Create"
+
+<PageTitle>전사목표 등록</PageTitle>
+
+<h3>전사목표 등록</h3>
+<hr />
+
+<DisplayResultText Comment="@resultText" />
+
+@if (model == null)
+{
+    <LoadingIndicator />
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <EditForm Model="model" OnValidSubmit="CreateObjective">
+                <label for="ObjectiveTitle" class="form-label mb-1">목표명</label>           
+                <div class="input-group mb-1">
+                    <InputText id="ObjectiveTitle" class="form-control" placeholder="목표명"
+                               @bind-Value="@model.ObjectiveTitle"></InputText>
+                </div>
+                <label for="ObjectiveContents" class="form-label mb-1">내용</label>
+                <div class="input-group mb-1">
+
+                    <InputTextArea id="ObjectiveContents" class="form-control mb-1" rows="10" @bind-Value="@model.ObjectiveContents">
+                    </InputTextArea>
+                </div>
+                <hr />
+                <div class="input-group mb-1">
+                    <button type="submit" id="createbutton" class="btn btn-primary">생성</button>
+                    <button type="button" id="cancelbutton" class="btn btn-light" @onclick="MoveMainObjectivePage">목록</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}

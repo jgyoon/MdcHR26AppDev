@@ -1,0 +1,77 @@
+﻿@page "/SubAgreement/TeamLeader/Details/{Id:long}"
+
+<PageTitle>세부 직무 합의(상세)</PageTitle>
+
+<h3>세부 직무 합의</h3>
+<hr />
+
+@if (!String.IsNullOrEmpty(resultText))
+{
+    <p><em>@resultText</em></p>
+}
+
+@if (processDb == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h5>@userName 님 세부직무평가 합의 </h5>
+    <div class="row">
+        <div class="col-md-12">
+            <EditForm Model="processDb">
+                @*이전 합의 코멘트*@
+                @if (!String.IsNullOrEmpty(Old_Agreement_Comment))
+                {
+                    <div class="row">
+                        @if (!Collapsed)
+                        {
+                            <h5 for="Old_Agreement_Comment" class="form-label mb-1">
+                                이전 합의 내역(Old)
+                                <span @onclick="@Toggle" class="oi oi-plus mr-1" />
+                            </h5>
+
+                        }
+                        else
+                        {
+                            <h5 for="Old_Agreement_Comment" class="form-label mb-1">
+                                이전 합의 내역(Old)
+                                <span @onclick="@Toggle" class="oi oi-minus mr-1" />
+                            </h5>
+                        }
+                    </div>
+                    @if (Collapsed)
+                    {
+                        <hr />
+                        <div>@((MarkupString)replaceString(Old_Agreement_Comment))</div>
+                    }
+                    <hr />
+                }
+                <div class="input-group mb-1">
+                    <span class="input-group-text mb-1">합의코멘트</span>
+                    <InputTextArea id="Agreement_Comment" class="form-control mb-1" rows="5" @bind-Value="@processDb.SubAgreement_Comment">
+                    </InputTextArea>
+                </div>
+                <div class="input-group mb-1">
+                    <button id="confirmbutton" class="btn btn-primary" @onclick="AgreementConfirm">승인</button>
+                    <button id="referutton" class="btn btn-light" @onclick="AgreementRefer">반려</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (model.Count == 0)
+{
+    <p><em>No DATA</em></p>
+}
+else
+{
+    <hr />
+    <p><em>@userName 님 업무비중</em></p>
+    <SubAgreementDetailsTable subAgreements="model"></SubAgreementDetailsTable>
+}
+

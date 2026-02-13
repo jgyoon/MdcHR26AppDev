@@ -1,11 +1,14 @@
 CREATE VIEW [dbo].[v_MemberListDB]
 AS SELECT
-    U.UId,
+    U.Uid,
     U.UserId,
     U.UserName,
     U.ENumber,
+    R.ERankId,
+    R.ERankNo,
     R.ERankName AS ERank,
     D.EDepartId,
+    D.EDepartmentNo,
     D.EDepartmentName,
     U.EStatus AS ActivateStatus,
     U.IsTeamLeader,

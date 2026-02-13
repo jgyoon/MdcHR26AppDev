@@ -5,7 +5,7 @@ CREATE TABLE [dbo].[TotalReportDb]
     -- [01] TotalReport id
     [TRid] BIGINT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     -- [02] User id (외래키)
-    [UId] BIGINT NOT NULL,
+    [Uid] BIGINT NOT NULL,
 
     -- 평가대상자 평가점수
     -- [03] User_Evaluation_1(일정준수)
@@ -56,8 +56,8 @@ CREATE TABLE [dbo].[TotalReportDb]
 
     -- 외래키 제약조건
     CONSTRAINT FK_TotalReportDb_UserDb
-        FOREIGN KEY (UId)
-        REFERENCES [dbo].[UserDb](UId)
+        FOREIGN KEY (Uid)
+        REFERENCES [dbo].[UserDb](Uid)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION
 )

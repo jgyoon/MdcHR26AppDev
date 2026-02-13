@@ -1,0 +1,26 @@
+﻿@page "/DeptObjective/Sub"
+
+<PageTitle>조직 목표</PageTitle>
+
+<h3>조직 목표</h3>
+<hr />
+@if (isEdit)
+{
+    <div class="input-group mb-1">
+        <button class="btn btn-primary" @onclick="MoveSubObjectiveCreatePage">목표 생성</button>
+    </div>
+    <hr />
+}
+
+@if (objectList == null)
+{
+    <LoadingIndicator />
+}
+else if (objectList.Count() == 0)
+{
+    <p><em>목표가 작성되지 않았습니다.</em></p>
+}
+else
+{
+    <ObjectiveListTable objectList="@objectList" isEdit="@isEdit" isMain="@isMain"></ObjectiveListTable>
+}

@@ -1,0 +1,24 @@
+@page "/Admin/EUsersManage"
+@rendermode InteractiveServer
+
+<PageTitle>평가대상자관리페이지</PageTitle>
+
+<h3>평가대상자관리페이지</h3>
+<hr />
+<SearchbarComponent searchTerm="@searchTerm" SearchAction="HandleSearchValueChanged" SearchInitAction="SearchInit" />
+<SearchDeptComponent deptlist="@deptlist" SearchDeptAction="HandleDeptValueChanged"
+                     @bind-selectedDept="@selectedDept" />
+<hr />
+
+@if (userlist == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!userlist.Any())
+{
+    <p><em>사용자정보가 없습니다.</em></p>
+}
+else
+{
+    <EUserListTable Users="@userlist"></EUserListTable>
+}

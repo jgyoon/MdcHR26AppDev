@@ -1,0 +1,13 @@
+@namespace MdcHR26Apps.BlazorServer.Components.Pages.Components.SubAgreement.ViewPage
+@rendermode InteractiveServer
+
+<h3>세부직무 목록</h3>
+
+@if (subAgreements == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <SubAgreementDbListTable subAgreementDbs="subAgreements" OnDetailsClick="HandleDetailsClick" IsSubAgreementCompleted="@IsSubAgreementCompleted" />
+}

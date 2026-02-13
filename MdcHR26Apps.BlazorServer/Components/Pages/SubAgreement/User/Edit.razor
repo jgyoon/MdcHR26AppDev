@@ -1,0 +1,105 @@
+﻿@page "/SubAgreement/User/Edit/{Sid:long}"
+
+<PageTitle>세부 직무 수정</PageTitle>
+
+<h3>세부 직무 수정</h3>
+
+@if (model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <EditForm Model="model">
+                <FormSelectList Label="평가지표" BindValue="@model.Report_Item_Name_1" IsDisabled="true" />
+                <FormSelectList Label="평가직무" BindValue="@model.Report_Item_Name_2" IsDisabled="true" />
+                <FormSelectNumber Label="평가비중" BindValue="@model.Report_Item_Proportion" IsDisabled="true" />
+                <FormSelectList Label="세부평가직무" BindValue="@model.Report_SubItem_Name" IsDisabled="true" />
+                <FormSelectNumber Label="세부평가비중" peroportion="@model.Report_SubItem_Proportion" maxperoportion="@maxperoportion" PeroportionChanged="HandlePeroportionChanged" />
+                <small>설정가능한 비중 : 0 % ~ @maxperoportion %</small>
+
+                <hr />
+                @*Todolist 세부업무리스트*@
+                <div class="card">
+                    <div class="card-header">
+                        @if (!TaskCollapsed)
+                        {
+                            <h5>
+                                세부 업무 리스트(@taskCount 개)
+                                <span @onclick="@TaskToggle" class="oi oi-plus mr-1" />
+                            </h5>
+                            @if (!isUnLimitedTask)
+                            {
+                                <p><em>최대 세부 업무 수 : 2 개</em></p>
+                            }
+                        }
+                        else
+                        {
+                            <h5>
+                                세부 업무 리스트(@taskCount 개)
+                                <span @onclick="@TaskToggle" class="oi oi-minus mr-1" />
+                            </h5>
+                            @if (!isUnLimitedTask)
+                            {
+                                <p><em>최대 세부 업무 수 : 2 개</em></p>
+                            }
+                        }
+                    </div>
+                    <div class="card-body">
+                        @if (TaskCollapsed)
+                        {
+                            <FormAgreeTask tasks="@tasklist" OnDeleteTask="@DeleteTodo" />
+                        }
+                    </div>
+                </div>
+                <hr />
+                @*Todolist 세부업무*@
+                <div class="card">
+                    <div class="card-header">
+                        @if (!TaskCreateCollapsed)
+                        {
+                            <h5>
+                                세부 업무 생성
+                                <span @onclick="@TaskCreateToggle" class="oi oi-plus mr-1" />
+                            </h5>
+                        }
+                        else
+                        {
+                            <h5>
+                                세부 업무 생성
+                                <span @onclick="@TaskCreateToggle" class="oi oi-minus mr-1" />
+                            </h5>
+                        }
+                    </div>
+                    @if (TaskCreateCollapsed)
+                    {
+                        <div class="card-body">
+                            <FormAgreeTaskCreate task="@tasks" OnCreateTask="HandleValidSubmit" />
+                        </div>
+                        <DisplayResultText Comment="@addTaskErrorText" />
+                        @if (!String.IsNullOrEmpty(addTaskErrorText))
+                        {
+                            <p><em>3초 후 다시 작성해주세요.</em></p>
+                        }
+                    }
+                </div>
+                <hr />
+                @if (tasklist.Count > 2 && !isUnLimitedTask)
+                {
+                    <p><em>세부 업무 작성는 최대 2개까지 가능합니다.(현재 개수 : @tasklist.Count().ToString() 개)</em></p>
+                    <p><em>세부 업무 수를 조정해 주세요.</em></p>
+                }
+                else
+                {
+                    <div class="input-group mb-1">
+                        <button id="editbutton" class="btn btn-primary" @onclick="EditUserSubAgreement">변경</button>
+                        <button id="movepageutton" class="btn btn-light" @onclick="MoveUserSubAgreementMainPage">목록</button>
+                    </div>
+                }
+            </EditForm>
+        </div>
+    </div>
+    <DisplayResultText Comment="@resultText" />
+}

@@ -1,0 +1,33 @@
+﻿{
+    "AllPassed":  true,
+    "DiffCount":  0,
+    "MissingCount":  0,
+    "PassCount":  17,
+    "MissingFiles":  [
+
+                     ],
+    "ValidationTime":  "2026-02-03 18:05:51",
+    "DiffFiles":  [
+
+                  ],
+    "PassFiles":  [
+                      "MdcHR26Apps.BlazorServer/Components/Pages/Admin/TotalReport/Details.razor.cs",
+                      "MdcHR26Apps.BlazorServer/Components/Pages/Admin/TotalReport/ReportInit.razor.cs",
+                      "MdcHR26Apps.Models/DeptObjective/DeptObjectiveDb.cs",
+                      "MdcHR26Apps.Models/DeptObjective/DeptObjectiveRepository.cs",
+                      "MdcHR26Apps.Models/DeptObjective/IDeptObjectiveRepository.cs",
+                      "MdcHR26Apps.Models/EvaluationAgreement/AgreementDb.cs",
+                      "MdcHR26Apps.Models/EvaluationAgreement/AgreementRepository.cs",
+                      "MdcHR26Apps.Models/EvaluationAgreement/IAgreementRepository.cs",
+                      "MdcHR26Apps.Models/EvaluationLists/EvaluationLists.cs",
+                      "MdcHR26Apps.Models/EvaluationLists/EvaluationListsRepository.cs",
+                      "MdcHR26Apps.Models/EvaluationLists/IEvaluationListsRepository.cs",
+                      "MdcHR26Apps.Models/EvaluationSubAgreement/SubAgreementDb.cs",
+                      "MdcHR26Apps.Models/EvaluationSubAgreement/SubAgreementRepository.cs",
+                      "MdcHR26Apps.Models/EvaluationSubAgreement/ISubAgreementRepository.cs",
+                      "MdcHR26Apps.Models/EvaluationTasks/TasksDb.cs",
+                      "MdcHR26Apps.Models/EvaluationTasks/TasksRepository.cs",
+                      "MdcHR26Apps.Models/EvaluationTasks/ITasksRepository.cs"
+                  ],
+    "TotalFiles":  17
+}
