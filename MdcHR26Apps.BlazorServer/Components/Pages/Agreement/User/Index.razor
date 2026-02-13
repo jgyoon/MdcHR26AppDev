@@ -126,29 +126,28 @@ else
         else if (IsRequest && IsAgreement)
         {
             <p><em>합의가 완료되면 직무 수정이 불가합니다.</em></p>
-        }
-        <hr />
-
-        @* 합의내역 펼쳐보기 *@
-        <div class="row">
-            <div class="col">
-                <h5 @onclick="AgreementToggle" style="cursor: pointer;">
-                    합의 내역 리스트
-                    @if (AgreementCollapsed)
-                    {
-                        <span class="oi oi-minus float-end" />
-                    }
-                    else
-                    {
-                        <span class="oi oi-plus float-end" />
-                    }
-                </h5>
-            </div>
-        </div>
-        @if (AgreementCollapsed)
-        {
             <hr />
-            <AgreementDbListView Uid="@loginStatusService.LoginStatus.LoginUid" IsAgreementCompleted="@IsAgreement" />
+            @* 합의내역 펼쳐보기 *@
+            <div class="row">
+                <div class="col">
+                    <h5 @onclick="AgreementToggle" style="cursor: pointer;">
+                        합의 내역 리스트
+                        @if (AgreementCollapsed)
+                        {
+                            <span class="oi oi-minus float-end" />
+                        }
+                        else
+                        {
+                            <span class="oi oi-plus float-end" />
+                        }
+                    </h5>
+                </div>
+            </div>
+            @if (AgreementCollapsed)
+            {
+                <hr />
+                <AgreementDbListView Uid="@loginStatusService.LoginStatus.LoginUid" IsAgreementCompleted="@IsAgreement" />
+            }
         }
     }
 }

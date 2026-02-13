@@ -2,6 +2,7 @@ using MdcHR26Apps.BlazorServer.Data;
 using MdcHR26Apps.Models.Views.v_MemberListDB;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components;
+using MdcHR26Apps.BlazorServer.Utils;
 
 namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin
 {
@@ -20,6 +21,11 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin
 
         // 검색창 추가
         private string searchTerm { get; set; } = string.Empty;
+        // 공용함수 호출
+        [Inject]
+        public UserUtils utils { get; set; } = null!;
+        public List<string> deptlist = new List<string>();
+        public string selectedDept { get; set; } = string.Empty;        
 
         #region + State 클래스 사용
         // State 클래스 사용
@@ -43,6 +49,7 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin
         {
             var users = await memberListRepository.GetByAllAsync();
             state.Userlist = users.ToList();
+            deptlist = await utils.GetDeptListAsync();
         }
 
         #region + [1] CheckLogined : IsloginAndIsAdminCheck()
@@ -91,6 +98,7 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin
         private async Task SearchInit()
         {
             state.SearchTerm = string.Empty;
+            selectedDept = string.Empty;
             await SetData();
         }
 
@@ -106,6 +114,31 @@ namespace MdcHR26Apps.BlazorServer.Components.Pages.Admin
         {
             state.SearchTerm = newSearchValue;
             await Search();
+        }
+
+
+        #endregion
+
+        #region + [9].[2] 검색로직 추가(부서)
+        private async Task SearchDept()
+        {
+            if (!String.IsNullOrWhiteSpace(selectedDept))
+            {
+                // 2026년: 클라이언트에서 EDepartmentName 필터링
+                var allUsers = await memberListRepository.GetByAllAsync();
+                state.Userlist = allUsers
+                    .Where(u => u.EDepartmentName.Contains(selectedDept))
+                    .ToList();
+            }
+            else
+            {
+                await SetData();
+            }
+        }
+        private async Task HandleDeptValueChanged(string newSearchValue)
+        {
+            selectedDept = newSearchValue;
+            await SearchDept();
         }
         #endregion
     }

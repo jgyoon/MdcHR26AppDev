@@ -9,7 +9,7 @@
 </div>
 <hr />
 <SearchbarComponent searchTerm="@state.SearchTerm" SearchAction="HandleSearchValueChanged" SearchInitAction="SearchInit" />
-<hr />
+<SearchDeptComponent deptlist="@deptlist" SearchDeptAction="HandleDeptValueChanged" />
 
 @if (state.Userlist == null)
 {
